@@ -16,9 +16,14 @@
 
 package com.gst.socialcomponents.main.login;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -55,6 +60,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     private CallbackManager mCallbackManager;
     private String profilePhotoUrlLarge;
 
+    RelativeLayout galleryButton;
+    Context cxt;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +77,15 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         initGoogleSignIn();
         initFirebaseAuth();
         initFacebookSignIn();
+        galleryButton=findViewById(R.id.gallerybutton);
+
+        galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, GalleryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initGoogleSignIn() {
