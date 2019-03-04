@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="app_name">Social App</string>
+    <string name="app_name">Syndic SPIG</string>
     <string name="label_create_post_activity">Create post</string>
     <string name="label_post_detail_activity">Post detail</string>
     <string name="label_image_detail_activity">Image</string>
@@ -83,8 +83,9 @@
     <string name="text_login">Thank you for using our application! Please, sign in for continue your action.</string>
     <string name="error_authentication">Authentication failed.</string>
     <string name="error_google_play_services">Google Play Services error.</string>
-    <string name="button_login_with_facebook">Login with facebook</string>
-    <string name="button_login_with_google">Login with google</string>
+    <string name="button_login_with_facebook">Sign in with facebook</string>
+    <string name="button_login_with_google">Sign in with google</string>
+    <string name="button_login_with_email">Sign in with email</string>
 
 
     <string name="loading">Loading …</string>
