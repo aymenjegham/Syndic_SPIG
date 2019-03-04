@@ -18,6 +18,7 @@ package com.gst.socialcomponents.main.login;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -65,7 +66,7 @@ class LoginPresenter extends BasePresenter<LoginView> {
 
     public void onGoogleSignInClick() {
         if (checkInternetConnection()) {
-            ifViewAttached(LoginView::signInWithGoogle);
+             ifViewAttached(LoginView::signInWithGoogle);
         }
     }
 

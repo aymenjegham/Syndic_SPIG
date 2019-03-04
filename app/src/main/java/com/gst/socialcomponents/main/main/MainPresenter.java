@@ -65,6 +65,7 @@ class MainPresenter extends BasePresenter<MainView> {
         if (checkAuthorization()) {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             ifViewAttached(view -> view.openProfileActivity(userId, null));
+
         }
     }
 
@@ -104,4 +105,6 @@ class MainPresenter extends BasePresenter<MainView> {
     public void initPostCounter() {
         postManager.setPostCounterWatcher(newValue -> updateNewPostCounter());
     }
+
+
 }

@@ -36,6 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
+import com.gst.socialcomponents.main.main.GalleryActivity;
 import com.gst.socialcomponents.utils.GoogleApiHelper;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.LogoutHelper;
@@ -209,6 +210,12 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     @Override
     public void signInWithFacebook() {
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
     }
 }
 
