@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
 import com.gst.socialcomponents.main.main.GalleryActivity;
+import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.utils.GoogleApiHelper;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.LogoutHelper;
@@ -61,7 +63,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     private String profilePhotoUrlLarge;
 
     RelativeLayout galleryButton;
-    Context cxt;
+
 
 
 
@@ -73,6 +75,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         initGoogleSignIn();
         initFirebaseAuth();
@@ -181,7 +184,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         if (requestCode == SIGN_IN_GOOGLE) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             presenter.handleGoogleSignInResult(result);
-        }
+         }
     }
 
     @Override
@@ -231,10 +234,13 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
     }
 
+
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, GalleryActivity.class);
-        startActivity(intent);
-    }
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+      }
 }
 

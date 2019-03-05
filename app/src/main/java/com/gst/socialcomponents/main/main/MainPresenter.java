@@ -40,6 +40,8 @@ class MainPresenter extends BasePresenter<MainView> {
     MainPresenter(Context context) {
         super(context);
         postManager = PostManager.getInstance(context);
+
+
     }
 
 

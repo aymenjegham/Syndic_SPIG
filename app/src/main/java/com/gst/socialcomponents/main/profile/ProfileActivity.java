@@ -18,6 +18,8 @@ package com.gst.socialcomponents.main.profile;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,6 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +50,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsByUserAdapter;
 import com.gst.socialcomponents.dialogs.UnfollowConfirmationDialog;
@@ -54,6 +62,7 @@ import com.gst.socialcomponents.enums.FollowState;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.login.LoginActivity;
+import com.gst.socialcomponents.main.main.GalleryActivity;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.post.createPost.CreatePostActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
@@ -63,6 +72,7 @@ import com.gst.socialcomponents.managers.FollowManager;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profile;
+import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
@@ -76,6 +86,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     // UI references.
     private TextView nameEditText;
+    private TextView residentTextView;
     private ImageView imageView;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -93,6 +104,9 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     private TextView followersCounterTextView;
     private TextView followingsCounterTextView;
     private FollowButton followButton;
+
+    FirebaseUser firebaseUser;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +128,18 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
             currentUserId = firebaseUser.getUid();
         }
 
+
+
+
+
+
+
+
         // Set up the login form.
         progressBar = findViewById(R.id.progressBar);
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
+        residentTextView=findViewById(R.id.nameresidencText);
         postsCounterTextView = findViewById(R.id.postsCounterTextView);
         likesCountersTextView = findViewById(R.id.likesCountersTextView);
         followersCounterTextView = findViewById(R.id.followersCounterTextView);
@@ -132,7 +154,118 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
         loadPostsList();
         supportPostponeEnterTransition();
+
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    Log.v("datachanged", String.valueOf(profile.isActive()));
+
+                    if (!profile.isActive()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showalert();
+                            }
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+
+
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    Log.v("datachanged", String.valueOf(profile.isActive()));
+
+                    if (!profile.isActive()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showalert();
+                            }
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+    }
+
+    void showalert(){
+        new AlertDialog.Builder(ProfileActivity.this,R.xml.styles)
+                .setTitle("En attente de vérification")
+                .setMessage("Votre adhésion est en attente de confirmation d'un modérateur" +
+                        ",vous serez notifié de l'activation de votre compte")
+                .setCancelable(false)
+                .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(ProfileActivity.this, GalleryActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNeutralButton("Modifier votre profile", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(ProfileActivity.this,EditProfileActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      //  Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                       // intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                       // intent1.addCategory(Intent.CATEGORY_HOME);
+                       // startActivity(intent1);
+
+                        finishAffinity();
+                    }
+                })
+                .show();
+    }
+
 
     @Override
     public void onStart() {
@@ -305,6 +438,17 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     public void setProfileName(String username) {
         nameEditText.setText(username);
     }
+
+
+
+
+
+    @Override
+    public void setResidenceName(String username) {
+        residentTextView.setText(username);
+    }
+
+
 
     @Override
     public void setProfilePhoto(String photoUrl) {

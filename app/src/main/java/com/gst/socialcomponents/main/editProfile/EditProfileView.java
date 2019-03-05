@@ -24,10 +24,24 @@ import com.gst.socialcomponents.main.pickImageBase.PickImageView;
 
 public interface EditProfileView extends PickImageView {
     void setName(String username);
+    void setResidence(String username);
+    void setNumresidence(String username);
+    void setMobile(String username);
+
 
     void setProfilePhoto(String photoUrl);
 
     String getNameText();
+    String getResidenceText();
+    String getNumresidenceText();
+    String getMobileText();
+
 
     void setNameError(String string);
+    void setResidenceError(String string);
+    void setNumresidenceError(String string);
+    void setMobileError(String string);
+
+
+
 }

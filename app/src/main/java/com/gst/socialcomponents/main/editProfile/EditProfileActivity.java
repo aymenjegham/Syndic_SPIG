@@ -44,6 +44,9 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
     // UI references.
     private EditText nameEditText;
+    private EditText residenceEditText;
+    private EditText numresidenceEditText;
+    private EditText numtelEditText;
     protected ImageView imageView;
     private ProgressBar avatarProgressBar;
 
@@ -58,6 +61,10 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
+        numresidenceEditText=findViewById(R.id.numresidenceEditText);
+        residenceEditText=findViewById(R.id.residenceEditText);
+        numtelEditText=findViewById(R.id.numtelEditText);
+
 
         imageView.setOnClickListener(this::onSelectImageClick);
 
@@ -106,6 +113,22 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     }
 
     @Override
+    public void setResidence(String residencename) {
+        residenceEditText.setText(residencename);
+    }
+
+    @Override
+    public void setNumresidence(String numresidencetext) {
+        numresidenceEditText.setText(numresidencetext);
+
+    }
+
+    @Override
+    public void setMobile(String numtel) {
+        numtelEditText.setText(numtel);
+    }
+
+    @Override
     public void setProfilePhoto(String photoUrl) {
         ImageUtil.loadImage(GlideApp.with(this), photoUrl, imageView, new RequestListener<Drawable>() {
             @Override
@@ -128,9 +151,44 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     }
 
     @Override
+    public String getResidenceText() {
+        return residenceEditText.getText().toString();
+    }
+
+    @Override
+    public String getNumresidenceText() {
+        return numresidenceEditText.getText().toString();
+    }
+
+    @Override
+    public String getMobileText() {
+        return numtelEditText.getText().toString();
+    }
+
+
+
+    @Override
     public void setNameError(@Nullable String string) {
         nameEditText.setError(string);
         nameEditText.requestFocus();
+    }
+
+    @Override
+    public void setResidenceError(String string) {
+        residenceEditText.setError(string);
+        residenceEditText.requestFocus();
+    }
+
+    @Override
+    public void setNumresidenceError(String string) {
+        numresidenceEditText.setError(string);
+        numresidenceEditText.requestFocus();
+    }
+
+    @Override
+    public void setMobileError(String string) {
+        numtelEditText.setError(string);
+        numtelEditText.requestFocus();
     }
 
     @Override

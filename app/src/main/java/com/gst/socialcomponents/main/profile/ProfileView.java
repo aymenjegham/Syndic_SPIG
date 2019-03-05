@@ -48,6 +48,9 @@ public interface ProfileView extends BaseView {
 
     void setProfileName(String username);
 
+    void setResidenceName(String username);
+
+
     void setProfilePhoto(String photoUrl);
 
     void setDefaultProfilePhoto();

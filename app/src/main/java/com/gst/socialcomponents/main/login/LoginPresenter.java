@@ -18,6 +18,7 @@ package com.gst.socialcomponents.main.login;
 
 import android.content.Context;
 import android.net.Uri;
+import android.renderscript.Sampler;
 import android.util.Log;
 
 import com.facebook.login.LoginResult;
@@ -26,13 +27,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BasePresenter;
 import com.gst.socialcomponents.main.interactors.ProfileInteractor;
 import com.gst.socialcomponents.managers.ProfileManager;
+import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.PreferencesUtil;
 import com.google.android.gms.tasks.Task;
@@ -58,6 +64,11 @@ class LoginPresenter extends BasePresenter<LoginView> {
                             .addRegistrationToken(FirebaseInstanceId.getInstance().getToken(), userId);
                 }
 
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("profiles");
+
+
+
+
                 view.hideProgress();
                 view.finish();
             });
@@ -78,6 +89,7 @@ class LoginPresenter extends BasePresenter<LoginView> {
 
     public void handleGoogleSignInResult(GoogleSignInResult result) {
         ifViewAttached(view -> {
+            Log.v("handlesigninresult",result.getStatus().toString());
             if (result.isSuccess()) {
                 view.showProgress();
 

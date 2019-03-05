@@ -127,6 +127,7 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
         });
     }
 
+
     void onPostClick(Post post, View postItemView) {
         PostManager.getInstance(context).isPostExistSingleValue(post.getId(), exist -> {
             ifViewAttached(view -> {
@@ -168,6 +169,8 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
                 profile = obj;
                 ifViewAttached(view -> {
                     view.setProfileName(profile.getUsername());
+                    view.setResidenceName(profile.getResidence());
+
 
                     if (profile.getPhotoUrl() != null) {
                         view.setProfilePhoto(profile.getPhotoUrl());

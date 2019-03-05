@@ -27,22 +27,72 @@ public class Profile implements Serializable, LazyLoading {
     private String id;
     private String username;
     private String email;
+    private String residence;
+    private String numresidence;
+    private String mobile;
     private String photoUrl;
     private long likesCount;
     private String registrationToken;
     private ItemType itemType;
+    private boolean active;
+    private boolean type;
 
-    public Profile() {
+   public Profile() {
         // Default constructor required for calls to DataSnapshot.getValue(Profile.class)
     }
+
+
 
     public Profile(String id) {
         this.id = id;
     }
 
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
+    }
+
+    public String getResidence() {
+        return residence;
+    }
+
+    public void setResidence(String residence) {
+        this.residence = residence;
+    }
+
+    public String getNumresidence() {
+        return numresidence;
+    }
+
+    public void setNumresidence(String numresidence) {
+        this.numresidence = numresidence;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Profile(ItemType load) {
         itemType = load;
     }
+
+
 
     public String getId() {
         return id;

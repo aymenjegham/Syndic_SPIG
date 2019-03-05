@@ -18,16 +18,20 @@ package com.gst.socialcomponents.main.main;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
+ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,16 +40,30 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsAdapter;
 import com.gst.socialcomponents.main.base.BaseActivity;
+import com.gst.socialcomponents.main.base.BaseView;
+import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.followPosts.FollowingPostsActivity;
 import com.gst.socialcomponents.main.post.createPost.CreatePostActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.main.profile.ProfileActivity;
 import com.gst.socialcomponents.main.search.SearchActivity;
+import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.Post;
+import com.gst.socialcomponents.model.Profile;
+import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.AnimationUtils;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
@@ -58,6 +76,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private boolean counterAnimationInProgress = false;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeContainer;
+    Constants constants;
+
+
+    FirebaseUser firebaseUser;
+    DatabaseReference reference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +89,135 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setContentView(R.layout.activity_main);
         presenter.onProfileMenuActionClicked();
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         initContentView();
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    Log.v("datachanged", String.valueOf(profile.isActive()));
+
+                    if (!profile.isActive()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showalert();
+                            }
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+
+
+
+
+
+
+
     }
+    void showalert(){
+        new AlertDialog.Builder(MainActivity.this,R.xml.styles)
+                .setTitle("En attente de vérification")
+                .setMessage("Votre adhésion est en attente de confirmation d'un modérateur" +
+                        ",vous serez notifié de l'activation de votre compte")
+                .setCancelable(false)
+                .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      Intent intent =new Intent(MainActivity.this,GalleryActivity.class);
+                      startActivity(intent);
+                    }
+                })
+                .setNeutralButton("Modifier votre profile", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(MainActivity.this, EditProfileActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //  Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                        // intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        // intent1.addCategory(Intent.CATEGORY_HOME);
+                        // startActivity(intent1);
+
+                        finishAffinity();
+
+                    }
+                })
+                .show();
+     }
+
+
+
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.updateNewPostCounter();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    Log.v("datachanged", String.valueOf(profile.isActive()));
+
+                    if (!profile.isActive()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showalert();
+                            }
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+
+
+
+
     }
 
     @NonNull
@@ -109,7 +252,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     @Override
     public void onBackPressed() {
         attemptToExitIfRoot(floatingActionButton);
-    }
+     }
 
     public void refreshPostList() {
         postsAdapter.loadFirstPage();

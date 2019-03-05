@@ -55,6 +55,50 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/residenceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/residence_name"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/numresidenceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numresidence_name"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/numtelEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numtel"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

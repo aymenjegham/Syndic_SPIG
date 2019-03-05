@@ -17,11 +17,15 @@
 package com.gst.socialcomponents.main.editProfile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseView;
+import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
+import com.gst.socialcomponents.main.login.LoginActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
@@ -52,6 +56,9 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                 ifViewAttached(view -> {
                     if (profile != null) {
                         view.setName(profile.getUsername());
+                        view.setResidence(profile.getResidence());
+                        view.setNumresidence(profile.getNumresidence());
+                        view.setMobile(profile.getMobile());
 
                         if (profile.getPhotoUrl() != null) {
                             view.setProfilePhoto(profile.getPhotoUrl());
@@ -71,12 +78,29 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                 view.setNameError(null);
 
                 String name = view.getNameText().trim();
+                String residence = view.getResidenceText().trim();
+                String numresidence=view.getNumresidenceText().trim();
+                String mobile=view.getMobileText().trim();
+
                 boolean cancel = false;
 
-                if (TextUtils.isEmpty(name)) {
+                if ((TextUtils.isEmpty(name))) {
                     view.setNameError(context.getString(R.string.error_field_required));
                     cancel = true;
-                } else if (!ValidationUtil.isNameValid(name)) {
+                }
+                else if(TextUtils.isEmpty(residence)){
+                    view.setResidenceError(context.getString(R.string.error_field_required));
+                    cancel = true;
+
+                }else if(TextUtils.isEmpty(numresidence)){
+                    view.setNumresidenceError(context.getString(R.string.error_field_required));
+                    cancel = true;
+                }
+                else if(TextUtils.isEmpty(mobile)){
+                    view.setMobileError(context.getString(R.string.error_field_required));
+                    cancel = true;
+                }
+                else if (!ValidationUtil.isNameValid(name)) {
                     view.setNameError(context.getString(R.string.error_profile_name_length));
                     cancel = true;
                 }
@@ -84,6 +108,9 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                 if (!cancel) {
                     view.showProgress();
                     profile.setUsername(name);
+                    profile.setResidence(residence);
+                    profile.setNumresidence(numresidence);
+                    profile.setMobile(mobile);
                     createOrUpdateProfile(imageUri);
                 }
             });
@@ -104,7 +131,10 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
     }
 
     protected void onProfileUpdatedSuccessfully() {
-        ifViewAttached(BaseView::finish);
+        Log.v("profileupdateddcreated","here we go ");
+       ifViewAttached(BaseView::finish);
+
+
     }
 
 }

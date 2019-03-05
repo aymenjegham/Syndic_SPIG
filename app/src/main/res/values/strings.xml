@@ -69,6 +69,9 @@
     <!-- Strings related to registration and login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_name">Name</string>
+    <string name="residence_name">Residence</string>
+    <string name="numresidence_name">Matricule Residence</string>
+    <string name="numtel">Mobile</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_conf_password">Confirm password</string>
     <string name="action_create_profile">Continue</string>

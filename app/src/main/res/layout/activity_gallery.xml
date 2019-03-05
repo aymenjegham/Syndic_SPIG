@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".main.main.GalleryActivity">
 
+
+    <com.smarteist.autoimageslider.SliderLayout
+        android:id="@+id/imageSlider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
