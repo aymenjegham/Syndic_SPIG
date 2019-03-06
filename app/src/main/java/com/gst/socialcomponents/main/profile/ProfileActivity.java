@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -38,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -214,7 +216,14 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showalert();
+                                try{
+                                    showalert();
+                                    Looper.loop();
+                                    Looper.myLooper().quit();
+
+                                }catch (WindowManager.BadTokenException e){
+
+                                }
                             }
                         });
                     }

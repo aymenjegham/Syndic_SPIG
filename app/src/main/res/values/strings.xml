@@ -194,5 +194,8 @@
     <string name="new_like_channel_name">New Like</string>
     <string name="new_comment_channel_name">New Comment</string>
 
+    <string name="ticketing">ticket</string>
+    <string name="notif">notif</string>
+
 
 </resources>

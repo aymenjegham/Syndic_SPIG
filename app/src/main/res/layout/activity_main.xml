@@ -21,7 +21,8 @@
             android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -73,6 +74,7 @@
         android:layout_margin="@dimen/large_intrinsic_padding"
         android:clickable="true"
         android:src="@drawable/ic_add_white_48dp"
-        android:layout_gravity="bottom|right" />
+        android:layout_gravity="bottom|end"
+        android:focusable="true" />
 
 </android.support.design.widget.CoordinatorLayout>
