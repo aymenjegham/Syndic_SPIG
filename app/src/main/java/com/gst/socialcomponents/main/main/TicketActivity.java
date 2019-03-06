@@ -15,11 +15,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -32,41 +34,56 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.main.pickImageBase.PickImageView;
+import com.gst.socialcomponents.model.Ticket;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.BreakIterator;
 
 public class TicketActivity extends AppCompatActivity {
 
     FloatingActionButton addnewticket;
-    ImageView iv;
-
-
+     private Bitmap bitmap;
 
      public static final int GET_FROM_GALLERY = 3;
     public static final int TAKE_PICTURE =4;
+
+    private FirebaseUser firebaseUser;
+    private DatabaseReference reference;
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
-
-
-
-        iv=findViewById(R.id.imageView2);
-        iv.setImageResource(R.drawable.btn_google_dark_disabled_xhdpi);
 
         addnewticket = findViewById(R.id.addNewticket);
         addnewticket.setOnClickListener(new View.OnClickListener() {
@@ -76,42 +93,49 @@ public class TicketActivity extends AppCompatActivity {
 
             }
         });
+
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference();
+
+
+
+
+
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-     /*   if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-            } catch (FileNotFoundException e) {
-                 e.printStackTrace();
-            } catch (IOException e) {
-                 e.printStackTrace();
-            }
-        } */
+
         if(requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            String[] filePath = {MediaStore.Images.Media.DATA};
-            Cursor c = getContentResolver().query(selectedImage, filePath,
-                    null, null, null);
-            c.moveToFirst();
-            int columnIndex = c.getColumnIndex(filePath[0]);
-            String picturePath = c.getString(columnIndex);
-            c.close();
-            Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+            try {
+                 if (bitmap != null) {
+                    bitmap.recycle();
+                }
+                InputStream stream = getContentResolver().openInputStream(
+                        data.getData());
+                bitmap = BitmapFactory.decodeStream(stream);
+                stream.close();
+               // iv.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
 
 
-
-
-
+            }
 
         }else if (requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK){
 
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            iv.setImageBitmap(photo);
+          //  iv.setImageBitmap(photo);
 
         }
 
@@ -141,6 +165,41 @@ public class TicketActivity extends AppCompatActivity {
                     Toast.makeText(TicketActivity.this, "error on description", Toast.LENGTH_SHORT).show();
                 }
                 if (!cancel) {
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/tickets");
+                    StorageReference imagesRef = storageRef.child(bitmap.toString());
+                    UploadTask uploadTask = imagesRef.putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+
+                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String photoLink = uri.toString();
+                                    Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP,"envoyé",photoLink);
+                                     reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
+                                     Log.v("linktopic",photoLink);
+                                }
+                            });
+
+                        }
+                    });
+
+
+
                  }
 
 
@@ -149,11 +208,6 @@ public class TicketActivity extends AppCompatActivity {
         adddialogview.findViewById(R.id.importimage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-             //   Intent intent = new Intent();
-               // intent.setType("image/*");
-                //intent.setAction(Intent.ACTION_GET_CONTENT);
-                //startActivityForResult(Intent.createChooser(intent, "Select Picture"),GET_FROM_GALLERY);
 
                 Intent intent = new Intent(
                         Intent.ACTION_PICK,
@@ -191,6 +245,14 @@ public class TicketActivity extends AppCompatActivity {
 
         adddialog.show();
     }
+    public void uploadImage(Bitmap bitmap) {
+
+
+
+
+    }
+
+
 
 
 
