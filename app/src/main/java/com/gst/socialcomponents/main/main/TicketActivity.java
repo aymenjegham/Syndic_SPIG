@@ -143,15 +143,11 @@ public class TicketActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         long count = dataSnapshot.getChildrenCount();
 
-                       Log.v("testingdataondatabase","data changed: "+count);
-                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                         Log.v("testingdataondatabase","1st"+ds.getValue());
-                           Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
-                             Log.v("testingdataondatabase",td.toString());
-                             TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
+                          for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
+                              TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
                              tickets.add(ticket);
-                             Log.v("testingdataondatabase",String.valueOf(tickets.size()));
-                             retrivedata(tickets);
+                              retrivedata(tickets);
 
 
 
@@ -178,7 +174,6 @@ public class TicketActivity extends AppCompatActivity {
     void retrivedata(ArrayList tickets){
         RecyclerView recyclerView =findViewById(R.id.recyclerView2);
         recyclerView.setHasFixedSize(true);
-        Log.v("testingdataondatabase","size:"+tickets.size()+"");
 
 
         TicketAdapter adapter;
