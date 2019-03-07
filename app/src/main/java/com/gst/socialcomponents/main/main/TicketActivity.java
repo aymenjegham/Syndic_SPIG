@@ -22,6 +22,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,12 +57,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.TicketAdapter;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.main.pickImageBase.PickImageView;
 import com.gst.socialcomponents.model.Ticket;
 import com.gst.socialcomponents.model.TicketRetrieve;
+import com.gst.socialcomponents.utils.HorizontalSpaceItemDecorator;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -130,7 +134,7 @@ public class TicketActivity extends AppCompatActivity {
         }
 
 
-        List<TicketRetrieve> tickets = new ArrayList<>() ;
+        ArrayList<TicketRetrieve> tickets = new ArrayList() ;
 
         Query ref = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
         ref.addListenerForSingleValueEvent(
@@ -147,6 +151,8 @@ public class TicketActivity extends AppCompatActivity {
                              TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
                              tickets.add(ticket);
                              Log.v("testingdataondatabase",String.valueOf(tickets.size()));
+                             retrivedata(tickets);
+
 
 
                          }
@@ -163,10 +169,30 @@ public class TicketActivity extends AppCompatActivity {
 
 
 
+
+
+
     }
 
 
-            @Override
+    void retrivedata(ArrayList tickets){
+        RecyclerView recyclerView =findViewById(R.id.recyclerView2);
+        recyclerView.setHasFixedSize(true);
+        Log.v("testingdataondatabase","size:"+tickets.size()+"");
+
+
+        TicketAdapter adapter;
+        adapter=new TicketAdapter(tickets);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+    }
+
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
