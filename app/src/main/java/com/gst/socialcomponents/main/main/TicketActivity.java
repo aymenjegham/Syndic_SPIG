@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +19,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,10 +42,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,6 +60,7 @@ import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.main.pickImageBase.PickImageView;
 import com.gst.socialcomponents.model.Ticket;
+import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -66,8 +72,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TicketActivity extends AppCompatActivity {
+
+    public ActionBar actionBar;
 
     FloatingActionButton addnewticket;
      private Bitmap bitmap;
@@ -80,10 +92,23 @@ public class TicketActivity extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference;
 
+    byte[] data;
+    String url;
+
+    private List<Ticket> tickets;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
+
+        Toolbar toolbar = findViewById(R.id.toolbarticket);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         addnewticket = findViewById(R.id.addNewticket);
         addnewticket.setOnClickListener(new View.OnClickListener() {
@@ -102,15 +127,46 @@ public class TicketActivity extends AppCompatActivity {
         if (firebaseUser != null) {
 
             reference = FirebaseDatabase.getInstance().getReference();
-
-
-
-
-
         }
+
+
+        List<TicketRetrieve> tickets = new ArrayList<>() ;
+
+        Query ref = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        long count = dataSnapshot.getChildrenCount();
+
+                       Log.v("testingdataondatabase","data changed: "+count);
+                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                         Log.v("testingdataondatabase","1st"+ds.getValue());
+                           Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
+                             Log.v("testingdataondatabase",td.toString());
+                             TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
+                             tickets.add(ticket);
+                             Log.v("testingdataondatabase",String.valueOf(tickets.size()));
+
+
+                         }
+
+
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                     }
+                });
+
+
+
     }
 
-    @Override
+
+            @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -123,7 +179,6 @@ public class TicketActivity extends AppCompatActivity {
                         data.getData());
                 bitmap = BitmapFactory.decodeStream(stream);
                 stream.close();
-               // iv.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -133,14 +188,10 @@ public class TicketActivity extends AppCompatActivity {
             }
 
         }else if (requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK){
-
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-          //  iv.setImageBitmap(photo);
-
+            bitmap = (Bitmap) data.getExtras().get("data");
         }
 
     }
-
 
     void   showalert(){
         LayoutInflater factory = LayoutInflater.from(this);
@@ -165,44 +216,51 @@ public class TicketActivity extends AppCompatActivity {
                     Toast.makeText(TicketActivity.this, "error on description", Toast.LENGTH_SHORT).show();
                 }
                 if (!cancel) {
+                    if(bitmap!=null) {
 
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        data = baos.toByteArray();
+                        url=bitmap.toString();
 
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/tickets");
-                    StorageReference imagesRef = storageRef.child(bitmap.toString());
-                    UploadTask uploadTask = imagesRef.putBytes(data);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/tickets");
+                        StorageReference imagesRef = storageRef.child(url);
+                        UploadTask uploadTask = imagesRef.putBytes(data);
+                         ProgressDialog pd = new ProgressDialog(TicketActivity.this);
+                        pd.setMessage("uploading");
+                        pd.show();
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-
-                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String photoLink = uri.toString();
-                                    Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP,"envoyé",photoLink);
-                                     reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
-                                     Log.v("linktopic",photoLink);
-                                }
-                            });
-
-                        }
-                    });
-
-
-
-                 }
-
-
+                                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        String photoLink = uri.toString();
+                                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink);
+                                        reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
+                                        pd.dismiss();
+                                        adddialog.dismiss();
+                                        bitmap=null;
+                                        Toast.makeText(TicketActivity.this, "update successful", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                    }else
+                    {
+                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null");
+                        reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
+                        adddialog.dismiss();
+                        Toast.makeText(TicketActivity.this, "update successful", Toast.LENGTH_SHORT).show();
+                    }
+                    }
             }
         });
         adddialogview.findViewById(R.id.importimage).setOnClickListener(new View.OnClickListener() {
@@ -213,12 +271,6 @@ public class TicketActivity extends AppCompatActivity {
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, GET_FROM_GALLERY);
-
-
-
-
-
-
             }
         });
         adddialogview.findViewById(R.id.takephotoimage).setOnClickListener(new View.OnClickListener() {
@@ -231,25 +283,18 @@ public class TicketActivity extends AppCompatActivity {
                 } catch (ActivityNotFoundException ex) {
 
                 }
-
-
             }
         });
         adddialogview.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 adddialog.hide();
-
             }
         });
 
         adddialog.show();
     }
     public void uploadImage(Bitmap bitmap) {
-
-
-
-
     }
 
 

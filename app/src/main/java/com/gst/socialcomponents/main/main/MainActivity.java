@@ -96,6 +96,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         toolbar.setTitle("Syndic SPIG");
         setSupportActionBar(toolbar);
 
+
         initContentView();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
