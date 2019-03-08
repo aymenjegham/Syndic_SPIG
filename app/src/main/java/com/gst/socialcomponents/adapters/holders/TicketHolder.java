@@ -29,6 +29,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
     private TextView matricule;
     private TextView time;
     Context cxt;
+    private ImageView stateimageview;
 
 
     public TicketHolder(View ticketCard) {
@@ -41,6 +42,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         this.state=(TextView)itemView.findViewById(R.id.stateTextView);
         this.matricule=(TextView)itemView.findViewById(R.id.matriculeTextView);
         this.time=(TextView)itemView.findViewById(R.id.dateTextView);
+        this.stateimageview=itemView.findViewById(R.id.stateImageView);
 
 
 
@@ -66,13 +68,32 @@ public class TicketHolder extends RecyclerView.ViewHolder {
 
         title.setText(titleString);
         description.setText(descriptionString);
-            Glide.with(photolink.getContext()).load(url).into(photolink);
-        state.setText(statestring);
+        Glide.with(photolink.getContext()).load(url).into(photolink);
+
+           if(statestring.equals("en cours")){
+               stateimageview.setImageResource(R.drawable.ic_encours);
+               state.setText(statestring);
+
+               return;
+           }
+           else if(statestring.equals("cloturé")){
+               stateimageview.setImageResource(R.drawable.ic_done);
+               state.setText(statestring);
+
+               return;
+           }else if (statestring.equals("envoyé")){
+               stateimageview.setImageResource(R.drawable.ic_sent);
+               state.setText(statestring);
+
+           }
+
+
          String timelongtostring = String.valueOf(timelong);
          int strlength=timelongtostring.length();
         matricule.setText(timelongtostring.substring(4, strlength-1));
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanString(cxt, timelong);
+
         time.setText(date);
 
 

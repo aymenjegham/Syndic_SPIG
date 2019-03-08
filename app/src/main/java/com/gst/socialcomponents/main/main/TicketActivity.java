@@ -93,6 +93,8 @@ public class TicketActivity extends AppCompatActivity {
 
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
+    private DatabaseReference reference1;
+
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -136,9 +138,9 @@ public class TicketActivity extends AppCompatActivity {
 
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
 
-       reference = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
-       reference.keepSynced(true);
-        reference.addListenerForSingleValueEvent(
+       reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
+       reference1.keepSynced(true);
+        reference1.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -227,10 +229,11 @@ public class TicketActivity extends AppCompatActivity {
                 String description =descet.getText().toString();
 
                 if ((TextUtils.isEmpty(titletext))) {
-                    Toast.makeText(TicketActivity.this, "error on title", Toast.LENGTH_SHORT).show();
+                     titleet.setError(getApplicationContext().getString(R.string.error_field_required));
                     cancel = true;
                 }else if ((TextUtils.isEmpty(description))){
-                    Toast.makeText(TicketActivity.this, "error on description", Toast.LENGTH_SHORT).show();
+                    descet.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
                 }
                 if (!cancel) {
                     if(bitmap!=null) {

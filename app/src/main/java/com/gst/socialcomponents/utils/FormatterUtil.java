@@ -19,6 +19,7 @@ package com.gst.socialcomponents.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.gst.socialcomponents.R;
 
@@ -63,10 +64,13 @@ public class FormatterUtil {
         long range = Math.abs(now - time);
 
         if (range < NOW_TIME_RANGE) {
-            return context.getString(R.string.now_time_range);
+            return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
+
+            //return context.getString(R.string.now_time_range);
         }
 
         return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
+
     }
 
 

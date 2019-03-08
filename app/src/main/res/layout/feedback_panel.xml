@@ -16,7 +16,7 @@
         android:paddingBottom="@dimen/intrinsic_padding">
 
         <ImageView
-            android:id="@+id/watcherImageView"
+            android:id="@+id/stateImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_sent" />
@@ -34,9 +34,9 @@
 
     <LinearLayout
         android:id="@+id/matriculeticket"
-        android:layout_width="102dp"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
+        android:layout_weight="0.2"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="@dimen/intrinsic_padding"
@@ -61,9 +61,9 @@
 
     <LinearLayout
         android:id="@+id/dateContainer"
-        android:layout_width="103dp"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_weight="0.6"
         android:gravity="center_vertical"
         android:orientation="horizontal"
 

@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -83,6 +84,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
+    Boolean typeuser;
+    Toolbar toolbar ;
+
 
 
     @Override
@@ -91,8 +95,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setContentView(R.layout.activity_main);
         presenter.onProfileMenuActionClicked();
 
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Syndic SPIG");
         setSupportActionBar(toolbar);
 
@@ -110,8 +113,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
-                    Log.v("datachanged", String.valueOf(profile.isActive()));
-
+                    typeuser=profile.isType();
+                    if(typeuser== true){
+                        changesetup();
+                    }
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -148,6 +153,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
     }
+
+    private void changesetup() {
+        toolbar.setTitle("Moderateur");
+        toolbar.setBackgroundColor(0xffB22222);
+     }
+
     void   showalert(){
         new AlertDialog.Builder(MainActivity.this,R.xml.styles)
                 .setTitle("En attente de vérification")
@@ -458,8 +469,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startActivity(searchIntent);
                 return true;
             case R.id.ticketing:
-                Intent ticket = new Intent(this, TicketActivity.class);
-                startActivity(ticket);
+                if(typeuser==false){
+                    Intent ticket = new Intent(this, TicketActivity.class);
+                    startActivity(ticket);
+                }else {
+                    Intent ticket = new Intent(this, TicketActivityMod.class);
+                    startActivity(ticket);
+                }
+
                 return true;
             case R.id.notif:
                 Intent notif = new Intent(this, NotifActivity.class);
