@@ -196,6 +196,7 @@
 
     <string name="ticketing">ticket</string>
     <string name="notif">notif</string>
+    <string name="ticketimage">ticketimage</string>
 
 
 </resources>

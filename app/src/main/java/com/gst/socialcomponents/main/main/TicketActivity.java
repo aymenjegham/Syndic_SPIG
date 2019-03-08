@@ -136,8 +136,9 @@ public class TicketActivity extends AppCompatActivity {
 
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
 
-        Query ref = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
-        ref.addListenerForSingleValueEvent(
+       reference = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
+       reference.keepSynced(true);
+        reference.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -149,12 +150,7 @@ public class TicketActivity extends AppCompatActivity {
                              tickets.add(ticket);
                               retrivedata(tickets);
 
-
-
-                         }
-
-
-
+                          }
                     }
 
 

@@ -69,6 +69,7 @@ public class FormatterUtil {
         return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
     }
 
+
     public static CharSequence getRelativeTimeSpanStringShort(Context context, long time) {
         long now = System.currentTimeMillis();
         long range = Math.abs(now - time);
