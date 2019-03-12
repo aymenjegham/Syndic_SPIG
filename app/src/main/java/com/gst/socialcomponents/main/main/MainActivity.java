@@ -52,6 +52,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsAdapter;
@@ -99,7 +100,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         toolbar.setTitle("Syndic SPIG");
         setSupportActionBar(toolbar);
 
-
+        Log.v("Firebasetoken", "token "+ FirebaseInstanceId.getInstance().getToken());
         initContentView();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -469,6 +470,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startActivity(searchIntent);
                 return true;
             case R.id.ticketing:
+                if (typeuser ==null){
+                    Intent ticket = new Intent(this, MainActivity.class);
+                    startActivity(ticket);
+                }
+
                 if(typeuser==false){
                     Intent ticket = new Intent(this, TicketActivity.class);
                     startActivity(ticket);

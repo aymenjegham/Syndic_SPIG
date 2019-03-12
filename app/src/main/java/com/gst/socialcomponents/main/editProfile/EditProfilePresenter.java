@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseView;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
@@ -59,6 +60,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                         view.setResidence(profile.getResidence());
                         view.setNumresidence(profile.getNumresidence());
                         view.setMobile(profile.getMobile());
+                        view.setToken(profile.getToken());
 
                         if (profile.getPhotoUrl() != null) {
                             view.setProfilePhoto(profile.getPhotoUrl());
@@ -111,6 +113,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setResidence(residence);
                     profile.setNumresidence(numresidence);
                     profile.setMobile(mobile);
+                    profile.setToken( FirebaseInstanceId.getInstance().getToken());
                     createOrUpdateProfile(imageUri);
                 }
             });

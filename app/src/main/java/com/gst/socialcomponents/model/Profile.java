@@ -36,6 +36,7 @@ public class Profile implements Serializable, LazyLoading {
     private ItemType itemType;
     private boolean active;
     private boolean type;
+    private String token;
 
    public Profile() {
         // Default constructor required for calls to DataSnapshot.getValue(Profile.class)
@@ -150,5 +151,13 @@ public class Profile implements Serializable, LazyLoading {
     @Override
     public void setItemType(ItemType itemType) {
         this.itemType = itemType;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

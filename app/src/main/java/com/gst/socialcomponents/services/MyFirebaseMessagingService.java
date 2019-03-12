@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
     private static int notificationId = 0;
+ 
 
     private static final String POST_ID_KEY = "postId";
     private static final String AUTHOR_ID_KEY = "authorId";
@@ -63,22 +65,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_LIKE = "new_like";
     private static final String ACTION_TYPE_NEW_COMMENT = "new_comment";
     private static final String ACTION_TYPE_NEW_POST = "new_post";
+    private static final String ACTION_TYPE_NEW_MEMBER = "new_member_activated";
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.v("remotedmessagehandler",remoteMessage.toString());
 
         if (remoteMessage.getData() != null && remoteMessage.getData().get(ACTION_TYPE_KEY) != null) {
             handleRemoteMessage(remoteMessage);
         } else {
-            LogUtil.logError(TAG, "onMessageReceived()", new RuntimeException("FCM remoteMessage doesn't contains Action Type"));
+            LogUtil.logError("remotedmessagehandler", "onMessageReceived()", new RuntimeException("FCM remoteMessage doesn't contains Action Type"));
         }
     }
 
     private void handleRemoteMessage(RemoteMessage remoteMessage) {
         String receivedActionType = remoteMessage.getData().get(ACTION_TYPE_KEY);
-        LogUtil.logDebug(TAG, "Message Notification Action Type: " + receivedActionType);
+        LogUtil.logDebug("remotedmessagehandler", "Message Notification Action Type: " + remoteMessage);
+
+
+        Log.v("remotedmessagehandler",receivedActionType);
 
         switch (receivedActionType) {
+
             case ACTION_TYPE_NEW_LIKE:
                 parseCommentOrLike(Channel.NEW_LIKE, remoteMessage);
                 break;
@@ -88,7 +97,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case ACTION_TYPE_NEW_POST:
                 handleNewPostCreatedAction(remoteMessage);
                 break;
+            case ACTION_TYPE_NEW_MEMBER:
+                handleactivatedaccount(Channel.NEW_COMMENT, remoteMessage);
+                break;
         }
+    }
+
+    private void handleactivatedaccount(Channel channel, RemoteMessage remoteMessage) {
+        String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
+        String notificationBody = remoteMessage.getData().get(BODY_KEY);
+        String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
+        //String postId = remoteMessage.getData().get(POST_ID_KEY);
+
+        Intent backIntent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        //intent.putExtra(PostDetailsActivity.POST_ID_EXTRA_KEY, postId);
+
+        Bitmap bitmap = getBitmapFromUrl(notificationImageUrl);
+
+        sendNotification(channel, notificationTitle, notificationBody, bitmap, intent);
+        LogUtil.logDebug("remotedmessagehandler", "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
+
     }
 
     private void handleNewPostCreatedAction(RemoteMessage remoteMessage) {
@@ -114,7 +143,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Bitmap bitmap = getBitmapFromUrl(notificationImageUrl);
 
         sendNotification(channel, notificationTitle, notificationBody, bitmap, intent, backIntent);
-        LogUtil.logDebug(TAG, "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
+        LogUtil.logDebug("remotedmessagehandler", "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
     }
 
     @Nullable
@@ -123,6 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(Channel channel, String notificationTitle, String notificationBody, Bitmap bitmap, Intent intent) {
+
         sendNotification(channel, notificationTitle, notificationBody, bitmap, intent, null);
     }
 
@@ -136,7 +166,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent[] intents = new Intent[]{backIntent, intent};
             pendingIntent = PendingIntent.getActivities(this, notificationId++, intents, PendingIntent.FLAG_ONE_SHOT);
         } else {
-            pendingIntent = PendingIntent.getActivity(this, notificationId++, intent, PendingIntent.FLAG_ONE_SHOT);
+          pendingIntent = PendingIntent.getActivity(this, notificationId++, intent, PendingIntent.FLAG_ONE_SHOT);
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

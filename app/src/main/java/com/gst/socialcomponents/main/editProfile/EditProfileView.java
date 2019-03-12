@@ -27,6 +27,7 @@ public interface EditProfileView extends PickImageView {
     void setResidence(String username);
     void setNumresidence(String username);
     void setMobile(String username);
+    void setToken(String token);
 
 
     void setProfilePhoto(String photoUrl);

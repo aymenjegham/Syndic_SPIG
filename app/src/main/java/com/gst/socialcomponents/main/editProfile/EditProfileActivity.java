@@ -113,6 +113,11 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     }
 
     @Override
+    public void setToken(String token) {
+
+    }
+
+    @Override
     public void setResidence(String residencename) {
         residenceEditText.setText(residencename);
     }
