@@ -54,7 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
     private static int notificationId = 0;
- 
+
 
     private static final String POST_ID_KEY = "postId";
     private static final String AUTHOR_ID_KEY = "authorId";
@@ -66,6 +66,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_COMMENT = "new_comment";
     private static final String ACTION_TYPE_NEW_POST = "new_post";
     private static final String ACTION_TYPE_NEW_MEMBER = "new_member_activated";
+
+
 
 
     @Override
@@ -107,7 +109,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
         String notificationBody = remoteMessage.getData().get(BODY_KEY);
         String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
-        //String postId = remoteMessage.getData().get(POST_ID_KEY);
+        String status = remoteMessage.getData().get("statuactivity");
+        Log.v("notiftesting",status);
+
+        if(status.equals(": true")){
+            Log.v("notiftesting:","pass");
+        }
+
+
 
         Intent backIntent = new Intent(this, MainActivity.class);
         Intent intent = new Intent(this, MainActivity.class);
