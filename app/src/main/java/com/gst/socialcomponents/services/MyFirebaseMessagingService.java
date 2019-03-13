@@ -66,6 +66,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_COMMENT = "new_comment";
     private static final String ACTION_TYPE_NEW_POST = "new_post";
     private static final String ACTION_TYPE_NEW_MEMBER = "new_member_activated";
+    private static final String ACTION_TYPE_NEW_MODERATOR =  "new_moderator_activated";
 
 
 
@@ -102,8 +103,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case ACTION_TYPE_NEW_MEMBER:
                 handleactivatedaccount(Channel.NEW_COMMENT, remoteMessage);
                 break;
+            case ACTION_TYPE_NEW_MODERATOR:
+                handleactivatedmoderatoraccount(Channel.NEW_COMMENT, remoteMessage);
+                break;
+
         }
     }
+
+
+    private void handleactivatedmoderatoraccount(Channel channel, RemoteMessage remoteMessage) {
+        String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
+        String notificationBody = remoteMessage.getData().get(BODY_KEY);
+        String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
+        String status = remoteMessage.getData().get("statuactivity");
+        Log.v("notiftesting",status);
+
+        if(status.equals("true")){
+            notificationBody="Votre compte moderateur a été activé";
+        }else if (status.equals("false")) {
+            notificationBody = "Votre compte moderateur a été désactivé";
+        }
+
+
+
+        Intent backIntent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        //intent.putExtra(PostDetailsActivity.POST_ID_EXTRA_KEY, postId);
+
+        Bitmap bitmap = getBitmapFromUrl(notificationImageUrl);
+
+        sendNotification(channel, notificationTitle, notificationBody, bitmap, intent);
+        LogUtil.logDebug("remotedmessagehandler", "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
+
+    }
+
 
     private void handleactivatedaccount(Channel channel, RemoteMessage remoteMessage) {
         String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
@@ -112,8 +145,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String status = remoteMessage.getData().get("statuactivity");
         Log.v("notiftesting",status);
 
-        if(status.equals(": true")){
-            Log.v("notiftesting:","pass");
+        if(status.equals("true")){
+             notificationBody="Votre compte a été activé";
+        }else if (status.equals("false")) {
+             notificationBody = "Votre compte a été désactivé";
         }
 
 
