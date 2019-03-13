@@ -43,6 +43,10 @@ import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.PreferencesUtil;
 import com.google.android.gms.tasks.Task;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+
 /**
  * Created by Alexey on 03.05.18.
  */

@@ -16,10 +16,12 @@
   ~
   -->
 
+
 <resources>
     <string name="storage_link">gs://syndic-spig.appspot.com/</string>
     <string name="google_web_client_id">295510387802-6j78fq05rngogjnoh56p9tgn568oa47j.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">415080662213842</string>
+    <string name="facebook_app_id">2237622276500256</string>
     <string name="facebook_large_image_url_pattern">https://graph.facebook.com/%1$s/picture?type=large</string>
     <string name="google_large_image_url_pattern">%1$s?sz=%2$d</string>
+    <string name="fb_login_protocol_scheme">fb2237622276500256</string>
 </resources>

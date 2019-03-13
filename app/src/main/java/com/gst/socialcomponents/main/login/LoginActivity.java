@@ -48,6 +48,9 @@ import com.gst.socialcomponents.utils.GoogleApiHelper;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.LogoutHelper;
 
+ import com.facebook.appevents.AppEventsLogger;
+
+
 import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> implements LoginView, GoogleApiClient.OnConnectionFailedListener {
