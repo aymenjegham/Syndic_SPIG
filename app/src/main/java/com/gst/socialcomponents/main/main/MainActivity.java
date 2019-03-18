@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
-    Boolean typeuser;
+    public Boolean typeuser;
     Toolbar toolbar ;
 
 
@@ -100,8 +100,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         toolbar.setTitle("Syndic SPIG");
         setSupportActionBar(toolbar);
 
-        Log.v("Firebasetoken", "token "+ FirebaseInstanceId.getInstance().getToken());
-        initContentView();
+         initContentView();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -115,8 +114,17 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
                     typeuser=profile.isType();
-                    if(typeuser== true){
-                        changesetup();
+
+
+                     if(typeuser== true){
+
+                         changesetup();
+
+                    }
+                    if(typeuser== false){
+
+                        changesetuptodefault();
+
                     }
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
@@ -156,9 +164,18 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     private void changesetup() {
-        toolbar.setTitle("Moderateur");
-        toolbar.setBackgroundColor(0xffB22222);
+
+       toolbar.setTitle("Moderateur");
+       toolbar.setBackgroundColor(0xffB22222);
      }
+    private void changesetuptodefault() {
+
+        toolbar.setTitle("Syndic SPIG");
+        toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+
+    }
+
+
 
     void   showalert(){
         new AlertDialog.Builder(MainActivity.this,R.xml.styles)
@@ -225,6 +242,19 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                                 showalert();
                             }
                         });
+                    }
+
+
+
+                    typeuser=profile.isType();
+
+                    if(typeuser== true){
+
+                        changesetup();
+
+                    }
+                    else if(typeuser == false){
+                        changesetuptodefault();
                     }
 
 
@@ -470,15 +500,23 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startActivity(searchIntent);
                 return true;
             case R.id.ticketing:
+
+
                 if (typeuser ==null){
+
+                    Log.v("typeuserheck","null");
                     Intent ticket = new Intent(this, MainActivity.class);
                     startActivity(ticket);
                 }
 
-                if(typeuser==false){
+                if(typeuser != null && typeuser==false){
+                    Log.v("typeuserheck","false");
+
                     Intent ticket = new Intent(this, TicketActivity.class);
                     startActivity(ticket);
-                }else {
+                }else if (typeuser != null && typeuser==true){
+                    Log.v("typeuserheck","true");
+
                     Intent ticket = new Intent(this, TicketActivityMod.class);
                     startActivity(ticket);
                 }

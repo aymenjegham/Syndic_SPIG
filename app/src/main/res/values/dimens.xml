@@ -60,4 +60,8 @@
 
     <dimen name="refresh_layout_end_offset">24dp</dimen>
     <dimen name="refresh_layout_start_offset">-24dp</dimen>
+
+    <dimen name="input_label_vertical_spacing">8dp</dimen>
+    <dimen name="input_label_horizontal_spacing">4dp</dimen>
+
 </resources>

@@ -234,7 +234,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationChannel.enableVibration(true);
             notificationBuilder.setChannelId(channel.id);
             notificationManager.createNotificationChannel(notificationChannel);
-        }
+
+         }
 
         notificationManager.notify(notificationId++, notificationBuilder.build());
     }

@@ -18,24 +18,39 @@ package com.gst.socialcomponents.main.followPosts;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.FollowPostsAdapter;
 import com.gst.socialcomponents.main.base.BaseActivity;
+import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
+import com.gst.socialcomponents.main.main.GalleryActivity;
+import com.gst.socialcomponents.main.main.NotifActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.main.profile.ProfileActivity;
 import com.gst.socialcomponents.model.FollowingPost;
+import com.gst.socialcomponents.model.Profilefire;
 
 import java.util.List;
 
@@ -48,11 +63,17 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
     private SwipeRefreshLayout swipeContainer;
     private TextView message_following_posts_empty;
 
+    Toolbar toolbar;
+
+    public Boolean typeuser;
+    FirebaseUser firebaseUser;
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_posts);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
@@ -63,6 +84,73 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
         initContentView();
 
         presenter.loadFollowingPosts();
+
+
+
+
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+
+            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    typeuser=profile.isType();
+
+                    if(typeuser== true){
+                        changesetup();
+                    }
+                    if(typeuser== false){
+                        changesetuptodefault();
+                    }
+                    if (!profile.isActive()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                try{
+                                    showalert();
+                                    Looper.loop();
+                                    Looper.myLooper().quit();
+
+                                }catch (WindowManager.BadTokenException e){
+
+                                }
+                            }
+                        });
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+        }
+
+    }
+
+
+
+    private void changesetup() {
+
+        toolbar.setTitle("Moderateur");
+        toolbar.setBackgroundColor(0xffB22222);
+    }
+    private void changesetuptodefault() {
+
+        toolbar.setTitle("Syndic SPIG");
+        toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+
     }
 
     @Override
@@ -175,5 +263,40 @@ public class FollowingPostsActivity extends BaseActivity<FollowPostsView, Follow
         } else {
             startActivityForResult(intent, ProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST);
         }
+    }
+
+    void   showalert(){
+        new AlertDialog.Builder(FollowingPostsActivity.this,R.xml.styles)
+                .setTitle("En attente de vérification")
+                .setMessage("Votre adhésion est en attente de confirmation d'un modérateur" +
+                        ",vous serez notifié de l'activation de votre compte")
+                .setCancelable(false)
+                .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(FollowingPostsActivity.this, GalleryActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNeutralButton("Modifier votre profile", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent =new Intent(FollowingPostsActivity.this, EditProfileActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //  Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                        // intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        // intent1.addCategory(Intent.CATEGORY_HOME);
+                        // startActivity(intent1);
+
+                        finishAffinity();
+
+                    }
+                })
+                .show();
     }
 }

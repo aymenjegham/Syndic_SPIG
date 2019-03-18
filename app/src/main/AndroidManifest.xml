@@ -24,7 +24,10 @@
             android:theme="@style/AppCompat.NoActionBar">
 
         </activity>
-        <activity android:name=".main.main.NotifActivity" />
+        <activity android:name=".main.main.NotifActivity"
+            android:theme="@style/AppCompat.NoActionBar">
+        </activity>
+
         <activity
             android:name=".main.main.TicketActivity"
             android:parentActivityName=".main.main.MainActivity"

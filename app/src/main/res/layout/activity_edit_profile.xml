@@ -44,29 +44,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/nameEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    <EditText
+                 android:id="@+id/nameEditText"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
                     android:hint="@string/prompt_name"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"/>
 
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:hint="@string/residence_name"
+                android:paddingTop="2dp"
+                android:paddingBottom="5dp">
 
-                <EditText
-                    android:id="@+id/residenceEditText"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" Residence"
+                    style="@style/InputLabel"/>
+
+                <Spinner
+                    android:id="@+id/simpleSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/residence_name"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLines="1"/>
+                     android:imeOptions="actionDone" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -83,7 +91,9 @@
                     android:inputType="text"
                     android:maxLines="1"/>
 
+
             </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

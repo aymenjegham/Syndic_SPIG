@@ -22,13 +22,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -49,6 +53,10 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     private EditText numtelEditText;
     protected ImageView imageView;
     private ProgressBar avatarProgressBar;
+    private  Spinner spin;
+
+    String[] residencesNames={"Votre residence","Safa","Beach","Miami","Oakland","Sousse la Perle","East London","Hackney","Dakar","GST","Bay area"};
+    String selecteditem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +70,43 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
-        residenceEditText=findViewById(R.id.residenceEditText);
+         spin = findViewById(R.id.simpleSpinner);
         numtelEditText=findViewById(R.id.numtelEditText);
 
 
         imageView.setOnClickListener(this::onSelectImageClick);
 
+         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,residencesNames);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         spin.setAdapter(aa);
+
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                residencesNames[0] = "Hana";
+                selecteditem=residencesNames[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setNumresidenceError("selectionne ton residence");
+
+            }
+        });
+
         initContent();
     }
+
+
+
+
+
+
+
+
+
+
 
     @NonNull
     @Override
@@ -119,8 +156,12 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
     @Override
     public void setResidence(String residencename) {
-        residenceEditText.setText(residencename);
-    }
+       // residenceEditText.setText(residencename);
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,residencesNames);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        residencesNames[0] = residencename;
+        spin.setAdapter(aa);
+     }
 
     @Override
     public void setNumresidence(String numresidencetext) {
@@ -157,7 +198,8 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
     @Override
     public String getResidenceText() {
-        return residenceEditText.getText().toString();
+        return selecteditem;
+                //residenceEditText.getText().toString();
     }
 
     @Override

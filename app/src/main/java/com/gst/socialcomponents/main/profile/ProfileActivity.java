@@ -110,11 +110,15 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     FirebaseUser firebaseUser;
     DatabaseReference reference;
 
+    Toolbar toolbar;
+
+    public Boolean typeuser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+       toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
@@ -129,6 +133,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
         }
+
+
 
 
 
@@ -180,6 +186,19 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                         });
                     }
 
+                    typeuser=profile.isType();
+
+                    if(typeuser== true){
+
+                        changesetup();
+
+                    }
+                    if(typeuser== false){
+
+                        changesetuptodefault();
+
+                    }
+
 
                 }
 
@@ -195,6 +214,27 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
 
     }
+
+    private void changesetup() {
+
+        toolbar.setTitle("Profile Moderateur");
+        toolbar.setBackgroundColor(0xffB22222);
+    }
+    private void changesetuptodefault() {
+
+        toolbar.setTitle("Syndic SPIG");
+        toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+
+    }
+
+
+
+
+
+
+
+
+
 
     @Override
     protected void onResume() {
@@ -588,4 +628,12 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+
+
+
+
+
+
 }
