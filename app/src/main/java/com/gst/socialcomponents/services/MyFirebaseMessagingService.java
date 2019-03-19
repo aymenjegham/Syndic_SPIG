@@ -73,7 +73,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.v("remotedmessagehandler",remoteMessage.toString());
 
         if (remoteMessage.getData() != null && remoteMessage.getData().get(ACTION_TYPE_KEY) != null) {
             handleRemoteMessage(remoteMessage);
@@ -87,7 +86,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         LogUtil.logDebug("remotedmessagehandler", "Message Notification Action Type: " + remoteMessage);
 
 
-        Log.v("remotedmessagehandler",receivedActionType);
 
         switch (receivedActionType) {
 
@@ -116,7 +114,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String notificationBody = remoteMessage.getData().get(BODY_KEY);
         String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
         String status = remoteMessage.getData().get("statuactivity");
-        Log.v("notiftesting",status);
 
         if(status.equals("true")){
             notificationBody="Votre compte moderateur a été activé";
@@ -143,7 +140,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String notificationBody = remoteMessage.getData().get(BODY_KEY);
         String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
         String status = remoteMessage.getData().get("statuactivity");
-        Log.v("notiftesting",status);
 
         if(status.equals("true")){
              notificationBody="Votre compte a été activé";

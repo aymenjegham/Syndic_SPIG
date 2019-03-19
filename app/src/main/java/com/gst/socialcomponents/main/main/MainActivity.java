@@ -20,8 +20,10 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,6 +90,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     public Boolean typeuser;
     Toolbar toolbar ;
 
+    String residence;
+
 
 
     @Override
@@ -102,6 +106,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
          initContentView();
 
+
+
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
@@ -113,6 +120,15 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+
+                    residence =profile.getResidence();
+                    SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
+                    editor.putString("sharedprefresidence", residence);
+                    editor.apply();
+
+
+
+
                     typeuser=profile.isType();
 
 

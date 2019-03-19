@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,14 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.main.main.fragments.ClosedFragment;
+import com.gst.socialcomponents.main.main.fragments.ProcessessFragment;
+import com.gst.socialcomponents.main.main.fragments.UnreadFragment;
 
 import java.util.ArrayList;
 
-public class TicketActivityMod extends AppCompatActivity implements UnreadFragment.OnFragmentInteractionListener, ProcessedFragment.OnFragmentInteractionListener {
+public class TicketActivityMod extends AppCompatActivity implements UnreadFragment.OnFragmentInteractionListener, ProcessessFragment.OnFragmentInteractionListener ,ClosedFragment.OnFragmentInteractionListener{
 
 
 
     Toolbar toolbar;
+    TabLayout tablayout;
     public ActionBar actionBar;
 
 
@@ -33,8 +36,10 @@ public class TicketActivityMod extends AppCompatActivity implements UnreadFragme
 
 
         toolbar = findViewById(R.id.toolbarticketmod);
+        tablayout=findViewById(R.id.tab_layout);
         toolbar.setTitle("Moderateur");
         toolbar.setBackgroundColor(0xffB22222);
+        tablayout.setBackgroundColor(0xffB22222);
         setSupportActionBar(toolbar);
 
         actionBar = getSupportActionBar();
@@ -45,8 +50,10 @@ public class TicketActivityMod extends AppCompatActivity implements UnreadFragme
         final TabLayout tabLayout =findViewById(R.id.tab_layout);
         final ViewPager viewPager =findViewById(R.id.view_pager);
         ViewPagerAdapter viewPagerAdapter =new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new UnreadFragment(),"Unread");
-        viewPagerAdapter.addFragment(new ProcessedFragment(),"Processed");
+        viewPagerAdapter.addFragment(new UnreadFragment(),"Nouveaux");
+        viewPagerAdapter.addFragment(new ProcessessFragment(),"En cours");
+        viewPagerAdapter.addFragment(new ClosedFragment(),"Cloturé");
+
 
         viewPager.setAdapter(viewPagerAdapter);
 

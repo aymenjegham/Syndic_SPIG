@@ -6,8 +6,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -63,6 +65,8 @@ import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.main.pickImageBase.PickImageView;
+import com.gst.socialcomponents.model.Profile;
+import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.model.Ticket;
 import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.HorizontalSpaceItemDecorator;
@@ -101,6 +105,7 @@ public class TicketActivity extends AppCompatActivity {
 
     byte[] data;
     String url;
+    String residence ;
 
     private List<Ticket> tickets;
 
@@ -108,6 +113,10 @@ public class TicketActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
+
+        SharedPreferences prefs = getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+         residence = prefs.getString("sharedprefresidence", null);
+
 
         Toolbar toolbar = findViewById(R.id.toolbarticket);
         setSupportActionBar(toolbar);
@@ -139,7 +148,7 @@ public class TicketActivity extends AppCompatActivity {
 
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
 
-       reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(firebaseUser.getUid());
+       reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence).child(firebaseUser.getUid());
        reference1.keepSynced(true);
         reference1.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -214,6 +223,7 @@ public class TicketActivity extends AppCompatActivity {
     }
 
     void   showalert(){
+
         LayoutInflater factory = LayoutInflater.from(this);
         final View adddialogview = factory.inflate(R.layout.ticketdialog, null);
         final AlertDialog adddialog = new AlertDialog.Builder(this).create();
@@ -263,9 +273,10 @@ public class TicketActivity extends AppCompatActivity {
                                 task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        String photoLink = uri.toString();
+
+                                         String photoLink = uri.toString();
                                         Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink);
-                                        reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
+                                        reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                         pd.dismiss();
                                         adddialog.dismiss();
                                         bitmap=null;
@@ -277,7 +288,7 @@ public class TicketActivity extends AppCompatActivity {
                     }else
                     {
                         Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null");
-                        reference.child("Tickets").child(firebaseUser.getUid()).push().setValue(ticket);
+                        reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                         adddialog.dismiss();
                         Toast.makeText(TicketActivity.this, "update successful", Toast.LENGTH_SHORT).show();
                     }
