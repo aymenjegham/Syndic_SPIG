@@ -3,11 +3,13 @@ package com.gst.socialcomponents.main.main;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,8 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.NotifAdapter;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.model.Profilefire;
+import com.gst.socialcomponents.room.DatabaseClient;
+import com.gst.socialcomponents.room.Notif;
+
+import java.util.List;
 
 public class NotifActivity extends AppCompatActivity {
 
@@ -35,17 +42,20 @@ public class NotifActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference reference;
     public ActionBar actionBar;
-
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notif);
-        RecyclerView recyclerView =findViewById(R.id.recyclerViewnotif);
+        recyclerView =findViewById(R.id.recyclerViewnotif);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         toolbar = findViewById(R.id.toolbarnot);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
+
+        getNotifs();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -98,6 +108,31 @@ public class NotifActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void getNotifs() {
+        class GetTasks extends AsyncTask<Void, Void, List<Notif>> {
+
+            @Override
+            protected List<Notif> doInBackground(Void... voids) {
+                List<Notif> taskList = DatabaseClient
+                        .getInstance(getApplicationContext())
+                        .getAppDatabase()
+                        .notifDao()
+                        .getAll();
+                return taskList;
+            }
+
+            @Override
+            protected void onPostExecute(List<Notif> notifs) {
+                super.onPostExecute(notifs);
+                NotifAdapter adapter = new NotifAdapter(NotifActivity.this, notifs);
+                recyclerView.setAdapter(adapter);
+            }
+        }
+
+        GetTasks gt = new GetTasks();
+        gt.execute();
     }
 
 

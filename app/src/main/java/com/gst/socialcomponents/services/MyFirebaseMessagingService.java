@@ -25,14 +25,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.gst.socialcomponents.Constants;
@@ -40,9 +48,14 @@ import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.managers.PostManager;
+import com.gst.socialcomponents.room.DatabaseClient;
+import com.gst.socialcomponents.room.Notif;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by alexey on 13.04.17.
@@ -233,7 +246,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
          }
 
+        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
+        offsetRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                double offset = snapshot.getValue(Double.class);
+                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
+                saveNotif(notificationTitle,notificationBody,estimatedServerTimeMs,false);
+             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Listener was cancelled");
+            }
+        });
+
+
         notificationManager.notify(notificationId++, notificationBuilder.build());
+
     }
 
     enum Channel {
@@ -249,4 +278,41 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             this.name = name;
         }
     }
+
+
+    private void saveNotif(String notiftitle,String notifbody,double currenttime,Boolean isseen) {
+
+
+        class SaveNotif extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                //creating a task
+                Notif notif = new Notif();
+                notif.setTitle(notiftitle);
+                notif.setDesc(notifbody);
+                notif.setCurrenttime(currenttime);
+                notif.setFinished(isseen);
+
+                //adding to database
+                DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
+                        .notifDao()
+                        .insert(notif);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+            }
+        }
+
+        SaveNotif sn = new SaveNotif();
+        sn.execute();
+    }
+
+
+
 }
