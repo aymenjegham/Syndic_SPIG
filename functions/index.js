@@ -190,17 +190,43 @@ exports.pushNotificationNewPost = functions.database.ref('/posts/{postId}').onCr
 
     // Get post authorID.
     const getAuthorIdTask = admin.database().ref(`/posts/${postId}/authorId`).once('value');
+	    const getresidenceTask = admin.database().ref(`/posts/${postId}/residence`).once('value');
 
-    return getAuthorIdTask.then(authorId => {
+	
+	
+	
+	
+	
+	/*
+	  return Promise.all([getDeviceTokensTask, getCommentAuthorProfileTask]).then(results => {
+            const tokensSnapshot = results[0];
+            const commentAuthorProfile = results[1].val();
+
+            if (commentAuthorProfile.id === post.val().authorId) {
+                console.log('User commented own post');
+                return 'User commented own post';
+            }
+	*/
+
+ /*  return getAuthorIdTask.then(authorId => {
 
         console.log('post author id', authorId.val());
-
+*/
         // Create a notification
+		
+		return Promise.all([getAuthorIdTask, getresidenceTask]).then(results => {
+            const authorSnapshot = results[0];
+            const residence = results[1];
+		
+		
+		
+		
         const payload = {
             data: {
                 actionType: actionTypeNewPost,
                 postId: postId,
-                authorId: authorId.val(),
+                authorId: authorSnapshot.val(),
+				residencei: residence 
             },
         };
 

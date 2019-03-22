@@ -18,6 +18,7 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +47,8 @@ import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.FormatterUtil;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by alexey on 27.12.16.
@@ -125,6 +128,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Post post) {
 
+
+
+
+
         likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
 
 
@@ -152,7 +159,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
 
         if(post.isIsmoderator()){
-          linearlayout.setBackgroundColor(Color.RED);
+          linearlayout.setBackgroundResource(R.drawable.drawablemod);
         }else {
             linearlayout.setBackgroundColor(Color.WHITE);
         }

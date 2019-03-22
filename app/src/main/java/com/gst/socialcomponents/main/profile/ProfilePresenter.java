@@ -23,6 +23,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 
 import com.gst.socialcomponents.R;
@@ -170,6 +171,12 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
                 ifViewAttached(view -> {
                     view.setProfileName(profile.getUsername());
                     view.setResidenceName(profile.getResidence());
+
+                    if (profile.isType()){
+                        Log.v("profiletypeis",String.valueOf(profile.isType()));
+                        view.setProfileType();
+
+                    }
 
 
                     if (profile.getPhotoUrl() != null) {

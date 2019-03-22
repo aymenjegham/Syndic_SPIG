@@ -129,6 +129,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     editor.putBoolean("sharedprefismoderator",isModerator);
                     editor.apply();
 
+                   Log.v("checkingforequal","true we got there from main "+residence);
+
+
 
 
 
@@ -252,7 +255,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
-                    Log.v("datachanged", String.valueOf(profile.isActive()));
 
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {

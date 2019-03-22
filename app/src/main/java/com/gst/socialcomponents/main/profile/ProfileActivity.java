@@ -89,6 +89,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     // UI references.
     private TextView nameEditText;
     private TextView residentTextView;
+    private TextView moderator;
+
     private ImageView imageView;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -148,6 +150,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
         residentTextView=findViewById(R.id.nameresidencText);
+        moderator=findViewById(R.id.moderator);
         postsCounterTextView = findViewById(R.id.postsCounterTextView);
         likesCountersTextView = findViewById(R.id.likesCountersTextView);
         followersCounterTextView = findViewById(R.id.followersCounterTextView);
@@ -495,6 +498,12 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     @Override
     public void setResidenceName(String username) {
         residentTextView.setText(username);
+    }
+
+
+    @Override
+    public void setProfileType() {
+        moderator.setVisibility(View.VISIBLE);
     }
 
 

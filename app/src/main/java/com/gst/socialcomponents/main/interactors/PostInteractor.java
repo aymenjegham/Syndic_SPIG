@@ -19,6 +19,7 @@
 package com.gst.socialcomponents.main.interactors;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -58,6 +59,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Alexey on 05.06.18.
  */
@@ -70,9 +73,16 @@ public class PostInteractor {
     private DatabaseHelper databaseHelper;
     private Context context;
 
+    String residence ;
+    String residencevalue;
+
+
+
+
     public static PostInteractor getInstance(Context context) {
         if (instance == null) {
             instance = new PostInteractor(context);
+
         }
 
         return instance;
@@ -81,6 +91,8 @@ public class PostInteractor {
     private PostInteractor(Context context) {
         this.context = context;
         databaseHelper = ApplicationHelper.getDatabaseHelper();
+
+
     }
 
     public String generatePostId() {
@@ -145,7 +157,6 @@ public class PostInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
                 PostListResult result = parsePostList(objectMap);
-                Log.v("datasnapshotlisten",objectMap.toString());
 
                 if (result.getPosts().isEmpty() && result.isMoreDataAvailable()) {
                     getPostList(onDataChangedListener, result.getLastItemCreatedDate() - 1);
@@ -263,25 +274,42 @@ public class PostInteractor {
                         lastItemCreatedDate = createdDate;
                     }
 
+
+
+
+
+
+
                     if (!hasComplain) {
-                        Post post = new Post();
-                        post.setId(key);
-                        post.setTitle((String) mapObj.get("title"));
-                        post.setDescription((String) mapObj.get("description"));
-                        post.setImageTitle((String) mapObj.get("imageTitle"));
-                        post.setAuthorId((String) mapObj.get("authorId"));
-                        post.setCreatedDate(createdDate);
-                        post.setIsmoderator((boolean) mapObj.get("moderator"));
-                        if (mapObj.containsKey("commentsCount")) {
-                            post.setCommentsCount((long) mapObj.get("commentsCount"));
-                        }
-                        if (mapObj.containsKey("likesCount")) {
-                            post.setLikesCount((long) mapObj.get("likesCount"));
-                        }
-                        if (mapObj.containsKey("watchersCount")) {
-                            post.setWatchersCount((long) mapObj.get("watchersCount"));
-                        }
-                        list.add(post);
+                        SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+                        residence = prefs.getString("sharedprefresidence", null);
+
+                         Post post;
+                       if(mapObj.get("residence").equals(residence)) {
+                         post = new Post();
+                            post.setId(key);
+                            post.setTitle((String) mapObj.get("title"));
+                            post.setDescription((String) mapObj.get("description"));
+                            post.setImageTitle((String) mapObj.get("imageTitle"));
+                            post.setAuthorId((String) mapObj.get("authorId"));
+                            post.setCreatedDate(createdDate);
+                            post.setIsmoderator((boolean) mapObj.get("moderator"));
+                            post.setResidence((String) mapObj.get("residence"));
+
+                            if (mapObj.containsKey("commentsCount")) {
+                                post.setCommentsCount((long) mapObj.get("commentsCount"));
+                            }
+                            if (mapObj.containsKey("likesCount")) {
+                                post.setLikesCount((long) mapObj.get("likesCount"));
+                            }
+                            if (mapObj.containsKey("watchersCount")) {
+                                post.setWatchersCount((long) mapObj.get("watchersCount"));
+                            }
+                           list.add(post);
+                       }
+
+
+
                     }
                 }
             }

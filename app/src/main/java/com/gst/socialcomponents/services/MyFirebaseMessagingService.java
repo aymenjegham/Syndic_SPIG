@@ -22,6 +22,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -80,6 +81,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_POST = "new_post";
     private static final String ACTION_TYPE_NEW_MEMBER = "new_member_activated";
     private static final String ACTION_TYPE_NEW_MODERATOR =  "new_moderator_activated";
+
+    String residencepref;
 
 
 
@@ -175,11 +178,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void handleNewPostCreatedAction(RemoteMessage remoteMessage) {
         String postAuthorId = remoteMessage.getData().get(AUTHOR_ID_KEY);
+        String residencei =remoteMessage.getData().get("residencei");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
 
         //Send notification for each users except author of post.
         if (firebaseUser != null && !firebaseUser.getUid().equals(postAuthorId)) {
-            PostManager.getInstance(this.getApplicationContext()).incrementNewPostsCounter();
+
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+            residencepref = prefs.getString("sharedprefresidence", null);
+            Log.v("testingifitpass",residencei+"---"+residencepref);
+
+            if(residencepref.equals(residencei)){
+                Log.v("testingifitpass","done");
+                PostManager.getInstance(this.getApplicationContext()).incrementNewPostsCounter();
+
+            }
         }
     }
 

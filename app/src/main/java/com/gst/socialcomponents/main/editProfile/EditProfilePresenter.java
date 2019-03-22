@@ -18,6 +18,7 @@ package com.gst.socialcomponents.main.editProfile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +33,8 @@ import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.ValidationUtil;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Alexey on 03.05.18.
@@ -115,6 +118,9 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setMobile(mobile);
                     profile.setToken( FirebaseInstanceId.getInstance().getToken());
                     createOrUpdateProfile(imageUri);
+
+                    SharedPreferences.Editor editor = context.getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
+                    editor.putString("sharedprefresidence", residence);
                 }
             });
         }
