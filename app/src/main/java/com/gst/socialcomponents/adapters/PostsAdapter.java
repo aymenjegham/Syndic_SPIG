@@ -17,8 +17,11 @@
 
 package com.gst.socialcomponents.adapters;
 
+import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,8 @@ import com.gst.socialcomponents.utils.PreferencesUtil;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Kristina on 10/31/16.
  */
@@ -50,6 +55,7 @@ public class PostsAdapter extends BasePostsAdapter {
     private long lastLoadedItemCreatedDate;
     private SwipeRefreshLayout swipeContainer;
     private MainActivity mainActivity;
+
 
     public PostsAdapter(final MainActivity activity, SwipeRefreshLayout swipeContainer) {
         super(activity);
@@ -88,8 +94,9 @@ public class PostsAdapter extends BasePostsAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == ItemType.ITEM.getTypeCode()) {
-            return new PostViewHolder(inflater.inflate(R.layout.post_item_list_view, parent, false),
-                    createOnClickListener(), activity);
+                return new PostViewHolder(inflater.inflate(R.layout.post_item_list_view, parent, false),
+                        createOnClickListener(), activity);
+
         } else {
             return new LoadViewHolder(inflater.inflate(R.layout.loading_view, parent, false));
         }
@@ -129,6 +136,8 @@ public class PostsAdapter extends BasePostsAdapter {
                     //change adapter contents
                     if (activity.hasInternetConnection()) {
                         isLoading = true;
+
+
                         postList.add(new Post(ItemType.LOAD));
                         notifyItemInserted(postList.size());
                         loadNext(lastLoadedItemCreatedDate - 1);
@@ -142,6 +151,8 @@ public class PostsAdapter extends BasePostsAdapter {
         }
 
         if (getItemViewType(position) != ItemType.LOAD.getTypeCode()) {
+
+
             ((PostViewHolder) holder).bindData(postList.get(position));
         }
     }
@@ -150,6 +161,7 @@ public class PostsAdapter extends BasePostsAdapter {
         this.postList.addAll(list);
         notifyDataSetChanged();
         isLoading = false;
+
     }
 
     public void loadFirstPage() {

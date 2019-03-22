@@ -86,11 +86,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
     FirebaseUser firebaseUser;
-    DatabaseReference reference;
+    DatabaseReference reference,reference1;
     public Boolean typeuser;
     Toolbar toolbar ;
 
     String residence;
+    boolean isModerator;
 
 
 
@@ -122,8 +123,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
 
                     residence =profile.getResidence();
+                    isModerator =profile.isType();
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
+                    editor.putBoolean("sharedprefismoderator",isModerator);
                     editor.apply();
 
 
@@ -286,8 +289,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         }
 
 
-
-
     }
 
     @NonNull
@@ -372,6 +373,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         postsAdapter.setCallback(new PostsAdapter.Callback() {
             @Override
             public void onItemClick(final Post post, final View view) {
+
                 presenter.onPostClicked(post, view);
             }
 

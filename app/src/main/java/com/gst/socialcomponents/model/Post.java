@@ -16,6 +16,8 @@
 
 package com.gst.socialcomponents.model;
 
+import android.util.Log;
+
 import com.gst.socialcomponents.enums.ItemType;
 import com.gst.socialcomponents.utils.FormatterUtil;
 
@@ -42,6 +44,9 @@ public class Post implements Serializable, LazyLoading {
     private long watchersCount;
     private boolean hasComplain;
     private ItemType itemType;
+    private boolean ismoderator;
+
+
 
     public Post() {
         this.createdDate = new Date().getTime();
@@ -52,6 +57,17 @@ public class Post implements Serializable, LazyLoading {
         this.itemType = itemType;
         setId(itemType.toString());
     }
+
+
+    public boolean isIsmoderator() {
+        return ismoderator;
+    }
+
+    public void setIsmoderator(boolean ismoderator) {
+        this.ismoderator = ismoderator;
+    }
+
+
 
     public String getId() {
         return id;
@@ -147,6 +163,8 @@ public class Post implements Serializable, LazyLoading {
         result.put("watchersCount", watchersCount);
         result.put("hasComplain", hasComplain);
         result.put("createdDateText", FormatterUtil.getFirebaseDateFormat().format(new Date(createdDate)));
+        result.put("moderator",ismoderator);
+
 
         return result;
     }

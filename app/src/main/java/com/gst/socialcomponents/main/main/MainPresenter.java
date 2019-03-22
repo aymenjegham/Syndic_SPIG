@@ -19,6 +19,7 @@ package com.gst.socialcomponents.main.main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,7 @@ class MainPresenter extends BasePresenter<MainView> {
     }
 
     void onPostClicked(final Post post, final View postView) {
+
         postManager.isPostExistSingleValue(post.getId(), exist -> ifViewAttached(view -> {
             if (exist) {
                 view.openPostDetailsActivity(post, postView);

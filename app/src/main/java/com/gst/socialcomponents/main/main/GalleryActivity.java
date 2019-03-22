@@ -15,6 +15,7 @@ import com.smarteist.autoimageslider.SliderView;
 public class GalleryActivity extends AppCompatActivity {
 
     SliderLayout sliderLayout;
+    String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +32,93 @@ public class GalleryActivity extends AppCompatActivity {
 
     private void setSliderViews() {
 
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 17; i++) {
 
             DefaultSliderView sliderView = new DefaultSliderView(getApplicationContext());
 
             switch (i) {
                 case 0:
-                    sliderView.setImageUrl("http://vosges.immobilieregloulou.com/wp-content/uploads/2018/02/1.jpg");
+                   // sliderView.setImageUrl("http://vosges.immobilieregloulou.com/wp-content/uploads/2018/02/1.jpg");
+                    sliderView.setImageDrawable(R.drawable.vosges);
+                    description="Résidence les vosges";
                     break;
                 case 1:
-                    sliderView.setImageUrl("http://diarelmanezah.immobilieregloulou.com/wp-content/uploads/2018/09/bloc1-1.jpg");
+                    sliderView.setImageDrawable(R.drawable.sierra);
+                    description="Résidence Sierra";
                     break;
                 case 2:
-                    sliderView.setImageUrl("http://jasmins3.immobilieregloulou.com/assets/imgs/gal/ext00.jpg");
+                    sliderView.setImageDrawable(R.drawable.pyrenees);
+                    description="Résidence les pyrénées";
                     break;
                 case 3:
-                    sliderView.setImageUrl("http://residencek2.immobilieregloulou.com/web/uploads/images/6a7011ac30e3308c247bbfe4ffc69f48.jpeg");
+                    sliderView.setImageDrawable(R.drawable.prestige);
+                    description="Résidence Prestige";
+                    break;
+                case 4:
+                    sliderView.setImageDrawable(R.drawable.palms);
+                    description="Résidence Palm's";
+                    break;
+                case 5:
+                    sliderView.setImageDrawable(R.drawable.maarouf);
+                    description="résidence maarouf";
+                    break;
+                case 6:
+                    sliderView.setImageDrawable(R.drawable.lotissementmsaken);
+                    description="Lotisement Msaken";
+                    break;
+                case 7:
+                    sliderView.setImageDrawable(R.drawable.k2);
+                    description="résidence K2";
+                    break;
+                case 8:
+                    sliderView.setImageDrawable(R.drawable.jura);
+                    description="résidence le jura";
+                    break;
+                case 9:
+                    sliderView.setImageDrawable(R.drawable.jasmins);
+                    description="résidence les jasmins 3";
+                    break;
+                case 10:
+                    sliderView.setImageDrawable(R.drawable.jasmins1);
+                    description="résidence les jasmins 1";
+                    break;
+                case 11:
+                    sliderView.setImageDrawable(R.drawable.jasmins2);
+                    description="résidence les jasmins 3";
+                    break;
+                case 12:
+                    sliderView.setImageDrawable(R.drawable.houda2);
+                    description="résidence el houda 2";
+                    break;
+                case 13:
+                    sliderView.setImageDrawable(R.drawable.houda);
+                    description="résidence el houda";
+                    break;
+                case 14:
+                    sliderView.setImageDrawable(R.drawable.ennakhil);
+                    description="résidence ennakhil";
+                    break;
+                case 15:
+                    sliderView.setImageDrawable(R.drawable.chottmaryem);
+                    description="résidence chott maryem";
+                    break;
+                case 16:
+                    sliderView.setImageDrawable(R.drawable.arcade);
+                    description="résidence les arcades";
+                    break;
+                case 17:
+                    sliderView.setImageDrawable(R.drawable.alpes);
+                    description="résidence les alpes";
                     break;
             }
 
             sliderView.setImageScaleType(ImageView.ScaleType.CENTER_CROP);
-            sliderView.setDescription("this is a good example of what i am trying to demonstrate for a gallery slider, it is simple but i think it is efficient " + (i + 1));
+            sliderView.setDescription(description);
             final int finalI = i;
             sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(GalleryActivity.this, "" + (finalI + 1), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(GalleryActivity.this, "" + (finalI + 1), Toast.LENGTH_SHORT).show();
                 }
             });
 

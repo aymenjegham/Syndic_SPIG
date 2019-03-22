@@ -18,14 +18,19 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.collection.LLRBNode;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.controllers.LikeController;
@@ -60,6 +65,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView;
     private ImageView authorImageView;
     private ViewGroup likeViewGroup;
+    private CardView cardview;
+    private LinearLayout linearlayout;
 
     private ProfileManager profileManager;
     protected PostManager postManager;
@@ -86,6 +93,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         detailsTextView = view.findViewById(R.id.detailsTextView);
         authorImageView = view.findViewById(R.id.authorImageView);
         likeViewGroup = view.findViewById(R.id.likesContainer);
+        cardview=view.findViewById(R.id.card_view);
+        linearlayout =view.findViewById(R.id.linearlayoutpost);
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
 
@@ -118,6 +127,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
 
+
         String title = removeNewLinesDividers(post.getTitle());
         titleTextView.setText(title);
         String description = removeNewLinesDividers(post.getDescription());
@@ -138,6 +148,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
+        }
+
+
+        if(post.isIsmoderator()){
+          linearlayout.setBackgroundColor(Color.RED);
+        }else {
+            linearlayout.setBackgroundColor(Color.WHITE);
         }
     }
 

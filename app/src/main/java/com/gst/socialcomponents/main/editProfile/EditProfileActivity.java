@@ -18,6 +18,7 @@ package com.gst.socialcomponents.main.editProfile;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,7 +56,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     private ProgressBar avatarProgressBar;
     private  Spinner spin;
 
-    String[] residencesNames={"Votre residence","Safa","Beach","Miami","Oakland","Sousse la Perle","East London","Hackney","Dakar","GST","Bay area"};
+    String[] residencesNames={"Votre residence","Alpes","Arcades","Chott-maryem","Ennakhil","Houda","Houda 2","Jasmins","Jasmins 2","Jasmins 3","Jura","K2","Lotissement Msaken","Maarouf","Palms","Prestige","Pyrenées","Sierra","Vosges"};
     String selecteditem;
 
     @Override
@@ -83,8 +84,12 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                residencesNames[0] = "Hana";
+                residencesNames[0] = "Alpes";
                 selecteditem=residencesNames[position];
+                SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
+                editor.putString("sharedprefresidence", residencesNames[position]);
+                Log.v("testingmodifresid",residencesNames[position]);
+                editor.apply();
 
             }
 

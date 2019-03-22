@@ -17,6 +17,7 @@
 package com.gst.socialcomponents.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,7 @@ public class PostsByUserAdapter extends BasePostsAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         ((PostViewHolder) holder).bindData(postList.get(position));
     }
 

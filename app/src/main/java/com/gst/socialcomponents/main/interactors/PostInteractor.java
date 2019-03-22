@@ -145,6 +145,7 @@ public class PostInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
                 PostListResult result = parsePostList(objectMap);
+                Log.v("datasnapshotlisten",objectMap.toString());
 
                 if (result.getPosts().isEmpty() && result.isMoreDataAvailable()) {
                     getPostList(onDataChangedListener, result.getLastItemCreatedDate() - 1);
@@ -270,6 +271,7 @@ public class PostInteractor {
                         post.setImageTitle((String) mapObj.get("imageTitle"));
                         post.setAuthorId((String) mapObj.get("authorId"));
                         post.setCreatedDate(createdDate);
+                        post.setIsmoderator((boolean) mapObj.get("moderator"));
                         if (mapObj.containsKey("commentsCount")) {
                             post.setCommentsCount((long) mapObj.get("commentsCount"));
                         }

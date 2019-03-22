@@ -17,9 +17,11 @@
 package com.gst.socialcomponents.main.post;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
@@ -27,6 +29,8 @@ import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.managers.listeners.OnPostCreatedListener;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.ValidationUtil;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Alexey on 03.05.18.
@@ -36,16 +40,19 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
 
     protected boolean creatingPost = false;
     protected PostManager postManager;
+    boolean ismoderator;
 
     public BaseCreatePostPresenter(Context context) {
         super(context);
         postManager = PostManager.getInstance(context);
-    }
+        SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+        ismoderator = prefs.getBoolean("sharedprefismoderator", false);
+     }
 
     @StringRes
     protected abstract int getSaveFailMessage();
 
-    protected abstract void savePost(final String title, final String description);
+    protected abstract void savePost(final String title, final String description,boolean ismod);
 
     protected abstract boolean isImageRequired();
 
@@ -57,6 +64,8 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
 
             String title = view.getTitleText().trim();
             String description = view.getDescriptionText().trim();
+
+
 
             boolean cancel = false;
 
@@ -82,7 +91,7 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
             if (!cancel) {
                 creatingPost = true;
                 view.hideKeyboard();
-                savePost(title, description);
+                savePost(title, description,ismoderator);
             }
         });
     }

@@ -30,4 +30,5 @@ public enum ItemType {LOAD(10), ITEM(11);
     public int getTypeCode() {
         return this.typeCode;
     }
+
 }

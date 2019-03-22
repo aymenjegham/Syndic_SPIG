@@ -65,6 +65,7 @@ public class PostManager extends FirebaseListenersManager {
     }
 
     public void createOrUpdatePost(Post post) {
+
         try {
             postInteractor.createOrUpdatePost(post);
         } catch (Exception e) {

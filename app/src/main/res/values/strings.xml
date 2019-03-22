@@ -17,112 +17,112 @@
 
 <resources>
     <string name="app_name">Syndic SPIG</string>
-    <string name="label_create_post_activity">Create post</string>
-    <string name="label_post_detail_activity">Post detail</string>
+    <string name="label_create_post_activity">Créer publication</string>
+    <string name="label_post_detail_activity">Détails publication</string>
     <string name="label_image_detail_activity">Image</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_create_profile">Create profile</string>
+    <string name="title_activity_login">Se Connecter</string>
+    <string name="title_activity_create_profile">Créer profile</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_edit_profile">Edit profile</string>
-    <string name="title_activity_edit_post">Edit post</string>
-    <string name="title_activity_following_posts">Following posts</string>
+    <string name="title_activity_edit_profile">Editer profile</string>
+    <string name="title_activity_edit_post">Editer publication</string>
+    <string name="title_activity_following_posts">Messages suivis</string>
 
-    <string name="text_take_photo">Take photo</string>
-    <string name="text_pick_photo">Pick from Gallery</string>
-    <string name="button_title_cancel">Cancel</string>
+    <string name="text_take_photo">Prendre une photo</string>
+    <string name="text_pick_photo">Choisissez de la galerie</string>
+    <string name="button_title_cancel">Annuler</string>
     <string name="button_ok">OK</string>
 
-    <string name="hint_title">Title</string>
+    <string name="hint_title">Titre</string>
     <string name="hint_description">Description</string>
 
-    <string name="message_post_was_created">Post was created</string>
-    <string name="error_fail_create_post">Fail to create post</string>
-    <string name="error_fail_load_image">Fail to load image</string>
-    <string name="error_fail_crop_image">Fail to crop image</string>
-    <string name="error_smaller_image">Image is too small. Required image size 100x100 px</string>
-    <string name="error_incorrect_file_type">Incorrect file type</string>
-    <string name="error_bigger_file">File size is bigger than 10Mb</string>
-    <string name="message_creating_post">Creating post …</string>
-    <string name="message_saving">Saving …</string>
-    <string name="warning_empty_image">Image is required</string>
-    <string name="warning_empty_title">Title is required</string>
-    <string name="warning_empty_description">Description is required</string>
-    <string name="error_post_title_length">Max length of the title should be less than 255 symbols</string>
-    <string name="error_fail_remove_post">Fail to remove post</string>
-    <string name="message_post_was_removed">Post was removed</string>
-    <string name="error_fail_update_post">Fail to update post</string>
-    <string name="error_post_was_removed">Post was removed</string>
-    <string name="confirm_deletion_post">Delete this post?</string>
+    <string name="message_post_was_created">Publication créer</string>
+    <string name="error_fail_create_post">Echec de créer la publication</string>
+    <string name="error_fail_load_image">Impossible de charger l\'image</string>
+    <string name="error_fail_crop_image">Impossible de recadrer l\'image</string>
+    <string name="error_smaller_image">L\'image est trop petite. Taille d\'image requise 100x100 px</string>
+    <string name="error_incorrect_file_type">Type de fichier incorrect</string>
+    <string name="error_bigger_file">La taille du fichier est supérieure à 10 Mo</string>
+    <string name="message_creating_post">Creation de la publication …</string>
+    <string name="message_saving">Sauvegarde …</string>
+    <string name="warning_empty_image">Image est requis</string>
+    <string name="warning_empty_title">Titre est requis</string>
+    <string name="warning_empty_description">Description est requis</string>
+    <string name="error_post_title_length">La longueur maximale du titre doit être inférieure à 255 symboles. </string>
+    <string name="error_fail_remove_post">erreur suppression de publication</string>
+    <string name="message_post_was_removed">Publication supprimé</string>
+    <string name="error_fail_update_post">Échec de la mise à jour du message</string>
+    <string name="error_post_was_removed">Publication supprimé</string>
+    <string name="confirm_deletion_post">Supprimer cette publication?</string>
 
-    <string name="comment_text_hint">Enter your comment …</string>
-    <string name="button_post_comment">Post comment</string>
+    <string name="comment_text_hint">Entrer votre commentaire …</string>
+    <string name="button_post_comment">Créer un commentaire</string>
 
-    <string name="label_comments">Comments (%1$d):</string>
+    <string name="label_comments">Commentaires (%1$d):</string>
 
-    <string name="create_post_menu_label">Post</string>
-    <string name="create_post_full_menu_label">Create post</string>
-    <string name="sign_out_menu_label">Sign out</string>
-    <string name="edit_profile_menu_label">Edit profile</string>
-    <string name="button_title_save">Done</string>
+    <string name="create_post_menu_label">Publication</string>
+    <string name="create_post_full_menu_label">Créer une publication</string>
+    <string name="sign_out_menu_label">Se déconnecter</string>
+    <string name="edit_profile_menu_label">Editer le profile</string>
+    <string name="button_title_save">Terminé</string>
     <string name="button_title_continue">Continue</string>
 
     <!-- Strings related to registration and login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_name">Name</string>
+    <string name="prompt_name">Nom</string>
     <string name="residence_name">Residence</string>
     <string name="numresidence_name">Matricule Residence</string>
     <string name="numtel">Mobile</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_conf_password">Confirm password</string>
+    <string name="prompt_conf_password">Confirme password</string>
     <string name="action_create_profile">Continue</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="error_profile_name_length">Max length of the name should be less than 120 symbols</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_confirm_password">Wrong password confirmation</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="permissions_not_granted">Cancelling, required permissions are not granted</string>
-    <string name="error_fail_create_profile">Fail to create profile</string>
-    <string name="error_fail_update_profile">Fail to update profile</string>
-    <string name="text_login">Thank you for using our application! Please, sign in for continue your action.</string>
-    <string name="error_authentication">Authentication failed.</string>
-    <string name="error_google_play_services">Google Play Services error.</string>
-    <string name="button_login_with_facebook">Sign in with facebook</string>
-    <string name="button_login_with_google">Sign in with google</string>
-    <string name="button_login_with_email">Sign in with email</string>
-    <string name="button_gallery">Gallery</string>
+    <string name="error_field_required">Ce champ est requis</string>
+    <string name="error_profile_name_length">La longueur maximale du nom doit être inférieure à 120 symboles.</string>
+    <string name="error_invalid_email">Cette adresse email est invalide</string>
+    <string name="error_confirm_password">Mauvaise confirmation du mot de passe</string>
+    <string name="action_sign_in">Se connecter</string>
+    <string name="permissions_not_granted">Annulation, les autorisations requises ne sont pas accordées</string>
+    <string name="error_fail_create_profile">Échec de la création du profil</string>
+    <string name="error_fail_update_profile">Échec de la mise à jour du profil</string>
+    <string name="text_login">Merci d\'utiliser notre application! Veuillez vous connecter pour continuer votre action.</string>
+    <string name="error_authentication">Authentication échoué.</string>
+    <string name="error_google_play_services">erreur Google Play Services </string>
+    <string name="button_login_with_facebook">Se connecter avec facebook</string>
+    <string name="button_login_with_google">Se connecter avec google</string>
+    <string name="button_login_with_email">Se connecter avec email</string>
+    <string name="button_gallery">Gallerie</string>
 
 
-    <string name="loading">Loading …</string>
-    <string name="removing">Removing …</string>
-    <string name="error_general">Somthing went wrong.</string>
-    <string name="error_general_post">Somthing went wrong with post, id: %1$s</string>
-    <string name="internet_connection_failed">No internet connection</string>
-    <string name="press_once_again_to_exit">Press once again to exit</string>
+    <string name="loading">Chargement …</string>
+    <string name="removing">suppression …</string>
+    <string name="error_general">quelque chose s\'est mal passé.</string>
+    <string name="error_general_post">quelque chose s\'est mal passé avec le publication, id: %1$s</string>
+    <string name="internet_connection_failed">Pas d\'internet</string>
+    <string name="press_once_again_to_exit">Appuyez à nouveau pour quitter</string>
 
     <!-- Strings related to login -->
 
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="error_invalid_password">Ce mot de passe est trop court</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="permission_rationale">"Les autorisations de contacts sont nécessaires pour fournir un courrier
+         finitions. "
     </string>
 
     <string name="profile_menu_item">Profile</string>
-    <string name="collapse_text_label">show less</string>
-    <string name="expand_text_label">show more</string>
-    <string name="add_complain">Complain</string>
-    <string name="edit_post_menu">Edit post</string>
-    <string name="delete_post_menu">Delete post</string>
-    <string name="complain_text">You can complain to this post if it contains violence,
-        bullying and threats, hate speech, tragic events and sexually explicit contents.
-        Nobody will see the post if you complain to it. You can\'t delete your complain.</string>
+    <string name="collapse_text_label">montre moins</string>
+    <string name="expand_text_label">montre plus</string>
+    <string name="add_complain">Signaler</string>
+    <string name="edit_post_menu">Editer publication</string>
+    <string name="delete_post_menu">Suppression  publication</string>
+    <string name="complain_text">Vous pouvez vous plaindre à ce message s\'il contient de la violence,
+         intimidation et menaces, discours de haine, événements tragiques et contenus sexuellement explicites.
+         Personne ne verra le message si vous vous en plaignez. Vous ne pouvez pas supprimer votre plainte.</string>
 
-    <string name="send_comment_button_label">Send</string>
-    <string name="posted_by_label">Posted by:</string>
+    <string name="send_comment_button_label">Envoie</string>
+    <string name="posted_by_label">Publié par:</string>
 
     <plurals name="posts_counter_format">
-        <item quantity="one">post</item>
-        <item quantity="other">posts</item>
+        <item quantity="one">publication</item>
+        <item quantity="other">publications</item>
     </plurals>
 
     <plurals name="likes_counter_format">
@@ -140,29 +140,29 @@
         <item quantity="other">followings</item>
     </plurals>
 
-    <string name="posts_label">Posts:</string>
-    <string name="complain_sent">Complain was sent successfully</string>
-    <string name="now_time_range">now</string>
+    <string name="posts_label">Publications:</string>
+    <string name="complain_sent">Réclamation a été envoyé avec succès</string>
+    <string name="now_time_range">Mnt</string>
 
-    <string name="duration_minutes_shortest">%1$d m</string>
-    <string name="duration_hours_shortest">%1$d h</string>
-    <string name="duration_days_shortest">%1$d d</string>
-    <string name="duration_week_shortest">%1$d w</string>
+    <string name="duration_minutes_shortest">%1$d min</string>
+    <string name="duration_hours_shortest">%1$d hr</string>
+    <string name="duration_days_shortest">%1$d jour</string>
+    <string name="duration_week_shortest">%1$d sem</string>
 
     <string name="post_image_transition_name" translatable="false">post_image_transition</string>
     <string name="post_author_image_transition_name" translatable="false">post_author_image_transition_name</string>
-    <string name="message_new_post_was_created">New post was created</string>
+    <string name="message_new_post_was_created">Nouvelle publication a été créé</string>
 
     <plurals name="new_posts_counter_format">
-        <item quantity="one">%1$d new post</item>
-        <item quantity="other">%1$d new posts</item>
+        <item quantity="one">%1$d nouvelle publication</item>
+        <item quantity="other">%1$d nouveaux publicationss</item>
     </plurals>
 
-    <string name="edit_comment_menu_item">Edit</string>
-    <string name="delete_comment_menu_item">Delete</string>
-    <string name="message_comment_was_removed">Comment was removed</string>
-    <string name="message_comment_was_edited">Comment was edited</string>
-    <string name="title_edit_comment">Edit comment</string>
+    <string name="edit_comment_menu_item">Modifier</string>
+    <string name="delete_comment_menu_item">supprimer</string>
+    <string name="message_comment_was_removed">Commentaire supprimé</string>
+    <string name="message_comment_was_edited">Commentaire modifié</string>
+    <string name="title_edit_comment">Modifier commentaire</string>
 
     <!--Follow-->
     <string name="button_follow_title">Follow</string>
@@ -170,29 +170,29 @@
     <string name="button_following">Following</string>
     <string name="unfollow_user_message">Unfollow %1$s?</string>
     <string name="button_title_unfollow">Unfollow</string>
-    <string name="message_following_posts_empty">Follow somebody to see his new posts</string>
-    <string name="following_post_menu_item">Following Posts</string>
+    <string name="message_following_posts_empty">Follow quelqun pour voir ses nouvelles</string>
+    <string name="following_post_menu_item">Following Publications</string>
 
     <!--Users list-->
     <string name="title_followers">Followers</string>
     <string name="title_followings">Followings</string>
-    <string name="message_empty_list">You don\'t have any %1$s yet</string>
+    <string name="message_empty_list">Vous n\'en avez pas %1$s encore</string>
 
     <!--Search-->
-    <string name="search_menu_item">Search</string>
-    <string name="search_hint">Search …</string>
-    <string name="posts_tab_title">Posts</string>
-    <string name="users_tab_title">Users</string>
-    <string name="empty_posts_search_message">No posts found</string>
-    <string name="empty_user_search_message">No users found</string>
+    <string name="search_menu_item">Chercher</string>
+    <string name="search_hint">Cherche …</string>
+    <string name="posts_tab_title">Publications</string>
+    <string name="users_tab_title">Utilisateurs</string>
+    <string name="empty_posts_search_message">aucun article trouvé</string>
+    <string name="empty_user_search_message">aucun utilisateur trouvé</string>
 
 
     <!--Firebase errors-->
-    <string name="permission_denied_error">Please check your rules to access the Firebase Realtime Database</string>
+    <string name="permission_denied_error">Veuillez vérifier vos règles pour accéder à la base de données </string>
 
     <!--Notifications-->
-    <string name="new_like_channel_name">New Like</string>
-    <string name="new_comment_channel_name">New Comment</string>
+    <string name="new_like_channel_name">Nouvelle Like</string>
+    <string name="new_comment_channel_name">Nouveau Commentaire</string>
 
     <string name="ticketing">ticket</string>
     <string name="notif">notif</string>
