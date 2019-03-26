@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
  import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,7 +93,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     String residence;
     boolean isModerator;
-
+    private Menu menu;
 
 
     @Override
@@ -136,6 +137,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
                     typeuser=profile.isType();
+
 
 
                      if(typeuser== true){
@@ -189,6 +191,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
        toolbar.setTitle("Moderateur");
        toolbar.setBackgroundColor(0xffB22222);
+            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+
      }
     private void changesetuptodefault() {
 
@@ -499,11 +503,16 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        this.menu = menu;
+
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.profile:
@@ -523,24 +532,16 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
                 if (typeuser ==null){
-
-                    Log.v("typeuserheck","null");
-                    Intent ticket = new Intent(this, MainActivity.class);
+                     Intent ticket = new Intent(this, MainActivity.class);
                     startActivity(ticket);
                 }
-
                 if(typeuser != null && typeuser==false){
-                    Log.v("typeuserheck","false");
-
                     Intent ticket = new Intent(this, TicketActivity.class);
                     startActivity(ticket);
                 }else if (typeuser != null && typeuser==true){
-                    Log.v("typeuserheck","true");
-
                     Intent ticket = new Intent(this, TicketActivityMod.class);
                     startActivity(ticket);
                 }
-
                 return true;
             case R.id.notif:
                 Intent notif = new Intent(this, NotifActivity.class);
@@ -553,7 +554,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                      Intent ticket = new Intent(this, MainActivity.class);
                     startActivity(ticket);
                 }
-
                 if(typeuser != null && typeuser==false){
 
                     Intent tools = new Intent(this, ToolActivity.class);
@@ -562,6 +562,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     Intent tools = new Intent(this, ToolsActivityMod.class);
                     startActivity(tools);
+
                 }
                 return true;
             default:

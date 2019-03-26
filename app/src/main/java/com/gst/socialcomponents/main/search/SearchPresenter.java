@@ -24,7 +24,7 @@ import com.gst.socialcomponents.main.base.BasePresenter;
  * Created by Alexey on 08.05.18.
  */
 
-class SearchPresenter extends BasePresenter<SearchView> {
+public class SearchPresenter extends BasePresenter<SearchView> {
 
     private String currentUserId;
     private Activity activity;
