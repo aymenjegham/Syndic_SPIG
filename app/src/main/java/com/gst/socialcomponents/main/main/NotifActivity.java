@@ -154,7 +154,7 @@ public class NotifActivity extends AppCompatActivity {
     }
     private void changesetuptodefault() {
 
-        toolbar.setTitle("Syndic SPIG");
+        toolbar.setTitle("Syndic IG");
         toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
 
     }

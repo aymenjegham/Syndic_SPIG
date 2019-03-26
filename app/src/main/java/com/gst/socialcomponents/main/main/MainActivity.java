@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         presenter.onProfileMenuActionClicked();
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Syndic SPIG");
+        toolbar.setTitle("Syndic IG");
         setSupportActionBar(toolbar);
 
          initContentView();
@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
      }
     private void changesetuptodefault() {
 
-        toolbar.setTitle("Syndic SPIG");
+        toolbar.setTitle("Syndic IG");
         toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
 
     }
@@ -545,6 +545,24 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             case R.id.notif:
                 Intent notif = new Intent(this, NotifActivity.class);
                 startActivity(notif);
+                return true;
+
+            case R.id.tools:
+                if (typeuser ==null){
+
+                     Intent ticket = new Intent(this, MainActivity.class);
+                    startActivity(ticket);
+                }
+
+                if(typeuser != null && typeuser==false){
+
+                    Intent tools = new Intent(this, ToolActivity.class);
+                    startActivity(tools);
+                }else if (typeuser != null && typeuser==true){
+
+                    Intent tools = new Intent(this, ToolsActivityMod.class);
+                    startActivity(tools);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

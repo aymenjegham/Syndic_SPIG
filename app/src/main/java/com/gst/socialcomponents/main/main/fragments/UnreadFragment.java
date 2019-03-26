@@ -55,7 +55,7 @@ public class UnreadFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
-    private DatabaseReference reference1;
+    private DatabaseReference reference1,reference2;
 
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -112,6 +112,8 @@ public class UnreadFragment extends Fragment {
             @Override
             public void onLeftClicked2(int position) {
                 super.onLeftClicked2(position);
+                changetocloture(position);
+
 
             }
         });
@@ -151,22 +153,17 @@ public class UnreadFragment extends Fragment {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        long count = dataSnapshot.getChildrenCount();
-
+                            tickets.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                if(ticket.getState().equals("envoyé")){
+                                 if(ticket.getState().equals("envoyé")){
                                     tickets.add(ticket);
-                                 }
+                                }
                                 retrivedata(tickets);
-
                             }
-
                         }
                     }
-
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(getContext(), "error occured", Toast.LENGTH_SHORT).show();
@@ -175,11 +172,11 @@ public class UnreadFragment extends Fragment {
     }
 
     void changetoencours(int position){
-        ArrayList<TicketRetrieve> tickets = new ArrayList() ;
+        ArrayList<TicketRetrieve> ticketstoencours = new ArrayList() ;
 
-        reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
-        reference1.keepSynced(true);
-        reference1.addValueEventListener(
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
+        reference2.keepSynced(true);
+        reference2.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -187,15 +184,12 @@ public class UnreadFragment extends Fragment {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
                                 if((ticket.getState().equals("envoyé"))){
-                            tickets.add(ticket);
+                            ticketstoencours.add(ticket);
                         }
                     }
-
                 }
-                        TicketRetrieve newticket =tickets.get(position);
-                        Log.v("getticket",newticket.getTitle());
-                        double times= newticket.getTimestamp();
-                        reference1.addValueEventListener(
+                        TicketRetrieve newticket =ticketstoencours.get(position);
+                         reference2.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -205,17 +199,13 @@ public class UnreadFragment extends Fragment {
 
                                                 if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
 
-                                                     reference1.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("en cours");
+                                                     reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("en cours");
                                                     getdata();
-
-
                                                 }
                                             }
 
                                         }
                                     }
-
-
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                     }
@@ -232,12 +222,61 @@ public class UnreadFragment extends Fragment {
 
     }
 
+    void changetocloture(int position){
+        ArrayList<TicketRetrieve> ticketstoencours = new ArrayList() ;
+
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
+        reference2.keepSynced(true);
+        reference2.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            for (DataSnapshot ds2 : ds.getChildren()){
+                                TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
+                                if((ticket.getState().equals("envoyé"))){
+                                    ticketstoencours.add(ticket);
+                                }
+                            }
+                        }
+                        TicketRetrieve newticket =ticketstoencours.get(position);
+                        reference2.addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                                            for (DataSnapshot ds2 : ds.getChildren()){
+                                                TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
+
+                                                if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
+
+                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("cloturé");
+                                                    getdata();
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getContext(), "Error connexion", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
 
 
 
     void retrivedata(ArrayList tickets){
 
-Log.v("helloticksize",tickets.size()+" ");
         recyclerView.setHasFixedSize(true);
         TicketAdapter adapter;
         adapter=new TicketAdapter(tickets);

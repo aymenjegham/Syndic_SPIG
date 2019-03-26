@@ -150,13 +150,12 @@ public class TicketActivity extends AppCompatActivity {
 
        reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence).child(firebaseUser.getUid());
        reference1.keepSynced(true);
-        reference1.addListenerForSingleValueEvent(
+        reference1.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        long count = dataSnapshot.getChildrenCount();
-
-                          for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                        tickets.clear();
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
                               TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
                              tickets.add(ticket);

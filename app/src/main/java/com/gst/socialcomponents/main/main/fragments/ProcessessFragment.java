@@ -2,11 +2,14 @@ package com.gst.socialcomponents.main.main.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.TicketAdapter;
+import com.gst.socialcomponents.listeners.SwipeControllerActions;
+import com.gst.socialcomponents.listeners.SwipeControllercloture;
+import com.gst.socialcomponents.listeners.SwipeControllerprocess;
 import com.gst.socialcomponents.model.TicketRetrieve;
 
 import java.util.ArrayList;
@@ -41,11 +47,13 @@ public class ProcessessFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
-    private DatabaseReference reference1;
+    private DatabaseReference reference1,reference2;
 
     FirebaseStorage storage;
     StorageReference storageReference;
     String residence ;
+    SwipeControllerprocess swipeController = null;
+
 
 
 
@@ -76,6 +84,27 @@ public class ProcessessFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_processed, container, false);
         recyclerView =view.findViewById(R.id.recycler_view_process);
 
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
+
+        swipeController = new SwipeControllerprocess(new SwipeControllerActions() {
+
+            @Override
+            public void onLeftClicked2(int position) {
+                super.onLeftClicked2(position);
+                 changetocloture(position);
+            }
+
+        });
+
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
         SharedPreferences prefs = getContext().getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
 
@@ -90,45 +119,90 @@ public class ProcessessFragment extends Fragment {
             reference = FirebaseDatabase.getInstance().getReference();
         }
 
+        getdata();
+
+        return view;
+    }
+
+    private void getdata(){
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
 
         reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
         reference1.keepSynced(true);
-
-        reference1.addListenerForSingleValueEvent(
+        reference1.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        long count = dataSnapshot.getChildrenCount();
-
+                        tickets.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
                                 if(ticket.getState().equals("en cours")){
-                                     tickets.add(ticket);
-                                    retrivedata(tickets);
+                                    tickets.add(ticket);
                                 }
-
+                                retrivedata(tickets);
                             }
-
                         }
                     }
-
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(getContext(), "error occured", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    void changetocloture(int position){
+        ArrayList<TicketRetrieve> ticketstoencours = new ArrayList() ;
+
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
+        reference2.keepSynced(true);
+        reference2.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            for (DataSnapshot ds2 : ds.getChildren()){
+                                TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
+                                if((ticket.getState().equals("en cours"))){
+                                    ticketstoencours.add(ticket);
+                                }
+                            }
+                        }
+                        TicketRetrieve newticket =ticketstoencours.get(position);
+                        reference2.addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                                            for (DataSnapshot ds2 : ds.getChildren()){
+                                                TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
+
+                                                if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
+
+                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("cloturé");
+                                                    getdata();
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                    }
 
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getContext(), "Error connexion", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        return view;
+
     }
 
 
     void retrivedata(ArrayList tickets){
-
 
         recyclerView.setHasFixedSize(true);
         TicketAdapter adapter;

@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="app_name">Syndic SPIG</string>
+    <string name="app_name">Syndic IG</string>
     <string name="label_create_post_activity">Créer publication</string>
     <string name="label_post_detail_activity">Détails publication</string>
     <string name="label_image_detail_activity">Image</string>
