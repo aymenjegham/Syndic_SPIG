@@ -44,9 +44,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -204,7 +207,17 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
     void   showalert(){
-        new AlertDialog.Builder(MainActivity.this,R.xml.styles)
+        WebView myWebView = new WebView(MainActivity.this);
+        myWebView.loadUrl("http://google.com/");
+        myWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+         new AlertDialog.Builder(MainActivity.this,R.xml.styles)
                 .setTitle("En attente de vérification")
                 .setMessage("Votre adhésion est en attente de confirmation d'un modérateur" +
                         ",vous serez notifié de l'activation de votre compte")
@@ -223,6 +236,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                         startActivity(intent);
                     }
                 })
+                .setView(myWebView)
                 .setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -235,6 +249,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     }
                 })
+
                 .show();
      }
 
@@ -564,6 +579,16 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     startActivity(tools);
 
                 }
+                return true;
+
+            case R.id.gallerie:
+                Intent gallery = new Intent(this, GalleryActivity.class);
+                startActivity(gallery);
+                return true;
+
+            case R.id.about:
+                Intent apropos = new Intent(this, About.class);
+                startActivity(apropos);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

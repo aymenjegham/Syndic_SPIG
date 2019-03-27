@@ -18,13 +18,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.main.ToolActivity"
+        <activity android:name=".main.main.About"></activity>
+        <activity
+            android:name=".main.main.ToolActivity"
             android:parentActivityName=".main.main.MainActivity"
-            android:theme="@style/AppCompat.NoActionBar"/>
-
-        <activity android:name=".main.main.ToolsActivityMod"
+            android:theme="@style/AppCompat.NoActionBar" />
+        <activity
+            android:name=".main.main.ToolsActivityMod"
             android:parentActivityName=".main.main.MainActivity"
-            android:theme="@style/AppCompat.NoActionBar"/>
+            android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.TicketActivityMod"
             android:parentActivityName=".main.main.MainActivity"

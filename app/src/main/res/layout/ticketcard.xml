@@ -25,17 +25,19 @@
             <ImageView
                 android:id="@+id/photo"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="247dp"
                 android:background="@drawable/ic_stub"
                 android:contentDescription="@string/ticketimage"
                 android:foregroundGravity="top"
                 android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="@+id/photoImageViewticket"
                 app:layout_constraintBottom_toTopOf="@+id/countersContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
+
 
             <TextView
                 android:id="@+id/title"
@@ -65,8 +67,28 @@
                 android:textAppearance="@style/TextAppearance.Second"
                 app:layout_constraintBottom_toTopOf="@+id/countersContainer"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <com.gst.socialcomponents.views.CircularImageView
+                android:id="@+id/photoImageViewticket"
+                android:layout_width="@dimen/post_author_image_side"
+                android:layout_height="@dimen/post_author_image_side"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="8dp"
+                android:transitionName="@string/post_author_image_transition_name"
+                android:visibility="visible"
+                app:border="false"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shadow="false"
+                app:shadow_radius="@dimen/circle_image_shadow_radius"
+                tools:src="@drawable/ic_stub"
+                tools:targetApi="lollipop" />
 
             <include
                 android:id="@+id/countersContainer"
