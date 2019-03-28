@@ -2,11 +2,11 @@ package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -14,40 +14,66 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.UserAdapterFacture;
 import com.gst.socialcomponents.main.main.ToolsActivityMod;
 import com.gst.socialcomponents.main.main.fragments.ActivationFragment;
+import com.gst.socialcomponents.main.main.fragments.InvoicingFragment;
 import com.gst.socialcomponents.model.Profilefire;
-import com.gst.socialcomponents.model.TicketRetrieve;
-import com.gst.socialcomponents.utils.FormatterUtil;
-import com.gst.socialcomponents.views.FollowButton;
 
-public class UserHolder extends RecyclerView.ViewHolder {
+import java.util.ArrayList;
+
+public class UserHolderFacture extends RecyclerView.ViewHolder {
 
 
 
     private Context context;
     private ImageView photoImageView;
     private TextView nameTextView;
-    private Switch activationButton;
+
+    public CheckBox getFacturecheck() {
+        return facturecheck;
+    }
+
+    private CheckBox facturecheck;
     private TextView matriculeresidence;
     private TextView residence;
     private TextView mobileno;
     ToolsActivityMod toolsActivityMod=new ToolsActivityMod();
     ActivationFragment activationFragment =new ActivationFragment();
+    ConstraintLayout constraintLayout;
+    InvoicingFragment invoicingFragment;
 
 
-    public UserHolder(View profileCard) {
+
+
+    public int counter=0;
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public UserHolderFacture(View profileCard) {
         super(profileCard);
 
 
         this.photoImageView=itemView.findViewById(R.id.photoImageView);
         this.nameTextView =itemView.findViewById(R.id.nameTextView);
-        this.activationButton=itemView.findViewById(R.id.activeButton);
+        this.facturecheck=itemView.findViewById(R.id.facture_checkbox);
         this.matriculeresidence=itemView.findViewById(R.id.matriculeresidence);
         this.residence=itemView.findViewById(R.id.residence);
         this.mobileno=itemView.findViewById(R.id.mobileno);
+        this.constraintLayout=itemView.findViewById(R.id.itemlayout);
 
     }
+
+
+    public void checkall(boolean value){
+        facturecheck.setChecked(value);
+
+
+    }
+
+
 
 
 
@@ -60,42 +86,18 @@ public class UserHolder extends RecyclerView.ViewHolder {
         Boolean isactivated =profilefire.isActive();
         String  userid =profilefire.getId();
 
+
+
+
         nameTextView.setText(username);
         matriculeresidence.setText(matricule);
         residence.setText(residencestring);
         mobileno.setText(nummobile);
         Glide.with(photoImageView.getContext()).load(urlpath).into(photoImageView);
 
-        if(isactivated){
-            activationButton.setChecked(true);
-            activationButton.setText("Activé");
-            activationButton.setTextColor(Color.BLUE);
-        }else
-        {
-            activationButton.setChecked(false);
-            activationButton.setText("Désactivé");
-            activationButton.setTextColor(Color.RED);
-        }
-        activationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                     activationFragment.changestate(userid,true,buttonView);
 
-                    activationButton.setChecked(true);
-                    activationButton.setText("Activé");
-                    activationButton.setTextColor(Color.BLUE);
-                 }
-                else {
-                     activationFragment.changestate(userid,false,buttonView);
+        invoicingFragment=new InvoicingFragment();
 
-                    activationButton.setChecked(false);
-                    activationButton.setText("Désactivé");
-                    activationButton.setTextColor(Color.RED);
-
-                }
-            }
-        });
 
 
 

@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gst.socialcomponents.R;
-import com.gst.socialcomponents.adapters.holders.TicketHolder;
-import com.gst.socialcomponents.adapters.holders.UserHolder;
+import com.gst.socialcomponents.adapters.holders.Faceholder;
 import com.gst.socialcomponents.listeners.SwipeController;
 import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.model.Profilefire;
@@ -17,34 +16,38 @@ import com.gst.socialcomponents.model.TicketRetrieve;
 
 import java.util.ArrayList;
 
-public class UserAdapterdl extends RecyclerView.Adapter<UserHolder> {
+public class FacesAdapter extends RecyclerView.Adapter<Faceholder> {
+
+
 
 
     private ArrayList<Profilefire> profiles;
     TicketActivity ticketActivity;
     SwipeController swipeController = null;
 
-    public UserAdapterdl(ArrayList<Profilefire> profiles) {
+    public FacesAdapter(ArrayList<Profilefire> profiles) {
+        Log.v("lisreceived",profiles.size()+"  ");
+
         this.profiles=profiles;
      }
 
     @Override
-    public UserHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public Faceholder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View UserCard= LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item_list_viewsecond,parent,false);
+        View profilecard= LayoutInflater.from(parent.getContext()).inflate(R.layout.face_item,parent,false);
 
 
 
 
 
-        return new UserHolder(UserCard);
+        return new Faceholder(profilecard);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserHolder userHolder, int i) {
+    public void onBindViewHolder(@NonNull Faceholder faceholder, int i) {
         final Profilefire profilefire =profiles.get(i);
+        faceholder.updateUI(profilefire);
 
-        userHolder.updateUI(profilefire);
 
 
     }

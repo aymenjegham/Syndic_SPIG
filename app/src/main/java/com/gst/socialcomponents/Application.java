@@ -18,10 +18,15 @@
 package com.gst.socialcomponents;
 
 import com.gst.socialcomponents.main.interactors.PostInteractor;
+import com.gst.socialcomponents.model.Profilefire;
+
+import java.util.ArrayList;
 
 public class Application extends android.app.Application {
 
     public static final String TAG = Application.class.getSimpleName();
+
+
 
     @Override
     public void onCreate() {

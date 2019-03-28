@@ -133,7 +133,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     editor.putBoolean("sharedprefismoderator",isModerator);
                     editor.apply();
 
-                   Log.v("checkingforequal","true we got there from main "+residence);
 
 
 
@@ -194,7 +193,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
        toolbar.setTitle("Moderateur");
        toolbar.setBackgroundColor(0xffB22222);
-            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+       if(menu != null){
+           menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+
+       }
 
      }
     private void changesetuptodefault() {
@@ -236,7 +238,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                         startActivity(intent);
                     }
                 })
-                .setView(myWebView)
                 .setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -249,8 +250,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     }
                 })
+                 //.setView(myWebView)
 
-                .show();
+
+                 .show();
      }
 
 
@@ -593,5 +596,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
