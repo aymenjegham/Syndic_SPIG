@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +53,8 @@ public class FacturationActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference reference,reference1;
     Button confirmbutton;
+    EditText titre;
+    EditText montant;
 
 
     @Override
@@ -61,6 +64,8 @@ public class FacturationActivity extends AppCompatActivity {
         depuis=  findViewById(R.id.deouis);
         jusqua=  findViewById(R.id.jusqua);
         datelimit=  findViewById(R.id.datelimit);
+        titre=findViewById(R.id.editText);
+        montant=findViewById(R.id.editText2);
 
         confirmbutton=findViewById(R.id.buttonfacture);
 
@@ -200,12 +205,31 @@ public class FacturationActivity extends AppCompatActivity {
         confirmbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i=0;i<listofprifiles.size();i++) {
-
-                     //Facture facture =new Facture();
-                //    reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue( listofprifiles);
-                    Log.v("debugfrais",listofprifiles.get(i).getUsername()+listofprifiles.size()+" ");
+                boolean cancel = false;
+                if ((TextUtils.isEmpty(titre.getText().toString()))) {
+                    titre.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
+                }else if ((TextUtils.isEmpty(montant.getText().toString()))){
+                    montant.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
+                }else if ((TextUtils.isEmpty(depuis.getText().toString()))){
+                    depuis.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
+                }else if ((TextUtils.isEmpty(jusqua.getText().toString()))){
+                    jusqua.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
+                } else if ((TextUtils.isEmpty(datelimit.getText().toString()))){
+                    datelimit.setError(getApplicationContext().getString(R.string.error_field_required));
+                    cancel = true;
                 }
+                if(!cancel){
+                    for(int i=0;i<listofprifiles.size();i++) {
+                        Facture facture =new Facture(titre.getText().toString(),montant.getText().toString(),ServerValue.TIMESTAMP,depuis.getText().toString(),jusqua.getText().toString(),datelimit.getText().toString(),false);
+                        reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue(facture);
+                        Log.v("debugfrais",listofprifiles.get(i).getUsername()+listofprifiles.size()+" ");
+                    }
+                }
+
             }
         });
 

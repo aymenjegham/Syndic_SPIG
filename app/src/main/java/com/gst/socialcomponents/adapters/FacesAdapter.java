@@ -26,8 +26,6 @@ public class FacesAdapter extends RecyclerView.Adapter<Faceholder> {
     SwipeController swipeController = null;
 
     public FacesAdapter(ArrayList<Profilefire> profiles) {
-        Log.v("lisreceived",profiles.size()+"  ");
-
         this.profiles=profiles;
      }
 
@@ -35,11 +33,6 @@ public class FacesAdapter extends RecyclerView.Adapter<Faceholder> {
     public Faceholder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View profilecard= LayoutInflater.from(parent.getContext()).inflate(R.layout.face_item,parent,false);
-
-
-
-
-
         return new Faceholder(profilecard);
     }
 
@@ -48,17 +41,12 @@ public class FacesAdapter extends RecyclerView.Adapter<Faceholder> {
         final Profilefire profilefire =profiles.get(i);
         faceholder.updateUI(profilefire);
 
-
-
     }
 
 
 
     @Override
     public int getItemCount() {
-
-
-
         return profiles.size();
     }
 }
