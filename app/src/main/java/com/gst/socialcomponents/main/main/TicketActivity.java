@@ -122,6 +122,8 @@ public class TicketActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
+        toolbar.setTitle("Mes reclamations");
+
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -294,7 +296,7 @@ public class TicketActivity extends AppCompatActivity {
                     }
             }
         });
-        adddialogview.findViewById(R.id.importimage).setOnClickListener(new View.OnClickListener() {
+        adddialogview.findViewById(R.id.joindre).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -304,7 +306,7 @@ public class TicketActivity extends AppCompatActivity {
                 startActivityForResult(intent, GET_FROM_GALLERY);
             }
         });
-        adddialogview.findViewById(R.id.takephotoimage).setOnClickListener(new View.OnClickListener() {
+        adddialogview.findViewById(R.id.prendre).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {

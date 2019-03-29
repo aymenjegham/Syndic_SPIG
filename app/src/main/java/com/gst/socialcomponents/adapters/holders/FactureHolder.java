@@ -2,6 +2,7 @@ package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ public class FactureHolder extends RecyclerView.ViewHolder {
     TextView titletv,montant,datede,datejusqua,datelimit,stateTv,time;
     Boolean statut;
     Context cxt;
+    ImageView stateImage;
 
 
     public FactureHolder(View facturecard) {
@@ -32,6 +34,7 @@ public class FactureHolder extends RecyclerView.ViewHolder {
         this.stateTv=itemView.findViewById(R.id.stateTextView);
         this.montant=itemView.findViewById(R.id.montantTv);
         this.time=itemView.findViewById(R.id.dateTextViewpanel);
+        this.stateImage=itemView.findViewById(R.id.stateImageViewpanel);
 
 
 
@@ -58,8 +61,16 @@ public class FactureHolder extends RecyclerView.ViewHolder {
 
         if(!statut){
             stateTv.setTextColor(Color.RED);
-            stateTv.setText("non payé");
+            stateTv.setText("Non payé");
             montant.setText(montantapayer);
+
+    }else if(statut){
+            stateTv.setTextColor(Color.BLUE);
+            stateTv.setText("Payé");
+            montant.setText(montantapayer);
+            montant.setPaintFlags(montant.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            stateImage.setImageResource(R.drawable.ic_done);
+
         }
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanString(cxt, timelong);

@@ -52,6 +52,7 @@ public class NotifActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         toolbar = findViewById(R.id.toolbarnot);
+        toolbar.setTitle("Mes notifications");
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 

@@ -31,12 +31,13 @@ import com.gst.socialcomponents.R;
 
 import com.gst.socialcomponents.main.main.fragments.ActivationFragment;
  import com.gst.socialcomponents.main.main.fragments.InvoicingFragment;
+import com.gst.socialcomponents.main.main.fragments.ReunionFragment;
 import com.gst.socialcomponents.model.Profilefire;
 
 
 import java.util.ArrayList;
 
-public class ToolsActivityMod extends AppCompatActivity implements ActivationFragment.OnFragmentInteractionListener, InvoicingFragment.OnFragmentInteractionListener {
+public class ToolsActivityMod extends AppCompatActivity implements ActivationFragment.OnFragmentInteractionListener, InvoicingFragment.OnFragmentInteractionListener,ReunionFragment.OnFragmentInteractionListener {
 
 
     Toolbar toolbar;
@@ -74,6 +75,8 @@ public class ToolsActivityMod extends AppCompatActivity implements ActivationFra
 
         viewPagerAdapter.addFragment(new ActivationFragment(),"Activation");
         viewPagerAdapter.addFragment(new InvoicingFragment(),"Facturation");
+        viewPagerAdapter.addFragment(new ReunionFragment(),"Réunions");
+
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

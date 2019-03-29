@@ -12,17 +12,17 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Title"
+                android:hint="Titre"
+                android:inputType="text"
                 android:maxLength="22"
                 android:maxLines="1"
-                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,83 +42,123 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
-            <ImageButton
-                android:id="@+id/importimage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/intrinsic_padding"
-                android:layout_marginTop="64dp"
-                android:background="@drawable/ic_importimage"
-                app:layout_constraintBottom_toTopOf="@+id/takephotoimage"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
-
-            <ImageButton
-                android:id="@+id/takephotoimage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/intrinsic_padding"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/ic_takephoto"
-                app:layout_constraintBottom_toTopOf="@+id/cancel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/includetext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="12dp"
-                android:text="Attach a picture"
-                app:layout_constraintBottom_toTopOf="@+id/takephototext"
-                app:layout_constraintStart_toEndOf="@+id/importimage" />
-
-            <TextView
-                android:id="@+id/takephototext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Take a picture"
-                app:layout_constraintBottom_toTopOf="@+id/cancel"
-                app:layout_constraintStart_toEndOf="@+id/takephotoimage" />
-
             <Button
                 android:id="@+id/add"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/intrinsic_padding"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/send_comment_button_bg"
                 android:minWidth="0dp"
                 android:paddingLeft="@dimen/large_intrinsic_padding"
                 android:paddingRight="@dimen/large_intrinsic_padding"
-                android:text="Submit"
+                android:text="Envoi"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline10"
+                app:layout_constraintTop_toBottomOf="@+id/prendre"
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/cancel"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/intrinsic_padding"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/send_comment_button_bg"
                 android:minWidth="0dp"
                 android:paddingLeft="@dimen/large_intrinsic_padding"
                 android:paddingRight="@dimen/large_intrinsic_padding"
-                android:text="Cancel"
+                android:text="Annuler"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prendre" />
+
+            <LinearLayout
+                android:id="@+id/joindre"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description">
+
+                <ImageButton
+                    android:id="@+id/importimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/ic_importimage"
+                    app:layout_constraintStart_toStartOf="@+id/joindre"
+                    tools:layout_editor_absoluteY="218dp" />
+
+                <TextView
+                    android:id="@+id/includetext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Joinde une image"
+                    app:layout_constraintEnd_toEndOf="@+id/joindre"
+                    tools:layout_editor_absoluteY="218dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/prendre"
+                android:layout_width="228dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/joindre">
+
+                <ImageButton
+                    android:id="@+id/takephotoimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/ic_takephoto"
+                    app:layout_constraintBottom_toTopOf="@+id/cancel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/joindre" />
+
+                <TextView
+                    android:id="@+id/takephototext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Prendre une image"
+                    app:layout_constraintBottom_toTopOf="@+id/cancel"
+                    app:layout_constraintStart_toEndOf="@+id/takephotoimage" />
+            </LinearLayout>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.38" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.62" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

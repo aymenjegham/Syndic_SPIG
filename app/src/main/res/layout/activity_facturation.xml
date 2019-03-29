@@ -61,10 +61,10 @@
             android:text="Date limit"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/jusqua" />
+            app:layout_constraintTop_toBottomOf="@+id/titreET" />
 
         <EditText
-            android:id="@+id/jusqua"
+            android:id="@+id/titreET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -74,23 +74,23 @@
             android:ems="10"
             android:hint="Jusqu'a"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/periode"
+            app:layout_constraintStart_toEndOf="@+id/datereunion"
             app:layout_constraintTop_toBottomOf="@+id/deouis" />
 
         <TextView
-            android:id="@+id/periode"
+            android:id="@+id/datereunion"
             android:layout_width="109dp"
             android:layout_height="39dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Periode"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/jusqua"
+            app:layout_constraintBottom_toTopOf="@+id/titreET"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deouis" />
 
         <TextView
-            android:id="@+id/montant"
+            android:id="@+id/sujet"
             android:layout_width="109dp"
             android:layout_height="39dp"
             android:layout_marginStart="8dp"
@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.9" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <EditText
             android:id="@+id/editText"
@@ -180,8 +180,8 @@
             android:ems="10"
             android:hint="$$"
             android:inputType="number"
-            app:layout_constraintBaseline_toBaselineOf="@+id/montant"
-            app:layout_constraintStart_toStartOf="@+id/jusqua"
+            app:layout_constraintBaseline_toBaselineOf="@+id/sujet"
+            app:layout_constraintStart_toStartOf="@+id/titreET"
             app:layout_constraintTop_toBottomOf="@+id/editText" />
 
         <EditText
@@ -196,7 +196,7 @@
             android:ems="10"
             android:hint="De"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/periode"
+            app:layout_constraintStart_toEndOf="@+id/datereunion"
             app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
         <TextView

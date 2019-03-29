@@ -68,6 +68,9 @@ public class UserHolderFacture extends RecyclerView.ViewHolder {
 
 
     public void checkall(boolean value){
+        if(value){
+            facturecheck.setVisibility(View.VISIBLE);
+        }
         facturecheck.setChecked(value);
 
 

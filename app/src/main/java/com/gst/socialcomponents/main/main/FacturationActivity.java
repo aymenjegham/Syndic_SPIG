@@ -1,11 +1,8 @@
 package com.gst.socialcomponents.main.main;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,10 +27,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.FacesAdapter;
-import com.gst.socialcomponents.adapters.UserAdapterdl;
 import com.gst.socialcomponents.model.Facture;
+import com.gst.socialcomponents.model.Factureenvoi;
 import com.gst.socialcomponents.model.Profilefire;
-import com.gst.socialcomponents.model.Ticket;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +59,7 @@ public class FacturationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facturation);
         depuis=  findViewById(R.id.deouis);
-        jusqua=  findViewById(R.id.jusqua);
+        jusqua=  findViewById(R.id.titreET);
         datelimit=  findViewById(R.id.datelimit);
         titre=findViewById(R.id.editText);
         montant=findViewById(R.id.editText2);
@@ -224,10 +221,19 @@ public class FacturationActivity extends AppCompatActivity {
                 }
                 if(!cancel){
                     for(int i=0;i<listofprifiles.size();i++) {
-                        Facture facture =new Facture(titre.getText().toString(),montant.getText().toString(),ServerValue.TIMESTAMP,depuis.getText().toString(),jusqua.getText().toString(),datelimit.getText().toString(),false);
-                        reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue(facture);
-                        Log.v("debugfrais",listofprifiles.get(i).getUsername()+listofprifiles.size()+" ");
-                    }
+
+                        Factureenvoi factureenvoi =new Factureenvoi(titre.getText().toString(),montant.getText().toString(),ServerValue.TIMESTAMP,depuis.getText().toString(),jusqua.getText().toString(),datelimit.getText().toString(),false);
+
+                        Log.v("etfieldstestlog",listofprifiles.get(i).getResidence()+"done"+listofprifiles.get(i).getId()+"  ");
+
+                        reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue(factureenvoi);
+                        int duration = Snackbar.LENGTH_LONG;
+                        showSnackbar(v, "Facture envoyé vers recipient", duration);
+                        finish();
+
+
+
+                     }
                 }
 
             }
@@ -236,6 +242,10 @@ public class FacturationActivity extends AppCompatActivity {
 
     }
 
+    public void showSnackbar(View view, String message, int duration)
+    {
+        Snackbar.make(view, message, duration).show();
+    }
 
 
     @Override

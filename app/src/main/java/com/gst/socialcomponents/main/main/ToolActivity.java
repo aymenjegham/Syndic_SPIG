@@ -42,7 +42,7 @@ public class ToolActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = findViewById(R.id.toolbartoolactivity);
-        toolbar.setTitle("Syndic IG");
+        toolbar.setTitle("Mes factures");
 
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();

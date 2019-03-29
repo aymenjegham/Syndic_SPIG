@@ -6,10 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.main.fragments.InvoicingFragment">
+    tools:context=".main.main.fragments.ReunionFragment">
+
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_invoicing"
+        android:id="@+id/recycler_view_reunion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -21,7 +22,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <ToggleButton
-        android:id="@+id/buttonajout"
+        android:id="@+id/buttonajoutreunion"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -29,7 +30,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textOff="@string/ajouter_tout"
-        android:textOn="Retirr tout"
+        android:textOn="Retirer tout"
         android:background="@color/com_smart_login_code"
         android:textColor="@color/com_facebook_button_background_color_focused"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +39,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <Button
-        android:id="@+id/buttonfacture"
+        android:id="@+id/buttoninviter"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -46,7 +47,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:background="@color/google_button_color_pressed"
-        android:text="@string/facturer"
+        android:text="Inviter"
         android:textColor="@color/com_facebook_button_background_color_focused"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +68,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.87" />
-
 
 </android.support.constraint.ConstraintLayout>

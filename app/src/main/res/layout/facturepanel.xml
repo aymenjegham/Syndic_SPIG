@@ -16,7 +16,7 @@
         android:paddingBottom="@dimen/intrinsic_padding">
 
         <ImageView
-            android:id="@+id/stateImageView"
+            android:id="@+id/stateImageViewpanel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_waiting" />
