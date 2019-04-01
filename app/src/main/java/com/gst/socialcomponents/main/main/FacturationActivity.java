@@ -2,6 +2,7 @@ package com.gst.socialcomponents.main.main;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +55,8 @@ public class FacturationActivity extends AppCompatActivity {
     Button confirmbutton;
     EditText titre;
     EditText montant;
+    LinearLayout linearLayout;
+
 
 
     @Override
@@ -63,6 +68,8 @@ public class FacturationActivity extends AppCompatActivity {
         datelimit=  findViewById(R.id.datelimit);
         titre=findViewById(R.id.editText);
         montant=findViewById(R.id.editText2);
+        linearLayout=findViewById(R.id.reunionlayout);
+
 
         confirmbutton=findViewById(R.id.buttonfacture);
 
@@ -238,6 +245,27 @@ public class FacturationActivity extends AppCompatActivity {
 
             }
         });
+
+        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                linearLayout.getWindowVisibleDisplayFrame(r);
+
+                int heightDiff = linearLayout.getRootView().getHeight() - (r.bottom - r.top);
+
+                if (heightDiff > 244) { // if more than 100 pixels, its probably a keyboard...
+                    confirmbutton.setVisibility(View.GONE);
+
+
+                } else {
+                    confirmbutton.setVisibility(View.VISIBLE);
+
+
+                }
+            }
+        });
+
 
 
     }
