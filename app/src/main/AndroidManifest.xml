@@ -17,9 +17,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.main.ReunionActivity"
+        <activity android:name=".main.main.CalendarActivity"
+            android:parentActivityName=".main.main.MainActivity"
+            android:theme="@style/AppCompat.NoActionBar" />
+
+
+        <activity
+            android:name=".main.main.ReunionActivity"
             android:parentActivityName=".main.main.ToolsActivityMod"
-            android:theme="@style/AppCompat.NoActionBar"/>
+            android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.FacturationActivity"
             android:parentActivityName=".main.main.ToolsActivityMod"

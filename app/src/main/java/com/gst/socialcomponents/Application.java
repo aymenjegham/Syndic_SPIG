@@ -17,10 +17,17 @@
 
 package com.gst.socialcomponents;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
+
 import com.gst.socialcomponents.main.interactors.PostInteractor;
 import com.gst.socialcomponents.model.Profilefire;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Application extends android.app.Application {
 
@@ -34,5 +41,23 @@ public class Application extends android.app.Application {
 
         ApplicationHelper.initDatabaseHelper(this);
         PostInteractor.getInstance(this).subscribeToNewPosts();
+    }
+
+    public static void updateLanguage(Context ctx)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        String lang = prefs.getString("locale_override", "");
+        updateLanguage(ctx, lang);
+    }
+
+    public static void updateLanguage(Context ctx, String lang)
+    {
+        Configuration cfg = new Configuration();
+        if (!TextUtils.isEmpty(lang))
+            cfg.locale = new Locale(lang);
+        else
+            cfg.locale = Locale.getDefault();
+
+        ctx.getResources().updateConfiguration(cfg, null);
     }
 }

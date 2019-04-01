@@ -12,7 +12,7 @@
     <item
         android:id="@+id/followingPosts"
         android:icon="@drawable/ic_following_posts"
-        android:orderInCategory="3"
+        android:orderInCategory="8"
         android:title="@string/following_post_menu_item"
         app:showAsAction="always" />
 
@@ -54,6 +54,13 @@
         android:orderInCategory="7"
         android:title="Galerie"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/ic_calendar"
+        android:orderInCategory="3"
+        android:title="Calendrier"
+        app:showAsAction="always" />
 
 </menu>
 

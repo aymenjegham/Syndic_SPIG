@@ -19,12 +19,9 @@ package com.gst.socialcomponents.main.main;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -36,7 +33,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,8 +44,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,21 +52,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsAdapter;
 import com.gst.socialcomponents.main.base.BaseActivity;
-import com.gst.socialcomponents.main.base.BaseView;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.followPosts.FollowingPostsActivity;
 import com.gst.socialcomponents.main.post.createPost.CreatePostActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.main.profile.ProfileActivity;
 import com.gst.socialcomponents.main.search.SearchActivity;
-import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.Post;
-import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.AnimationUtils;
 
@@ -110,7 +101,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setSupportActionBar(toolbar);
 
          initContentView();
-
 
 
 
@@ -593,6 +583,26 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 Intent apropos = new Intent(this, About.class);
                 startActivity(apropos);
                 return true;
+
+            case R.id.calendar:
+                if (typeuser ==null){
+
+                    Intent tomain = new Intent(this, MainActivity.class);
+                    startActivity(tomain);
+                }
+                if(typeuser != null && typeuser==false){
+
+                    Intent tocalendar = new Intent(this, CalendarActivity.class);
+                    startActivity(tocalendar);
+                }else if (typeuser != null && typeuser==true){
+
+                    //Intent tocalendarmod = new Intent(this, .class);
+                    //startActivity(tocalendarmod);
+
+                }
+                return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }

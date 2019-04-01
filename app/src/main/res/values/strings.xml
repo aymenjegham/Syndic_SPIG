@@ -15,110 +15,111 @@
   ~
   -->
 
-<resources>
-    <string name="app_name">Syndic IG</string>
-    <string name="label_create_post_activity">Créer publication</string>
-    <string name="label_post_detail_activity">Détails publication</string>
-    <string name="label_image_detail_activity">Image</string>
-    <string name="title_activity_login">Se Connecter</string>
-    <string name="title_activity_create_profile">Créer profile</string>
-    <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_edit_profile">Editer profile</string>
-    <string name="title_activity_edit_post">Editer publication</string>
-    <string name="title_activity_following_posts">Messages suivis</string>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="fr">
+    <string name="app_name" translatable="false">Syndic IG</string>
+    <string name="label_create_post_activity" translatable="false">Créer publication</string>
+    <string name="label_post_detail_activity" translatable="false">Détails publication</string>
+    <string name="label_image_detail_activity" translatable="false">Image</string>
+    <string name="title_activity_login" translatable="false">Se Connecter</string>
+    <string name="title_activity_create_profile" translatable="false">Créer profile</string>
+    <string name="title_activity_profile" translatable="false">Profile</string>
+    <string name="title_activity_edit_profile" translatable="false">Editer profile</string>
+    <string name="title_activity_edit_post" translatable="false">Editer publication</string>
+    <string name="title_activity_following_posts" translatable="false">Messages suivis</string>
 
-    <string name="text_take_photo">Prendre une photo</string>
-    <string name="text_pick_photo">Choisissez de la galerie</string>
-    <string name="button_title_cancel">Annuler</string>
-    <string name="button_ok">OK</string>
+    <string name="text_take_photo" translatable="false">Prendre une photo</string>
+    <string name="text_pick_photo" translatable="false">Choisissez de la galerie</string>
+    <string name="button_title_cancel" translatable="false">Annuler</string>
+    <string name="button_ok" translatable="false">OK</string>
 
-    <string name="hint_title">Titre</string>
-    <string name="hint_description">Description</string>
+    <string name="hint_title" translatable="false">Titre</string>
+    <string name="hint_description" translatable="false">Description</string>
 
-    <string name="message_post_was_created">Publication créer</string>
-    <string name="error_fail_create_post">Echec de créer la publication</string>
-    <string name="error_fail_load_image">Impossible de charger l\'image</string>
-    <string name="error_fail_crop_image">Impossible de recadrer l\'image</string>
-    <string name="error_smaller_image">L\'image est trop petite. Taille d\'image requise 100x100 px</string>
-    <string name="error_incorrect_file_type">Type de fichier incorrect</string>
-    <string name="error_bigger_file">La taille du fichier est supérieure à 10 Mo</string>
-    <string name="message_creating_post">Creation de la publication …</string>
-    <string name="message_saving">Sauvegarde …</string>
-    <string name="warning_empty_image">Image est requis</string>
-    <string name="warning_empty_title">Titre est requis</string>
-    <string name="warning_empty_description">Description est requis</string>
-    <string name="error_post_title_length">La longueur maximale du titre doit être inférieure à 255 symboles. </string>
-    <string name="error_fail_remove_post">erreur suppression de publication</string>
-    <string name="message_post_was_removed">Publication supprimé</string>
-    <string name="error_fail_update_post">Échec de la mise à jour du message</string>
-    <string name="error_post_was_removed">Publication supprimé</string>
-    <string name="confirm_deletion_post">Supprimer cette publication?</string>
+    <string name="message_post_was_created" translatable="false">Publication créer</string>
+    <string name="error_fail_create_post" translatable="false">Echec de créer la publication</string>
+    <string name="error_fail_load_image" translatable="false">Impossible de charger l\'image</string>
+    <string name="error_fail_crop_image" translatable="false">Impossible de recadrer l\'image</string>
+    <string name="error_smaller_image" translatable="false">L\'image est trop petite. Taille d\'image requise 100x100 px</string>
+    <string name="error_incorrect_file_type" translatable="false">Type de fichier incorrect</string>
+    <string name="error_bigger_file" translatable="false">La taille du fichier est supérieure à 10 Mo</string>
+    <string name="message_creating_post" translatable="false">Creation de la publication …</string>
+    <string name="message_saving" translatable="false">Sauvegarde …</string>
+    <string name="warning_empty_image" translatable="false">Image est requis</string>
+    <string name="warning_empty_title" translatable="false">Titre est requis</string>
+    <string name="warning_empty_description" translatable="false">Description est requis</string>
+    <string name="error_post_title_length" translatable="false">La longueur maximale du titre doit être inférieure à 255 symboles. </string>
+    <string name="error_fail_remove_post" translatable="false">erreur suppression de publication</string>
+    <string name="message_post_was_removed" translatable="false">Publication supprimé</string>
+    <string name="error_fail_update_post" translatable="false">Échec de la mise à jour du message</string>
+    <string name="error_post_was_removed" translatable="false">Publication supprimé</string>
+    <string name="confirm_deletion_post" translatable="false">Supprimer cette publication?</string>
 
-    <string name="comment_text_hint">Entrer votre commentaire …</string>
-    <string name="button_post_comment">Créer un commentaire</string>
+    <string name="comment_text_hint" translatable="false">Entrer votre commentaire …</string>
+    <string name="button_post_comment" translatable="false">Créer un commentaire</string>
 
-    <string name="label_comments">Commentaires (%1$d):</string>
+    <string name="label_comments" translatable="false">Commentaires (%1$d):</string>
 
-    <string name="create_post_menu_label">Publication</string>
-    <string name="create_post_full_menu_label">Créer une publication</string>
-    <string name="sign_out_menu_label">Se déconnecter</string>
-    <string name="edit_profile_menu_label">Editer le profile</string>
-    <string name="button_title_save">Terminé</string>
-    <string name="button_title_continue">Continue</string>
+    <string name="create_post_menu_label" translatable="false">Publication</string>
+    <string name="create_post_full_menu_label" translatable="false">Créer une publication</string>
+    <string name="sign_out_menu_label" translatable="false">Se déconnecter</string>
+    <string name="edit_profile_menu_label" translatable="false">Editer le profile</string>
+    <string name="button_title_save" translatable="false">Terminé</string>
+    <string name="button_title_continue" translatable="false">Continue</string>
 
     <!-- Strings related to registration and login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_name">Nom</string>
-    <string name="residence_name">Residence</string>
-    <string name="numresidence_name">Matricule Residence</string>
-    <string name="numtel">Mobile</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_conf_password">Confirme password</string>
-    <string name="action_create_profile">Continue</string>
-    <string name="error_field_required">Ce champ est requis</string>
-    <string name="error_profile_name_length">La longueur maximale du nom doit être inférieure à 120 symboles.</string>
-    <string name="error_invalid_email">Cette adresse email est invalide</string>
-    <string name="error_confirm_password">Mauvaise confirmation du mot de passe</string>
-    <string name="action_sign_in">Se connecter</string>
-    <string name="permissions_not_granted">Annulation, les autorisations requises ne sont pas accordées</string>
-    <string name="error_fail_create_profile">Échec de la création du profil</string>
-    <string name="error_fail_update_profile">Échec de la mise à jour du profil</string>
-    <string name="text_login">Merci d\'utiliser notre application! Veuillez vous connecter pour continuer votre action.</string>
-    <string name="error_authentication">Authentication échoué.</string>
-    <string name="error_google_play_services">erreur Google Play Services </string>
-    <string name="button_login_with_facebook">Se connecter avec facebook</string>
-    <string name="button_login_with_google">Se connecter avec google</string>
-    <string name="button_login_with_email">Se connecter avec email</string>
-    <string name="button_gallery">Gallerie</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_name" translatable="false">Nom</string>
+    <string name="residence_name" translatable="false">Residence</string>
+    <string name="numresidence_name" translatable="false">Matricule Residence</string>
+    <string name="numtel" translatable="false">Mobile</string>
+    <string name="prompt_password" translatable="false">Password</string>
+    <string name="prompt_conf_password" translatable="false">Confirme password</string>
+    <string name="action_create_profile" translatable="false">Continue</string>
+    <string name="error_field_required" translatable="false">Ce champ est requis</string>
+    <string name="error_profile_name_length" translatable="false">La longueur maximale du nom doit être inférieure à 120 symboles.</string>
+    <string name="error_invalid_email" translatable="false">Cette adresse email est invalide</string>
+    <string name="error_confirm_password" translatable="false">Mauvaise confirmation du mot de passe</string>
+    <string name="action_sign_in" translatable="false">Se connecter</string>
+    <string name="permissions_not_granted" translatable="false">Annulation, les autorisations requises ne sont pas accordées</string>
+    <string name="error_fail_create_profile" translatable="false">Échec de la création du profil</string>
+    <string name="error_fail_update_profile" translatable="false">Échec de la mise à jour du profil</string>
+    <string name="text_login" translatable="false">Merci d\'utiliser notre application! Veuillez vous connecter pour continuer votre action.</string>
+    <string name="error_authentication" translatable="false">Authentication échoué.</string>
+    <string name="error_google_play_services" translatable="false">erreur Google Play Services </string>
+    <string name="button_login_with_facebook" translatable="false">Se connecter avec facebook</string>
+    <string name="button_login_with_google" translatable="false">Se connecter avec google</string>
+    <string name="button_login_with_email" translatable="false">Se connecter avec email</string>
+    <string name="button_gallery" translatable="false">Gallerie</string>
 
 
-    <string name="loading">Chargement …</string>
-    <string name="removing">suppression …</string>
-    <string name="error_general">quelque chose s\'est mal passé.</string>
-    <string name="error_general_post">quelque chose s\'est mal passé avec le publication, id: %1$s</string>
-    <string name="internet_connection_failed">Pas d\'internet</string>
-    <string name="press_once_again_to_exit">Appuyez à nouveau pour quitter</string>
+    <string name="loading" translatable="false">Chargement …</string>
+    <string name="removing" translatable="false">suppression …</string>
+    <string name="error_general" translatable="false">quelque chose s\'est mal passé.</string>
+    <string name="error_general_post" translatable="false">quelque chose s\'est mal passé avec le publication, id: %1$s</string>
+    <string name="internet_connection_failed" translatable="false">Pas d\'internet</string>
+    <string name="press_once_again_to_exit" translatable="false">Appuyez à nouveau pour quitter</string>
 
     <!-- Strings related to login -->
 
-    <string name="error_invalid_password">Ce mot de passe est trop court</string>
-    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
-    <string name="permission_rationale">"Les autorisations de contacts sont nécessaires pour fournir un courrier
+    <string name="error_invalid_password" translatable="false">Ce mot de passe est trop court</string>
+    <string name="error_incorrect_password" translatable="false">Ce mot de passe est incorrect</string>
+    <string name="permission_rationale" translatable="false">"Les autorisations de contacts sont nécessaires pour fournir un courrier
          finitions. "
     </string>
 
-    <string name="profile_menu_item">Profile</string>
-    <string name="collapse_text_label">montre moins</string>
-    <string name="expand_text_label">montre plus</string>
-    <string name="add_complain">Signaler</string>
-    <string name="edit_post_menu">Editer publication</string>
-    <string name="delete_post_menu">Suppression  publication</string>
-    <string name="complain_text">Vous pouvez vous plaindre à ce message s\'il contient de la violence,
+    <string name="profile_menu_item" translatable="false">Profile</string>
+    <string name="collapse_text_label" translatable="false">montre moins</string>
+    <string name="expand_text_label" translatable="false">montre plus</string>
+    <string name="add_complain" translatable="false">Signaler</string>
+    <string name="edit_post_menu" translatable="false">Editer publication</string>
+    <string name="delete_post_menu" translatable="false">Suppression  publication</string>
+    <string name="complain_text" translatable="false">Vous pouvez vous plaindre à ce message s\'il contient de la violence,
          intimidation et menaces, discours de haine, événements tragiques et contenus sexuellement explicites.
          Personne ne verra le message si vous vous en plaignez. Vous ne pouvez pas supprimer votre plainte.</string>
 
-    <string name="send_comment_button_label">Envoie</string>
-    <string name="posted_by_label">Publié par:</string>
+    <string name="send_comment_button_label" translatable="false">Envoie</string>
+    <string name="posted_by_label" translatable="false">Publié par:</string>
 
     <plurals name="posts_counter_format">
         <item quantity="one">publication</item>
@@ -140,68 +141,68 @@
         <item quantity="other">followings</item>
     </plurals>
 
-    <string name="posts_label">Publications:</string>
-    <string name="complain_sent">Réclamation a été envoyé avec succès</string>
-    <string name="now_time_range">Mnt</string>
+    <string name="posts_label" translatable="false">Publications:</string>
+    <string name="complain_sent" translatable="false">Réclamation a été envoyé avec succès</string>
+    <string name="now_time_range" translatable="false">Mnt</string>
 
-    <string name="duration_minutes_shortest">%1$d min</string>
-    <string name="duration_hours_shortest">%1$d hr</string>
-    <string name="duration_days_shortest">%1$d jour</string>
-    <string name="duration_week_shortest">%1$d sem</string>
+    <string name="duration_minutes_shortest" translatable="false">%1$d min</string>
+    <string name="duration_hours_shortest" translatable="false">%1$d hr</string>
+    <string name="duration_days_shortest" translatable="false">%1$d jour</string>
+    <string name="duration_week_shortest" translatable="false">%1$d sem</string>
 
     <string name="post_image_transition_name" translatable="false">post_image_transition</string>
     <string name="post_author_image_transition_name" translatable="false">post_author_image_transition_name</string>
-    <string name="message_new_post_was_created">Nouvelle publication a été créé</string>
+    <string name="message_new_post_was_created" translatable="false">Nouvelle publication a été créé</string>
 
     <plurals name="new_posts_counter_format">
         <item quantity="one">%1$d nouvelle publication</item>
         <item quantity="other">%1$d nouveaux publicationss</item>
     </plurals>
 
-    <string name="edit_comment_menu_item">Modifier</string>
-    <string name="delete_comment_menu_item">supprimer</string>
-    <string name="message_comment_was_removed">Commentaire supprimé</string>
-    <string name="message_comment_was_edited">Commentaire modifié</string>
-    <string name="title_edit_comment">Modifier commentaire</string>
+    <string name="edit_comment_menu_item" translatable="false">Modifier</string>
+    <string name="delete_comment_menu_item" translatable="false">supprimer</string>
+    <string name="message_comment_was_removed" translatable="false">Commentaire supprimé</string>
+    <string name="message_comment_was_edited" translatable="false">Commentaire modifié</string>
+    <string name="title_edit_comment" translatable="false">Modifier commentaire</string>
 
     <!--Follow-->
-    <string name="button_follow_title">Follow</string>
-    <string name="button_follow_back_title">Follow back</string>
-    <string name="button_following">Following</string>
-    <string name="unfollow_user_message">Unfollow %1$s?</string>
-    <string name="button_title_unfollow">Unfollow</string>
-    <string name="message_following_posts_empty">Follow quelqun pour voir ses nouvelles</string>
-    <string name="following_post_menu_item">Following Publications</string>
+    <string name="button_follow_title" translatable="false">Follow</string>
+    <string name="button_follow_back_title" translatable="false">Follow back</string>
+    <string name="button_following" translatable="false">Following</string>
+    <string name="unfollow_user_message" translatable="false">Unfollow %1$s?</string>
+    <string name="button_title_unfollow" translatable="false">Unfollow</string>
+    <string name="message_following_posts_empty" translatable="false">Follow quelqun pour voir ses nouvelles</string>
+    <string name="following_post_menu_item" translatable="false">Following Publications</string>
 
     <!--Users list-->
-    <string name="title_followers">Followers</string>
-    <string name="title_followings">Followings</string>
-    <string name="message_empty_list">Vous n\'en avez pas %1$s encore</string>
+    <string name="title_followers" translatable="false">Followers</string>
+    <string name="title_followings" translatable="false">Followings</string>
+    <string name="message_empty_list" translatable="false">Vous n\'en avez pas %1$s encore</string>
 
     <!--Search-->
-    <string name="search_menu_item">Chercher</string>
-    <string name="search_hint">Cherche …</string>
-    <string name="posts_tab_title">Publications</string>
-    <string name="users_tab_title">Utilisateurs</string>
-    <string name="empty_posts_search_message">aucun article trouvé</string>
-    <string name="empty_user_search_message">aucun utilisateur trouvé</string>
+    <string name="search_menu_item" translatable="false">Chercher</string>
+    <string name="search_hint" translatable="false">Cherche …</string>
+    <string name="posts_tab_title" translatable="false">Publications</string>
+    <string name="users_tab_title" translatable="false">Utilisateurs</string>
+    <string name="empty_posts_search_message" translatable="false">aucun article trouvé</string>
+    <string name="empty_user_search_message" translatable="false">aucun utilisateur trouvé</string>
 
 
     <!--Firebase errors-->
-    <string name="permission_denied_error">Veuillez vérifier vos règles pour accéder à la base de données </string>
+    <string name="permission_denied_error" translatable="false">Veuillez vérifier vos règles pour accéder à la base de données </string>
 
     <!--Notifications-->
-    <string name="new_like_channel_name">Nouvelle Like</string>
-    <string name="new_comment_channel_name">Nouveau Commentaire</string>
+    <string name="new_like_channel_name" translatable="false">Nouvelle Like</string>
+    <string name="new_comment_channel_name" translatable="false">Nouveau Commentaire</string>
 
-    <string name="ticketing">ticket</string>
-    <string name="notif">notif</string>
-    <string name="ticketimage">ticketimage</string>
+    <string name="ticketing" translatable="false">ticket</string>
+    <string name="notif" translatable="false">notif</string>
+    <string name="ticketimage" translatable="false">ticketimage</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="ajouter_tout">Ajouter tout</string>
-    <string name="facturer">Facturer</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="ajouter_tout" translatable="false">Ajouter tout</string>
+    <string name="facturer" translatable="false">Facturer</string>
 
 
 </resources>

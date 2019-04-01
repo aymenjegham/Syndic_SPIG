@@ -68,7 +68,7 @@ public class FacturationActivity extends AppCompatActivity {
         datelimit=  findViewById(R.id.datelimit);
         titre=findViewById(R.id.editText);
         montant=findViewById(R.id.editText2);
-        linearLayout=findViewById(R.id.reunionlayout);
+        linearLayout=findViewById(R.id.linearLayoutfacturation);
 
 
         confirmbutton=findViewById(R.id.buttonfacture);
