@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -51,6 +55,7 @@ public class ReunionActivity extends AppCompatActivity {
     final Calendar myCalendar1= Calendar.getInstance();
     String residence;
     ArrayList<Coming> userids=new ArrayList<>();
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,7 @@ public class ReunionActivity extends AppCompatActivity {
         heuret=findViewById(R.id.heureET);
         emplacer=findViewById(R.id.locationET);
         confirmr=findViewById(R.id.buttonconfirmreunion);
+        linearLayout=findViewById(R.id.reunionlayout);
 
         setSupportActionBar(toolbar);
 
@@ -193,9 +199,7 @@ public class ReunionActivity extends AppCompatActivity {
                     Reunion reunion = new Reunion(userids,titrer.getText().toString(),ServerValue.TIMESTAMP,sujetr.getText().toString(),datet.getText().toString(),heuret.getText().toString(),emplacer.getText().toString());
                         reference.child("Reunions").child(residence).push().setValue(reunion);
                     int duration = Snackbar.LENGTH_LONG;
-
                     showSnackbar(v, "Facture envoyé vers recipient", duration);
-
                     finish();
 
 
@@ -203,6 +207,29 @@ public class ReunionActivity extends AppCompatActivity {
 
             }
         });
+
+        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                linearLayout.getWindowVisibleDisplayFrame(r);
+
+                int heightDiff = linearLayout.getRootView().getHeight() - (r.bottom - r.top);
+
+                if (heightDiff > 244) { // if more than 100 pixels, its probably a keyboard...
+                      confirmr.setVisibility(View.GONE);
+
+
+                } else {
+                   confirmr.setVisibility(View.VISIBLE);
+
+
+                }
+            }
+        });
+
+
+
 
     }
     public void showSnackbar(View view, String message, int duration)
