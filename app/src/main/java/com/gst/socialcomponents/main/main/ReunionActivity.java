@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -93,7 +94,7 @@ public class ReunionActivity extends AppCompatActivity {
 
 
         for(int i =0 ;i <listofprifiles.size();i++){
-            Coming coming=new Coming(listofprifiles.get(i).getId(),false);
+            Coming coming=new Coming(listofprifiles.get(i).getId(),false,false);
             userids.add(coming);
         }
 
@@ -109,8 +110,10 @@ public class ReunionActivity extends AppCompatActivity {
         adapter=new FacesAdapter(listofprifiles);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+          layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
+
+
 
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("Myprefsfile", MODE_PRIVATE);

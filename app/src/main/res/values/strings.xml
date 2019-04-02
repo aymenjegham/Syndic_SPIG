@@ -15,8 +15,7 @@
   ~
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="fr">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="fr">
     <string name="app_name" translatable="false">Syndic IG</string>
     <string name="label_create_post_activity" translatable="false">Créer publication</string>
     <string name="label_post_detail_activity" translatable="false">Détails publication</string>

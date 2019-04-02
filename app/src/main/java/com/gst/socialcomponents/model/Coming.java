@@ -6,10 +6,12 @@ public class Coming {
 
     public String usersid;
     public Boolean state;
+    public Boolean seen;
 
-    public Coming(String usersid, Boolean state) {
+    public Coming(String usersid, Boolean state,Boolean seen) {
         this.usersid = usersid;
         this.state = state;
+        this.seen =seen;
     }
 
     public Coming() {
@@ -29,5 +31,13 @@ public class Coming {
 
     public void setState(Boolean state) {
         this.state = state;
+    }
+
+    public Boolean getSeen() {
+        return seen;
+    }
+
+    public void setSeen(Boolean seen) {
+        this.seen = seen;
     }
 }

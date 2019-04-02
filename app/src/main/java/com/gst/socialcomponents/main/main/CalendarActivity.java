@@ -2,6 +2,7 @@ package com.gst.socialcomponents.main.main;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -155,13 +156,15 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void setupRecyclerview(ArrayList<ReunionRetrieve> reunions) {
 
+
+
         RecyclerView recyclerView =findViewById(R.id.recyclerviewreunions);
         recyclerView.setHasFixedSize(false);
          ReunionsAdapter adapter;
-        adapter=new ReunionsAdapter(reunions);
+        adapter=new ReunionsAdapter(reunions,getApplicationContext());
         recyclerView.setAdapter(adapter);
-        LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+          LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
+         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
     }

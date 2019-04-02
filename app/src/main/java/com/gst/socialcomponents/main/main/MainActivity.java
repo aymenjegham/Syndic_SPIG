@@ -596,8 +596,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     startActivity(tocalendar);
                 }else if (typeuser != null && typeuser==true){
 
-                    //Intent tocalendarmod = new Intent(this, .class);
-                    //startActivity(tocalendarmod);
+                    Intent calendaractivitymod = new Intent(this, CalendarActivityMod.class);
+                    startActivity(calendaractivitymod);
 
                 }
                 return true;
