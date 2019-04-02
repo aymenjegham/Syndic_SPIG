@@ -92,6 +92,8 @@ public class ReunionHolder extends RecyclerView.ViewHolder {
                     refuse.setEnabled(false);
                     accept.setAlpha(.5f);
                     refuse.setAlpha(.5f);
+                    accept.hide();
+                    refuse.hide();
                     if(members.get(i).getState()){
                         partant.show();
                     }else{

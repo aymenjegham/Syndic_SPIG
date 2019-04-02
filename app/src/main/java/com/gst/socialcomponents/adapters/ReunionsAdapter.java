@@ -39,6 +39,7 @@ public class ReunionsAdapter extends RecyclerView.Adapter<ReunionHolder> {
     private Context cxt;
     DatabaseReference reference,reference2,reference3 ;
     private FirebaseUser firebaseUser;
+    String user="";
 
 
     public ReunionsAdapter(ArrayList<ReunionRetrieve> reunions, Context applicationContext) {
@@ -49,13 +50,11 @@ public class ReunionsAdapter extends RecyclerView.Adapter<ReunionHolder> {
     @Override
     public ReunionHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View reunionCard= LayoutInflater.from(parent.getContext()).inflate(R.layout.reuniontcard,parent,false);
+
+            View reunionCard= LayoutInflater.from(parent.getContext()).inflate(R.layout.reuniontcard,parent,false);
+            return new ReunionHolder(reunionCard);
 
 
-
-
-
-        return new ReunionHolder(reunionCard);
     }
 
     @Override
