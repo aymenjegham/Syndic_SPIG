@@ -251,6 +251,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
+
     @Override
     protected void onResume() {
         super.onResume();

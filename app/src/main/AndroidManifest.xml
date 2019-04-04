@@ -16,10 +16,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.main.DetailReunionActivity"
+
+        <activity android:name=".main.login.LoginemailActivity"
             android:parentActivityName=".main.main.MainActivity"
             android:theme="@style/AppCompat.NoActionBar"/>
+
+        <activity android:name=".main.login.RegisteremailActivity"
+            android:parentActivityName=".main.main.MainActivity"
+            android:theme="@style/AppCompat.NoActionBar"/>
+        <activity
+            android:name=".main.main.DetailReunionActivity"
+            android:parentActivityName=".main.main.MainActivity"
+            android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.CalendarActivityMod"
             android:parentActivityName=".main.main.MainActivity"

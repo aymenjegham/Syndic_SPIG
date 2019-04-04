@@ -47,13 +47,13 @@
         android:icon="@drawable/ic_info"
         android:orderInCategory="5"
         android:title="A propos"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/gallerie"
         android:icon="@drawable/ic_galerie"
         android:orderInCategory="7"
         android:title="Galerie"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/calendar"

@@ -91,6 +91,12 @@ class LoginPresenter extends BasePresenter<LoginView> {
         }
     }
 
+    public void onEmailSignInClick() {
+        if (checkInternetConnection()) {
+            ifViewAttached(LoginView::signInWithEmail);
+        }
+    }
+
     public void handleGoogleSignInResult(GoogleSignInResult result) {
         ifViewAttached(view -> {
             Log.v("handlesigninresult",result.getStatus().toString());

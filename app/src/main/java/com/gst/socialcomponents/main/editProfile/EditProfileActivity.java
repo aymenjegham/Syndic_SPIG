@@ -40,9 +40,17 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.data.PostProfile;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.pickImageBase.PickImageActivity;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Headers;
 
 public class EditProfileActivity<V extends EditProfileView, P extends EditProfilePresenter<V>> extends PickImageActivity<V, P> implements EditProfileView {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
@@ -56,6 +64,9 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     private ProgressBar avatarProgressBar;
     private  Spinner spin;
 
+
+
+
     String[] residencesNames={"Votre residence","Alpes","Arcades","Chott-maryem","Ennakhil","Houda","Houda 2","Jasmins","Jasmins 2","Jasmins 3","Jura","K2","Lotissement Msaken","Maarouf","Palms","Prestige","Pyrenées","Sierra","Vosges"};
     String selecteditem;
 
@@ -67,12 +78,16 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
          spin = findViewById(R.id.simpleSpinner);
         numtelEditText=findViewById(R.id.numtelEditText);
+
+
 
 
         imageView.setOnClickListener(this::onSelectImageClick);
@@ -260,6 +275,12 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
+
+
+
+
+
 }
 

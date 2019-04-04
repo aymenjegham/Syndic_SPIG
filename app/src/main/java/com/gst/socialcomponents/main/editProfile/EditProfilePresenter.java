@@ -25,6 +25,9 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.data.PostProfile;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.base.BaseView;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
 import com.gst.socialcomponents.main.login.LoginActivity;
@@ -33,6 +36,11 @@ import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.ValidationUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Headers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -44,6 +52,10 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
 
     protected Profile profile;
     protected ProfileManager profileManager;
+    private APIService mAPIService;
+
+
+
 
     protected EditProfilePresenter(Context context) {
         super(context);
@@ -119,12 +131,39 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setToken( FirebaseInstanceId.getInstance().getToken());
                     createOrUpdateProfile(imageUri);
 
+                    mAPIService = ApiUtils.getAPIService();
+                    sendPost(profile.isActive(), profile.getEmail(),profile.getId(),profile.getLikesCount(),profile.getMobile(),profile.getNumresidence(),profile.getPhotoUrl(),profile.getResidence(),profile.getToken(),profile.isType(),profile.getUsername());
+
+
                     SharedPreferences.Editor editor = context.getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                 }
             });
         }
     }
+
+    public void sendPost(Boolean active, String email,String id,Long likescount,String mobile,String numresidence,String photoUrl,String residence,String token,Boolean typeuser,String username) {
+
+        mAPIService.savePost(active, email, id,likescount,mobile,numresidence,photoUrl,residence,token,typeuser,username).enqueue(new Callback<PostProfile>() {
+
+            @Headers("Content-Type: application/json")
+            @Override
+            public void onResponse(Call<PostProfile> call, Response<PostProfile> response) {
+
+                if(response.isSuccessful()) {
+                    Log.v("loggingresponse", "post submitted to API." + response.body().toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<PostProfile> call, Throwable t) {
+                Log.v("loggingresponse","error"+ t.getMessage());
+            }
+        });
+    }
+
+
+
+
 
     private void createOrUpdateProfile(Uri imageUri) {
         profileManager.createOrUpdateProfile(profile, imageUri, success -> {

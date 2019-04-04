@@ -16,14 +16,10 @@
 
 package com.gst.socialcomponents.main.login;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
@@ -43,12 +39,9 @@ import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
 import com.gst.socialcomponents.main.main.GalleryActivity;
-import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.utils.GoogleApiHelper;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.LogoutHelper;
-
- import com.facebook.appevents.AppEventsLogger;
 
 
 import java.util.Arrays;
@@ -67,6 +60,8 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
 
     RelativeLayout galleryButton;
 
+    RelativeLayout rllogin;
+
 
 
 
@@ -75,15 +70,21 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+       // rllogin=findViewById(R.id.emailSigninButton);
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
 
         initGoogleSignIn();
+        initEmailSignIn();
         initFirebaseAuth();
         initFacebookSignIn();
         galleryButton=findViewById(R.id.gallerybutton);
+
+
+
 
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +100,12 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.googleSignInButton).setOnClickListener(view -> presenter.onGoogleSignInClick());
+    }
+
+    private void initEmailSignIn() {
+        // mAuth = FirebaseAuth.getInstance();
+
+        findViewById(R.id.emailSigninButton).setOnClickListener(view -> presenter.onEmailSignInClick());
     }
 
     private void initFirebaseAuth() {
@@ -230,11 +237,20 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     public void signInWithGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, SIGN_IN_GOOGLE);
+
     }
 
     @Override
     public void signInWithFacebook() {
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
+
+    }
+
+    @Override
+    public void signInWithEmail() {
+        Intent intent = new Intent(LoginActivity.this, RegisteremailActivity.class);
+        startActivity(intent);
+
     }
 
 
