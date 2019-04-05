@@ -33,6 +33,7 @@ import org.threeten.bp.LocalDate;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 
@@ -155,13 +156,11 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerview(ArrayList<ReunionRetrieve> reunions) {
-
-
-
         RecyclerView recyclerView =findViewById(R.id.recyclerviewreunions);
         recyclerView.setHasFixedSize(false);
          ReunionsAdapter adapter;
         adapter=new ReunionsAdapter(reunions,getApplicationContext());
+        Collections.reverse(reunions);
         recyclerView.setAdapter(adapter);
           LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
          layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

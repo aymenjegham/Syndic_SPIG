@@ -64,7 +64,6 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         String url=ticketRetrieve.getPhotolink();
         String statestring=ticketRetrieve.getState();
         Long timelong=ticketRetrieve.getTimestamp();
-        String urlpath =ticketRetrieve.getPhotolink();
 
 
 
@@ -73,20 +72,17 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         title.setText(titleString);
         description.setText(descriptionString);
         Glide.with(photolink.getContext()).load(url).into(photolink);
-        Glide.with(photoImageView.getContext()).load(urlpath).into(photoImageView);
 
 
         if(statestring.equals("en cours")){
                stateimageview.setImageResource(R.drawable.ic_encours);
                state.setText(statestring);
 
-               return;
            }
            else if(statestring.equals("cloturé")){
                stateimageview.setImageResource(R.drawable.ic_done);
                state.setText(statestring);
 
-               return;
            }else if (statestring.equals("envoyé")){
                stateimageview.setImageResource(R.drawable.ic_sent);
                state.setText(statestring);

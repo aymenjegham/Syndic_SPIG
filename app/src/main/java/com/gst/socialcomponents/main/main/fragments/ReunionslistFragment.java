@@ -29,6 +29,7 @@ import com.gst.socialcomponents.model.ReunionRetrieve;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -122,6 +123,8 @@ public class ReunionslistFragment extends Fragment {
     }
 
     private void setupRecyclerview(ArrayList<ReunionRetrieve> reunions,View v) {
+
+        Collections.reverse(reunions);
         recyclerView.setHasFixedSize(false);
         ReunionsAdaptermod adapter;
         adapter=new ReunionsAdaptermod(reunions,getContext());

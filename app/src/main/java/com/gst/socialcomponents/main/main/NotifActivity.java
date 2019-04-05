@@ -29,6 +29,7 @@ import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.room.DatabaseClient;
 import com.gst.socialcomponents.room.Notif;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NotifActivity extends AppCompatActivity {
@@ -127,6 +128,9 @@ public class NotifActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<Notif> notifs) {
                 super.onPostExecute(notifs);
+
+
+                Collections.reverse(notifs);
                 NotifAdapter adapter = new NotifAdapter(NotifActivity.this, notifs);
                 recyclerView.setAdapter(adapter);
             }

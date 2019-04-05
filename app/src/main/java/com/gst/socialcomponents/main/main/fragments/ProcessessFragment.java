@@ -27,12 +27,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.TicketAdapter;
+import com.gst.socialcomponents.adapters.TicketAdapterMod;
 import com.gst.socialcomponents.listeners.SwipeControllerActions;
 import com.gst.socialcomponents.listeners.SwipeControllercloture;
 import com.gst.socialcomponents.listeners.SwipeControllerprocess;
 import com.gst.socialcomponents.model.TicketRetrieve;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -126,6 +128,8 @@ public class ProcessessFragment extends Fragment {
 
     private void getdata(){
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
+        ArrayList<String> ticketscreators = new ArrayList() ;
+
 
         reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
         reference1.keepSynced(true);
@@ -139,8 +143,10 @@ public class ProcessessFragment extends Fragment {
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
                                 if(ticket.getState().equals("en cours")){
                                     tickets.add(ticket);
+                                    ticketscreators.add(ds.getKey());
+
                                 }
-                                retrivedata(tickets);
+                                retrivedata(tickets,ticketscreators);
                             }
                         }
                     }
@@ -202,11 +208,14 @@ public class ProcessessFragment extends Fragment {
     }
 
 
-    void retrivedata(ArrayList tickets){
+    void retrivedata(ArrayList tickets,ArrayList<String> ticketscreators){
+
+        Collections.reverse(tickets);
+        Collections.reverse(ticketscreators);
 
         recyclerView.setHasFixedSize(true);
-        TicketAdapter adapter;
-        adapter=new TicketAdapter(tickets);
+        TicketAdapterMod adapter;
+        adapter=new TicketAdapterMod(tickets,ticketscreators);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

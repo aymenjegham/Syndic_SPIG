@@ -85,7 +85,6 @@ public class DetailReunionActivity extends AppCompatActivity {
         heure.setText(reuniondetails.getHeure());
         location.setText(reuniondetails.getLocation());
 
-        Log.v("reunionistlist",reunionists.size()+"  ");
 
 
 

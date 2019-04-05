@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:paddingBottom="8dp">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="match_parent"
+                android:layout_height="247dp"
+                android:background="@drawable/ic_stub"
+                android:contentDescription="@string/ticketimage"
+                android:foregroundGravity="top"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="@+id/photoImageViewticket"
+                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/photo"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/intrinsic_padding"
+                android:paddingRight="@dimen/intrinsic_padding"
+                android:textAppearance="@style/TextAppearance.Title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photo" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:ellipsize="end"
+                android:paddingLeft="@dimen/intrinsic_padding"
+                android:paddingRight="@dimen/intrinsic_padding"
+                android:textAppearance="@style/TextAppearance.Second"
+                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <com.gst.socialcomponents.views.CircularImageView
+                android:id="@+id/photoImageViewticket"
+                android:layout_width="@dimen/post_author_image_side"
+                android:layout_height="@dimen/post_author_image_side"
+                android:layout_marginTop="160dp"
+                android:layout_marginEnd="8dp"
+                android:transitionName="@string/post_author_image_transition_name"
+                android:visibility="visible"
+                app:border="false"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shadow="false"
+                app:shadow_radius="@dimen/circle_image_shadow_radius"
+                tools:src="@drawable/ic_stub"
+                tools:targetApi="lollipop" />
+
+            <include
+                android:id="@+id/countersContainer"
+                layout="@layout/feedback_panel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_below="@+id/description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <TextView
+                android:id="@+id/usernametv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="TextView"
+                android:textColor="@color/facebook_button_color"
+                app:layout_constraintBottom_toTopOf="@+id/title"
+                app:layout_constraintEnd_toStartOf="@+id/photoImageViewticket"
+                app:layout_constraintTop_toTopOf="@+id/title" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>
+

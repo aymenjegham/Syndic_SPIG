@@ -111,8 +111,7 @@ public class FacturationActivity extends AppCompatActivity {
             }
         }
         */
-
-        recyclerView.setHasFixedSize(false);
+         recyclerView.setHasFixedSize(false);
         FacesAdapter adapter;
         adapter=new FacesAdapter(listofprifiles);
         recyclerView.setAdapter(adapter);

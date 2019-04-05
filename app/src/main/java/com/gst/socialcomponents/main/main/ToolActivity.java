@@ -24,6 +24,7 @@ import com.gst.socialcomponents.model.Facture;
 import com.gst.socialcomponents.model.TicketRetrieve;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +103,7 @@ public class ToolActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rvfactures);
         recyclerView.setHasFixedSize(true);
         FacturesAdapter adapter;
+        Collections.reverse(factures);
         adapter = new FacturesAdapter(factures);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

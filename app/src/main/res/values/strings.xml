@@ -70,7 +70,7 @@
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_name" translatable="false">Nom</string>
     <string name="residence_name" translatable="false">Residence</string>
-    <string name="numresidence_name" translatable="false">Matricule Residence</string>
+    <string name="numresidence_name" translatable="false">Numero appartemment</string>
     <string name="numtel" translatable="false">Mobile</string>
     <string name="prompt_password" translatable="false">Password</string>
     <string name="prompt_conf_password" translatable="false">Confirme password</string>
