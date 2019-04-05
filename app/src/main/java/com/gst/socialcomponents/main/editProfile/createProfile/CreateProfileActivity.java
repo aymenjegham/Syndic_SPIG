@@ -18,6 +18,7 @@ package com.gst.socialcomponents.main.editProfile.createProfile;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,18 @@ public class CreateProfileActivity extends EditProfileActivity<CreateProfileView
     @Override
     protected void initContent() {
         String largeAvatarURL = getIntent().getStringExtra(LARGE_IMAGE_URL_EXTRA_KEY);
-        presenter.buildProfile(largeAvatarURL);
+
+        try {
+            presenter.buildProfile(largeAvatarURL);
+        } catch (NumberFormatException | NullPointerException ex) {
+            presenter.buildProfile("https://immoneuftunisie.com/wp-content/uploads/2016/11/12687791_1073390746014957_5927638171369947380_n.jpg");
+
+        }
+
+
+
+
+
     }
 
     @NonNull

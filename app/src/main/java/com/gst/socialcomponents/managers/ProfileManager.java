@@ -18,6 +18,7 @@ package com.gst.socialcomponents.managers;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,7 +62,7 @@ public class ProfileManager extends FirebaseListenersManager {
         Profile profile = new Profile(firebaseUser.getUid());
         profile.setEmail(firebaseUser.getEmail());
         profile.setUsername(firebaseUser.getDisplayName());
-       // profile.setPhotoUrl(largeAvatarURL != null ? largeAvatarURL : firebaseUser.getPhotoUrl().toString());
+        profile.setPhotoUrl(largeAvatarURL != null ? largeAvatarURL : firebaseUser.getPhotoUrl().toString());
         return profile;
     }
 

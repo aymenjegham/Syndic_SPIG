@@ -99,8 +99,7 @@ class LoginPresenter extends BasePresenter<LoginView> {
 
     public void handleGoogleSignInResult(GoogleSignInResult result) {
         ifViewAttached(view -> {
-            Log.v("handlesigninresult",result.getStatus().toString());
-            if (result.isSuccess()) {
+             if (result.isSuccess()) {
                 view.showProgress();
 
                 GoogleSignInAccount account = result.getSignInAccount();

@@ -248,7 +248,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
 
     @Override
     public void signInWithEmail() {
-        Intent intent = new Intent(LoginActivity.this, RegisteremailActivity.class);
+        Intent intent = new Intent(LoginActivity.this, LoginemailActivity.class);
         startActivity(intent);
 
     }

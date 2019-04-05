@@ -103,8 +103,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
                 selecteditem=residencesNames[position];
                 SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                 editor.putString("sharedprefresidence", residencesNames[position]);
-                Log.v("testingmodifresid",residencesNames[position]);
-                editor.apply();
+                 editor.apply();
 
             }
 

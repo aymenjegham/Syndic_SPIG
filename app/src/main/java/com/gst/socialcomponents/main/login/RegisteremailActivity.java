@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
 
 public class RegisteremailActivity extends AppCompatActivity {
 
@@ -60,7 +61,7 @@ public class RegisteremailActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (!cancel) {
+        if (!cancel && mdp.equals(mdp2)) {
 
             mAuth.createUserWithEmailAndPassword(email, mdp)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -69,12 +70,14 @@ public class RegisteremailActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "inscription réussi!", Toast.LENGTH_LONG).show();
 
-                                Intent intent = new Intent(RegisteremailActivity.this, LoginemailActivity.class);
+                               Intent intent = new Intent(RegisteremailActivity.this, CreateProfileActivity.class);
                                 startActivity(intent);
+                                finish();
+
+
                             }
                             else {
-                                Log.v("resultfromlogging",task.getException().toString());
-                                Toast.makeText(getApplicationContext(), "inscription échoué! Veuillez réessayer plus tard"+task.getException().toString(), Toast.LENGTH_LONG).show();
+                                 Toast.makeText(getApplicationContext(), "inscription échoué! Veuillez réessayer plus tard"+task.getException().toString(), Toast.LENGTH_LONG).show();
                              }
                         }
                     });

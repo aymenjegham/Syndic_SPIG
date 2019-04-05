@@ -134,7 +134,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if(status.equals("true")){
             notificationBody="Votre compte moderateur a été activé";
         }else if (status.equals("false")) {
-            notificationBody = "Votre compte moderateur a été désactivé";
+            notificationBody = "Votre compte a été initialisée";
         }
 
 

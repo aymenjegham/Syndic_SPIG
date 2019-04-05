@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".main.login.RegisteremailActivity">
 
+    <TextView
+        android:id="@+id/createAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:text=" Créer un nouveau compte "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmbutton" />
+
     <Button
         android:id="@+id/annulebutton"
         android:layout_width="wrap_content"
@@ -80,7 +90,7 @@
         app:layout_constraintGuide_percent="0.50121653" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/forgetPwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
