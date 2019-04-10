@@ -29,6 +29,7 @@ import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.FacesAdapter;
 import com.gst.socialcomponents.adapters.FacturesAdapter;
 import com.gst.socialcomponents.adapters.UserAdapterFacture;
+import com.gst.socialcomponents.adapters.viewPager.UserAdapterFactureCheck;
 import com.gst.socialcomponents.model.Facture;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.model.TicketRetrieve;
@@ -50,7 +51,7 @@ public class FactureslistFragment extends Fragment {
 
     RecyclerView recyclerView;
     FirebaseUser firebaseUser;
-    private DatabaseReference reference,reference2;
+    private DatabaseReference reference,reference2,reference3;
     String residence ;
 
     public FactureslistFragment() {
@@ -147,6 +148,45 @@ public class FactureslistFragment extends Fragment {
     }
 
     private void filterbynopay() {
+        ArrayList<Facture> factures = new ArrayList() ;
+
+        SharedPreferences prefs = getContext().getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+        residence = prefs.getString("sharedprefresidence", null);
+
+        reference3 = FirebaseDatabase.getInstance().getReference().child("Frais").child(residence);
+        reference3.keepSynced(true);
+        reference3.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        factures.clear();
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            for(DataSnapshot td : ds.getChildren()) {
+                                Facture facture = td.getValue(Facture.class);
+                                if(!facture.getStatut()){
+                                    factures.add(facture);
+                                }
+                            }
+
+                        }
+                        recyclerView.setHasFixedSize(true);
+                        FacturesAdapter adapter;
+                        Collections.reverse(factures);
+                        adapter = new FacturesAdapter(factures);
+                        recyclerView.setAdapter(adapter);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recyclerView.setLayoutManager(layoutManager);
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
     }
 
     private void filterbyfacture() {
@@ -165,22 +205,21 @@ public class FactureslistFragment extends Fragment {
                         factures.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for(DataSnapshot td : ds.getChildren()) {
-                                Log.v("testingvalue",td.getValue().toString()+"   "+ ds.getKey());
-                                Facture facture = ds.getValue(Facture.class);
+                                Facture facture = td.getValue(Facture.class);
                                 factures.add(facture);
                             }
-                            
-                        }
 
-                        recyclerView.setHasFixedSize(true);
-                      //  FacturesAdapter adapter;
+                        }
+                      recyclerView.setHasFixedSize(true);
+                        FacturesAdapter adapter;
                         Collections.reverse(factures);
-                        //adapter = new FacturesAdapter(factures);
-                        //recyclerView.setAdapter(adapter);
+                        adapter = new FacturesAdapter(factures);
+                        recyclerView.setAdapter(adapter);
 
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(layoutManager);
+
                     }
 
 
@@ -218,8 +257,8 @@ public class FactureslistFragment extends Fragment {
                                                 }
                                             }
                                             recyclerView.setHasFixedSize(true);
-                                            UserAdapterFacture adapter;
-                                            adapter=new UserAdapterFacture(profiles);
+                                            UserAdapterFactureCheck adapter;
+                                            adapter=new UserAdapterFactureCheck(profiles);
                                             recyclerView.setAdapter(adapter);
                                             LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
                                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

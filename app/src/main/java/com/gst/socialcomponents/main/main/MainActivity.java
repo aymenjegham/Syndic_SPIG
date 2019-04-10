@@ -33,6 +33,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,11 +82,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
     FirebaseUser firebaseUser;
-    DatabaseReference reference,reference1;
+    DatabaseReference reference,reference2,reference3;
     public Boolean typeuser;
     Toolbar toolbar ;
 
     String residence;
+    String token;
     boolean isModerator;
     private Menu menu;
 
@@ -118,6 +120,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     residence =profile.getResidence();
                     isModerator =profile.isType();
+                    token=profile.gettoken();
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                     editor.putBoolean("sharedprefismoderator",isModerator);
@@ -135,6 +138,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                      if(typeuser== true){
 
                          changesetup();
+
+                         reference3 = FirebaseDatabase.getInstance().getReference().child("moderators").child(residence);
+                         reference3.setValue(token);
+
 
                     }
                     if(typeuser== false){
@@ -187,6 +194,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
 
        }
+
 
      }
     private void changesetuptodefault() {

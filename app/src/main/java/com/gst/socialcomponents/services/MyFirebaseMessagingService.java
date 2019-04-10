@@ -47,6 +47,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.main.MainActivity;
+import com.gst.socialcomponents.main.main.TicketActivityMod;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.room.DatabaseClient;
@@ -81,6 +82,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_POST = "new_post";
     private static final String ACTION_TYPE_NEW_MEMBER = "new_member_activated";
     private static final String ACTION_TYPE_NEW_MODERATOR =  "new_moderator_activated";
+    private static final String ACTION_TYPE_NEW_MODERATOR_NOTIF =  "new_reclamation_sent";
+
 
     String residencepref;
 
@@ -120,13 +123,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case ACTION_TYPE_NEW_MODERATOR:
                 handleactivatedmoderatoraccount(Channel.NEW_COMMENT, remoteMessage);
                 break;
+            case ACTION_TYPE_NEW_MODERATOR_NOTIF:
+                handlenotifieddmoderatoraccount(Channel.NEW_COMMENT, remoteMessage);
+                break;
 
         }
     }
 
 
     private void handleactivatedmoderatoraccount(Channel channel, RemoteMessage remoteMessage) {
-        String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
+
+
+         String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
         String notificationBody = remoteMessage.getData().get(BODY_KEY);
         String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
         String status = remoteMessage.getData().get("statuactivity");
@@ -147,6 +155,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         sendNotification(channel, notificationTitle, notificationBody, bitmap, intent);
         LogUtil.logDebug("remotedmessagehandler", "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
+
+    }
+    private void handlenotifieddmoderatoraccount(Channel channel, RemoteMessage remoteMessage) {
+
+
+        String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
+        String notificationBody = remoteMessage.getData().get(BODY_KEY);
+        String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
+
+        Intent backIntent = new Intent(this, TicketActivityMod.class);
+        Intent intent = new Intent(this, TicketActivityMod.class);
+        //intent.putExtra(PostDetailsActivity.POST_ID_EXTRA_KEY, postId);
+        Bitmap bitmap = getBitmapFromUrl(notificationImageUrl);
+
+        Log.v("receivednotifis",notificationTitle+"  "+notificationBody+" "+notificationImageUrl);
+
+
+        sendNotification(channel, notificationTitle, notificationBody,bitmap, intent);
 
     }
 

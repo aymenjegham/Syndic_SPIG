@@ -7,7 +7,7 @@ public class Profilefire {
     private String mobile;
     private String photoUrl;
     private long likesCount;
-    private String registrationToken;
+    private String token;
     private String id;
     private String username;
     private String email;
@@ -15,7 +15,7 @@ public class Profilefire {
     private boolean type;
 
 
-    public Profilefire(String residence, String numresidence, String mobile, String photoUrl, long likesCount, String registrationToken, String id, String username, String email, boolean active, boolean type) {
+    public Profilefire(String residence, String numresidence, String mobile, String photoUrl, long likesCount, String token, String id, String username, String email, boolean active, boolean type) {
         this.residence = residence;
         this.numresidence = numresidence;
         this.mobile = mobile;
@@ -26,6 +26,7 @@ public class Profilefire {
         this.email = email;
         this.active = active;
         this.type = type;
+        this.token=token;
     }
 
     public Profilefire() {
@@ -71,12 +72,12 @@ public class Profilefire {
         this.likesCount = likesCount;
     }
 
-    public String getRegistrationToken() {
-        return registrationToken;
+    public String gettoken() {
+        return token;
     }
 
-    public void setRegistrationToken(String registrationToken) {
-        this.registrationToken = registrationToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getId() {

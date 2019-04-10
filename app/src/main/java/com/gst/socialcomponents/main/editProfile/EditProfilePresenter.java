@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.gst.socialcomponents.R;
@@ -157,6 +158,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
             @Override
             public void onFailure(Call<PostProfile> call, Throwable t) {
                 Log.v("loggingresponse","error"+ t.getMessage());
+                Toast.makeText(context, "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
             }
         });
     }

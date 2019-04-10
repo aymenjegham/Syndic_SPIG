@@ -149,14 +149,9 @@ public class ReunionActivity extends AppCompatActivity {
 
                 String myFormat = "HH:mm";
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
                 heuret.setText(sdf.format(myCalendar1.getTime()));
 
-
-
             }
-
-
 
         };
 
