@@ -210,9 +210,6 @@ public class ProcessessFragment extends Fragment {
 
     void retrivedata(ArrayList tickets,ArrayList<String> ticketscreators){
 
-        Collections.reverse(tickets);
-        Collections.reverse(ticketscreators);
-
         recyclerView.setHasFixedSize(true);
         TicketAdapterMod adapter;
         adapter=new TicketAdapterMod(tickets,ticketscreators);

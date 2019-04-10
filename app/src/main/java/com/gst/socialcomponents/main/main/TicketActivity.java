@@ -183,7 +183,6 @@ public class TicketActivity extends AppCompatActivity {
 
     void retrivedata(ArrayList tickets){
 
-        Collections.reverse(tickets);
         RecyclerView recyclerView =findViewById(R.id.recyclerView2);
         recyclerView.setHasFixedSize(true);
         TicketAdapter adapter;

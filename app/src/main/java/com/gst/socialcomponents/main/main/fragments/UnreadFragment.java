@@ -284,8 +284,6 @@ public class UnreadFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         TicketAdapterMod adapter;
-        Collections.reverse(tickets);
-        Collections.reverse(ticketscreators);
 
         adapter=new TicketAdapterMod(tickets,ticketscreators);
          recyclerView.setAdapter(adapter);
