@@ -157,7 +157,6 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
             }
             @Override
             public void onFailure(Call<PostProfile> call, Throwable t) {
-                Log.v("loggingresponse","error"+ t.getMessage());
                 Toast.makeText(context, "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
             }
         });

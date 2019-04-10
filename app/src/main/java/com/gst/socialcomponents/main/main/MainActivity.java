@@ -57,6 +57,9 @@ import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsAdapter;
+import com.gst.socialcomponents.data.GetFacture;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.followPosts.FollowingPostsActivity;
@@ -67,6 +70,11 @@ import com.gst.socialcomponents.main.search.SearchActivity;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.AnimationUtils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Headers;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -90,6 +98,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     String token;
     boolean isModerator;
     private Menu menu;
+    private APIService mAPIService;
+
 
 
     @Override
@@ -101,6 +111,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Syndic IG");
         setSupportActionBar(toolbar);
+
+        mAPIService = ApiUtils.getAPIService();
+        loadFactures();
 
          initContentView();
 
@@ -184,6 +197,28 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
+    }
+
+    public void loadFactures() {
+        mAPIService.getFacture(4).enqueue(new Callback<GetFacture>() {
+
+            @Headers("Content-Type: application/json")
+            @Override
+            public void onResponse(Call<GetFacture> call, Response<GetFacture> response) {
+
+                if(response.isSuccessful()) {
+                     Log.d("testinggetinmain", "posts loaded from API"+response.body().getTitle()+" "+response.body().getCompleted()+" "+response.body().getId()+" "+response.body().getUserId());
+                }else {
+                    int statusCode  = response.code();
+                 }
+            }
+
+            @Override
+            public void onFailure(Call<GetFacture> call, Throwable t) {
+                 Log.d("testinggetinmain", "error loading from API"+t.getMessage());
+
+            }
+        });
     }
 
     private void changesetup() {
