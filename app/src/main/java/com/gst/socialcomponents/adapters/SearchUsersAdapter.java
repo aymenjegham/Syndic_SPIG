@@ -17,8 +17,11 @@
 package com.gst.socialcomponents.adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -31,6 +34,8 @@ import com.gst.socialcomponents.model.Profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Alexey on 03.05.18.
  */
@@ -39,6 +44,11 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public static final String TAG = SearchUsersAdapter.class.getSimpleName();
 
     private List<Profile> itemsList = new ArrayList<>();
+    private List<Profile> itemsListOfResidence = new ArrayList<>();
+    String residence;
+
+
+
 
     private UserViewHolder.Callback callback;
     private Activity activity;
@@ -66,13 +76,33 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+
         ((UserViewHolder) holder).bindData(itemsList.get(position));
+
+
+
+
+
     }
 
     public void setList(List<Profile> list) {
+
+        SharedPreferences prefs = activity.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+        residence = prefs.getString("sharedprefresidence", null);
+        itemsListOfResidence.clear();
+
+        for( int i=0;i<list.size();i++){
+            if((list.get(i).getResidence().equals(residence))){
+                itemsListOfResidence.add(list.get(i));
+            }
+
+        }
+
         itemsList.clear();
-        itemsList.addAll(list);
+        itemsList.addAll(itemsListOfResidence);
         notifyDataSetChanged();
+
     }
 
     public void updateItem(int position) {
