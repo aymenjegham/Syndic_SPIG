@@ -184,7 +184,7 @@ public class TicketActivity extends AppCompatActivity {
     void retrivedata(ArrayList tickets){
 
         RecyclerView recyclerView =findViewById(R.id.recyclerView2);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         TicketAdapter adapter;
         adapter=new TicketAdapter(tickets);
         recyclerView.setAdapter(adapter);
@@ -260,7 +260,7 @@ public class TicketActivity extends AppCompatActivity {
                         StorageReference imagesRef = storageRef.child(url);
                         UploadTask uploadTask = imagesRef.putBytes(data);
                          ProgressDialog pd = new ProgressDialog(TicketActivity.this);
-                        pd.setMessage("uploading");
+                        pd.setMessage("envoi");
                         pd.show();
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -276,22 +276,22 @@ public class TicketActivity extends AppCompatActivity {
                                     public void onSuccess(Uri uri) {
 
                                          String photoLink = uri.toString();
-                                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink);
+                                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink,"empty");
                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                         pd.dismiss();
                                         adddialog.dismiss();
                                         bitmap=null;
-                                        Toast.makeText(TicketActivity.this, "update successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TicketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
                         });
                     }else
                     {
-                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null");
+                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null","empty");
                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                         adddialog.dismiss();
-                        Toast.makeText(TicketActivity.this, "update successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TicketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
                     }
                     }
             }

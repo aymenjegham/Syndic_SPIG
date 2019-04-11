@@ -25,8 +25,8 @@
             <ImageView
                 android:id="@+id/photo"
                 android:layout_width="match_parent"
-                android:layout_height="247dp"
-                android:background="@drawable/ic_stub"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:contentDescription="@string/ticketimage"
                 android:foregroundGravity="top"
                 android:scaleType="fitCenter"
@@ -52,7 +52,10 @@
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
                 android:textAppearance="@style/TextAppearance.Title"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/usernametv"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/photo" />
 
@@ -63,30 +66,32 @@
                 android:layout_below="@+id/title"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
                 android:textAppearance="@style/TextAppearance.Second"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/countersContainer"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/usernametv"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
             <com.gst.socialcomponents.views.CircularImageView
                 android:id="@+id/photoImageViewticket"
                 android:layout_width="@dimen/post_author_image_side"
                 android:layout_height="@dimen/post_author_image_side"
-                android:layout_marginTop="160dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:transitionName="@string/post_author_image_transition_name"
                 android:visibility="visible"
                 app:border="false"
-                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photo"
                 app:shadow="false"
                 app:shadow_radius="@dimen/circle_image_shadow_radius"
                 tools:src="@drawable/ic_stub"
@@ -96,9 +101,10 @@
                 android:id="@+id/countersContainer"
                 layout="@layout/feedback_panel"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="36dp"
                 android:layout_below="@+id/description"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/commenlabelmod"
                 tools:layout_editor_absoluteX="8dp" />
 
             <TextView
@@ -106,12 +112,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="TextView"
                 android:textColor="@color/facebook_button_color"
-                app:layout_constraintBottom_toTopOf="@+id/title"
+                app:layout_constraintBottom_toBottomOf="@+id/photoImageViewticket"
                 app:layout_constraintEnd_toStartOf="@+id/photoImageViewticket"
-                app:layout_constraintTop_toTopOf="@+id/title" />
+                app:layout_constraintTop_toTopOf="@+id/photoImageViewticket" />
+
+            <TextView
+                android:id="@+id/residencenumtv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/photoImageViewticket"
+                app:layout_constraintTop_toBottomOf="@+id/usernametv" />
+
+            <TextView
+                android:id="@+id/commenlabelmod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Reponse :"
+                android:textColor="@color/google_button_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/commenttv"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/commenttv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:singleLine="false"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

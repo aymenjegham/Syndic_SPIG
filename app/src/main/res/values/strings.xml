@@ -203,5 +203,9 @@
     <string name="ajouter_tout" translatable="false">Ajouter tout</string>
     <string name="facturer" translatable="false">Facturer</string>
 
+    <string name="title_activity_detail_ticket">DetailTicketActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 
 </resources>

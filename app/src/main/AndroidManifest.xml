@@ -16,16 +16,23 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-
-        <activity android:name=".main.login.LoginemailActivity"
-            android:parentActivityName=".main.main.MainActivity"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".main.main.TicketDetailActivity"
+            android:parentActivityName=".main.main.TicketActivityMod"
             android:theme="@style/AppCompat.NoActionBar"/>
-
-        <activity android:name=".main.login.RegisteremailActivity"
+        <activity
+            android:name=".main.login.PasswordResetActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".main.login.LoginemailActivity"
+            android:noHistory="true"
             android:parentActivityName=".main.main.MainActivity"
-            android:theme="@style/AppCompat.NoActionBar"/>
+            android:theme="@style/AppCompat.NoActionBar" />
+        <activity
+            android:name=".main.login.RegisteremailActivity"
+            android:parentActivityName=".main.main.MainActivity"
+            android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.DetailReunionActivity"
             android:parentActivityName=".main.main.MainActivity"

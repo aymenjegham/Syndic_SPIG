@@ -16,17 +16,19 @@ import static java.text.DateFormat.getDateTimeInstance;
         public Map<String, String> timestamp;
         public String state;
         public String photolink;
+         public String comment;
 
         public Ticket() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public Ticket(String title, String description,Map<String, String> timestamp,String state,String photolink) {
+        public Ticket(String title, String description,Map<String, String> timestamp,String state,String photolink,String comment) {
             this.title = title;
             this.description = description;
             this.timestamp=timestamp;
             this.state=state;
             this.photolink=photolink;
+            this.comment=comment;
         }
 
 

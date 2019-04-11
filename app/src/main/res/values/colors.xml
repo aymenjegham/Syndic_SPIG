@@ -38,4 +38,6 @@
     <color name="follow_button_pressed_color">#0087BC</color>
     <color name="follow_button_light_color">@color/white</color>
     <color name="follow_button_light_pressed_color">#f7f7f7</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

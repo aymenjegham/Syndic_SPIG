@@ -16,17 +16,27 @@ public class TicketRetrieve {
     public Long timestamp;
     public String state;
     public String photolink;
+    public String comment;
 
     public TicketRetrieve() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public TicketRetrieve(String title, String description,Long timestamp,String state,String photolink) {
+    public TicketRetrieve(String title, String description,Long timestamp,String state,String photolink,String comment) {
         this.title = title;
         this.description = description;
         this.timestamp=timestamp;
         this.state=state;
         this.photolink=photolink;
+        this.comment=comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getTitle() {

@@ -58,10 +58,10 @@
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailedittext" />
+        app:layout_constraintTop_toBottomOf="@+id/send_email" />
 
     <EditText
-        android:id="@+id/emailedittext"
+        android:id="@+id/send_email"
          android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

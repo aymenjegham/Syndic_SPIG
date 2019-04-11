@@ -149,6 +149,8 @@ public class UnreadFragment extends Fragment {
 
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
         ArrayList<String> ticketscreators = new ArrayList() ;
+        ArrayList<String> ticketsid = new ArrayList() ;
+
 
         reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
         reference1.keepSynced(true);
@@ -164,8 +166,10 @@ public class UnreadFragment extends Fragment {
 
                                      tickets.add(ticket);
                                     ticketscreators.add(ds.getKey());
-                                }
-                                retrivedata(tickets,ticketscreators);
+                                     ticketsid.add(ds2.getKey());
+
+                                 }
+                                retrivedata(tickets,ticketscreators,ticketsid);
                             }
                         }
                     }
@@ -280,12 +284,12 @@ public class UnreadFragment extends Fragment {
 
 
 
-    void retrivedata(ArrayList tickets, ArrayList<String> ticketscreators){
+    void retrivedata(ArrayList tickets, ArrayList<String> ticketscreators, ArrayList<String> ticketsid){
 
-        recyclerView.setHasFixedSize(true);
+       // recyclerView.setHasFixedSize(true);
         TicketAdapterMod adapter;
 
-        adapter=new TicketAdapterMod(tickets,ticketscreators);
+        adapter=new TicketAdapterMod(tickets,ticketscreators,ticketsid,getContext());
          recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -131,6 +131,7 @@ public class ClosedFragment extends Fragment {
     private void getdata(){
         ArrayList<TicketRetrieve> tickets = new ArrayList() ;
         ArrayList<String> ticketscreators = new ArrayList() ;
+        ArrayList<String> ticketsid = new ArrayList() ;
 
 
         reference1 = FirebaseDatabase.getInstance().getReference().child("Tickets").child(residence);
@@ -146,8 +147,9 @@ public class ClosedFragment extends Fragment {
                                 if(ticket.getState().equals("cloturé")){
                                     tickets.add(ticket);
                                     ticketscreators.add(ds.getKey());
+                                    ticketsid.add(ds2.getKey());
                                 }
-                                retrivedata(tickets,ticketscreators);
+                                retrivedata(tickets,ticketscreators,ticketsid);
                             }
 
                         }
@@ -213,11 +215,11 @@ public class ClosedFragment extends Fragment {
 
 
     }
-    void retrivedata(ArrayList tickets,ArrayList<String> ticketscreators){
+    void retrivedata(ArrayList tickets,ArrayList<String> ticketscreators,ArrayList<String> ticketsid){
 
         recyclerView.setHasFixedSize(true);
         TicketAdapterMod adapter;
-        adapter=new TicketAdapterMod(tickets,ticketscreators);
+        adapter=new TicketAdapterMod(tickets,ticketscreators,ticketsid,getContext());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

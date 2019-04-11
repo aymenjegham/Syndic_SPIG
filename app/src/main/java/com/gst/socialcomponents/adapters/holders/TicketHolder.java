@@ -18,6 +18,8 @@ import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.FormatterUtil;
 
+import static com.gst.socialcomponents.R.drawable.com_facebook_button_background;
+
 public class TicketHolder extends RecyclerView.ViewHolder {
 
 
@@ -30,7 +32,9 @@ public class TicketHolder extends RecyclerView.ViewHolder {
     private TextView time;
     Context cxt;
     private ImageView stateimageview;
-    private ImageView photoImageView;
+     private  TextView comment;
+    private  TextView commenttv;
+
 
 
 
@@ -45,7 +49,8 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         this.matricule=(TextView)itemView.findViewById(R.id.matriculeTextView);
         this.time=(TextView)itemView.findViewById(R.id.dateTextView);
         this.stateimageview=itemView.findViewById(R.id.stateImageView);
-        this.photoImageView=itemView.findViewById(R.id.photoImageViewticket);
+         this.comment=itemView.findViewById(R.id.commenttv);
+        this.commenttv=itemView.findViewById(R.id.commenttvv);
 
 
 
@@ -64,6 +69,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         String url=ticketRetrieve.getPhotolink();
         String statestring=ticketRetrieve.getState();
         Long timelong=ticketRetrieve.getTimestamp();
+        String commentaire=ticketRetrieve.getComment();
 
 
 
@@ -71,7 +77,16 @@ public class TicketHolder extends RecyclerView.ViewHolder {
 
         title.setText(titleString);
         description.setText(descriptionString);
-        Glide.with(photolink.getContext()).load(url).into(photolink);
+
+
+        if(url != null){
+            Glide.with(photolink.getContext()).load(url).into(photolink);
+
+        }else if(url == null){
+            photolink.setBackground(cxt.getResources().getDrawable(R.drawable.ic_photo_camera));
+            Log.v("photolinksource",url);
+
+        }
 
 
         if(statestring.equals("en cours")){
@@ -80,7 +95,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
 
            }
            else if(statestring.equals("cloturé")){
-               stateimageview.setImageResource(R.drawable.ic_done);
+               stateimageview.setImageResource(R.drawable.ic_thumbs_up);
                state.setText(statestring);
 
            }else if (statestring.equals("envoyé")){
@@ -93,6 +108,12 @@ public class TicketHolder extends RecyclerView.ViewHolder {
          String timelongtostring = String.valueOf(timelong);
          int strlength=timelongtostring.length();
         matricule.setText(timelongtostring.substring(4, strlength-1));
+
+        if(commentaire.equals("empty")){
+            comment.setVisibility(View.GONE);
+            commenttv.setVisibility(View.GONE);
+        }
+        comment.setText(commentaire);
 
         CharSequence date = FormatterUtil.getRelativeTimeSpanString(cxt, timelong);
 
