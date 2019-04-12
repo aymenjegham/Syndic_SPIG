@@ -86,6 +86,8 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
+
+
     public void setList(List<Profile> list) {
 
         SharedPreferences prefs = activity.getSharedPreferences("Myprefsfile", MODE_PRIVATE);

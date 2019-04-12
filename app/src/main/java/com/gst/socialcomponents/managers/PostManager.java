@@ -157,6 +157,7 @@ public class PostManager extends FirebaseListenersManager {
         closeListeners(context);
         ValueEventListener valueEventListener = postInteractor.filterPostsByLikes(limit, onDataChangedListener);
         addListenerToMap(context, valueEventListener);
+
     }
 
     public void loadImageMediumSize(GlideRequests request, String imageTitle, ImageView imageView, @Nullable OnImageRequestListener onImageRequestListener) {

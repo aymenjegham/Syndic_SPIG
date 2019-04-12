@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,6 +194,8 @@ public class SearchPostsFragment extends BaseFragment<SearchPostsView, SearchPos
 
     @Override
     public void onSearchResultsReady(List<Post> posts) {
+
+
         hideLocalProgress();
         emptyListMessageTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);

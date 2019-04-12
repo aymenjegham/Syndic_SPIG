@@ -18,6 +18,7 @@
 package com.gst.socialcomponents.main.search.posts;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.gst.socialcomponents.main.base.BasePresenter;
 import com.gst.socialcomponents.managers.PostManager;
@@ -46,6 +47,8 @@ public class SearchPostsPresenter extends BasePresenter<SearchPostsView> {
 
     public void search(String searchText) {
         if (checkInternetConnection()) {
+            Log.v("postsfilteringter",searchText+"  ");
+
             if (searchText.isEmpty()) {
                 filterByLikes();
             } else {
@@ -62,12 +65,15 @@ public class SearchPostsPresenter extends BasePresenter<SearchPostsView> {
         if (checkInternetConnection()) {
             ifViewAttached(SearchPostsView::showLocalProgress);
             postManager.filterByLikes(LIMIT_POSTS_FILTERED_BY_LIKES, this::handleSearchResult);
+
         } else {
             ifViewAttached(SearchPostsView::hideLocalProgress);
         }
     }
 
     private void handleSearchResult(List<Post> list) {
+
+
         ifViewAttached(view -> {
             view.hideLocalProgress();
             view.onSearchResultsReady(list);
