@@ -46,6 +46,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -71,6 +72,7 @@ import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.AnimationUtils;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -106,7 +108,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter.onProfileMenuActionClicked();
+         presenter.onProfileMenuActionClicked();
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Syndic IG");
@@ -114,6 +116,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         mAPIService = ApiUtils.getAPIService();
         loadFactures();
+
+
+
 
          initContentView();
 
@@ -297,6 +302,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     protected void onResume() {
+        Log.v("checki,ng","reture");
+
         super.onResume();
         presenter.updateNewPostCounter();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -454,7 +461,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        recyclerView.setAdapter(postsAdapter);
+         recyclerView.setAdapter(postsAdapter);
         postsAdapter.loadFirstPage();
     }
 

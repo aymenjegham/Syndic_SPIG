@@ -184,6 +184,8 @@ public class PostInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 PostListResult result = parsePostList((Map<String, Object>) dataSnapshot.getValue());
                 onDataChangedListener.onListChanged(result.getPosts());
+
+
             }
 
             @Override
@@ -201,6 +203,9 @@ public class PostInteractor {
                 if (dataSnapshot.getValue() != null) {
                     if (isPostValid((Map<String, Object>) dataSnapshot.getValue())) {
                         Post post = dataSnapshot.getValue(Post.class);
+                         Log.v("valueis",dataSnapshot.getValue().toString()+"  "+post.getModerator());
+
+
                         if (post != null) {
                             post.setId(id);
                         }
@@ -293,7 +298,7 @@ public class PostInteractor {
                             post.setImageTitle((String) mapObj.get("imageTitle"));
                             post.setAuthorId((String) mapObj.get("authorId"));
                             post.setCreatedDate(createdDate);
-                            post.setIsmoderator((boolean) mapObj.get("moderator"));
+                            post.setModerator((String) mapObj.get("moderator"));
                             post.setResidence((String) mapObj.get("residence"));
 
                             if (mapObj.containsKey("commentsCount")) {

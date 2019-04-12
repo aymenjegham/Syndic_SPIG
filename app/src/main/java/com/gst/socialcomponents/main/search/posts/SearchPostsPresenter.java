@@ -47,7 +47,6 @@ public class SearchPostsPresenter extends BasePresenter<SearchPostsView> {
 
     public void search(String searchText) {
         if (checkInternetConnection()) {
-            Log.v("postsfilteringter",searchText+"  ");
 
             if (searchText.isEmpty()) {
                 filterByLikes();

@@ -167,7 +167,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="84e05e27c9fcba7e1de6a47e355a1aa247264a46" />
+            android:value="031dac87cd173e6922fa0b08b38e5c99a897ed51" />
 
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>

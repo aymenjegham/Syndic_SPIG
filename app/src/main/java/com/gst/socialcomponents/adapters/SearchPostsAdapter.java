@@ -83,6 +83,7 @@ public class SearchPostsAdapter extends BasePostsAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         ((PostViewHolder) holder).bindData(postList.get(position));
     }
 

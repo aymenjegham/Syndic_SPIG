@@ -18,6 +18,7 @@
 package com.gst.socialcomponents.adapters;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -100,6 +101,8 @@ public class PostsAdapter extends BasePostsAdapter {
         } else {
             return new LoadViewHolder(inflater.inflate(R.layout.loading_view, parent, false));
         }
+
+
     }
 
     private PostViewHolder.OnClickListener createOnClickListener() {
@@ -129,6 +132,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         if (position >= getItemCount() - 1 && isMoreDataAvailable && !isLoading) {
             android.os.Handler mHandler = activity.getWindow().getDecorView().getHandler();
             mHandler.post(new Runnable() {
@@ -150,6 +154,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
         }
 
+
         if (getItemViewType(position) != ItemType.LOAD.getTypeCode()) {
 
 
@@ -158,6 +163,7 @@ public class PostsAdapter extends BasePostsAdapter {
     }
 
     private void addList(List<Post> list) {
+
         this.postList.addAll(list);
         notifyDataSetChanged();
         isLoading = false;

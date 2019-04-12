@@ -44,10 +44,16 @@ public class Post implements Serializable, LazyLoading {
     private long watchersCount;
     private boolean hasComplain;
     private ItemType itemType;
-    private boolean ismoderator;
-    private String residence;
+     private String residence;
+     private String moderator;
 
+    public String getModerator() {
+        return moderator;
+    }
 
+    public void setModerator(String moderator) {
+        this.moderator = moderator;
+    }
 
     public Post() {
         this.createdDate = new Date().getTime();
@@ -60,13 +66,7 @@ public class Post implements Serializable, LazyLoading {
     }
 
 
-    public boolean isIsmoderator() {
-        return ismoderator;
-    }
 
-    public void setIsmoderator(boolean ismoderator) {
-        this.ismoderator = ismoderator;
-    }
 
     public String getResidence() {
         return residence;
@@ -170,7 +170,7 @@ public class Post implements Serializable, LazyLoading {
         result.put("watchersCount", watchersCount);
         result.put("hasComplain", hasComplain);
         result.put("createdDateText", FormatterUtil.getFirebaseDateFormat().format(new Date(createdDate)));
-        result.put("moderator",ismoderator);
+        result.put("moderator",moderator);
         result.put("residence",residence);
 
 

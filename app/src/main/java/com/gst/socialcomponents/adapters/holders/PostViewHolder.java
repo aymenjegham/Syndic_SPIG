@@ -124,6 +124,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 onClickListener.onAuthorClick(getAdapterPosition(), v);
             }
         });
+
+
     }
 
     public void bindData(Post post) {
@@ -158,11 +160,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         }
 
 
-        if(post.isIsmoderator()){
-          linearlayout.setBackgroundResource(R.drawable.drawablemod);
+
+        if(post.getModerator().equals("true")){
+            linearlayout.setBackgroundResource(R.drawable.drawablemod);
         }else {
             linearlayout.setBackgroundColor(Color.WHITE);
+
         }
+
+
+
+
     }
 
     private String removeNewLinesDividers(String text) {

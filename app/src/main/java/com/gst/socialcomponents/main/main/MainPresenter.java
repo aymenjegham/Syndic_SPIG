@@ -16,10 +16,14 @@
 
 package com.gst.socialcomponents.main.main;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +57,9 @@ class MainPresenter extends BasePresenter<MainView> {
             }
         }
     }
+
+
+
 
     void onPostClicked(final Post post, final View postView) {
 

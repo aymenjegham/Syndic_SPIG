@@ -69,13 +69,13 @@ class EditPostPresenter extends BaseCreatePostPresenter<EditPostView> {
     }
 
     @Override
-    protected void savePost(final String title, final String description,boolean ismod,String reside) {
+    protected void savePost(final String title, final String description,String ismod,String reside) {
         ifViewAttached(view -> {
             view.showProgress(R.string.message_saving);
 
             post.setTitle(title);
             post.setDescription(description);
-            post.setIsmoderator(ismod);
+            post.setModerator(ismod);
             post.setResidence(reside);
 
             if (view.getImageUri() != null) {

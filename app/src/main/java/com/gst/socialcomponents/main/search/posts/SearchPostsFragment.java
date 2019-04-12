@@ -122,6 +122,7 @@ public class SearchPostsFragment extends BaseFragment<SearchPostsView, SearchPos
                     @Override
                     public void onDataChanged(boolean exist) {
                         if (exist) {
+
                             openPostDetailsActivity(post, view);
                         } else {
                             showSnackBar(R.string.error_post_was_removed);

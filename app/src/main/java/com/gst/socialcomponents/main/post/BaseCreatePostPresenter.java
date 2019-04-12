@@ -40,20 +40,20 @@ public abstract class BaseCreatePostPresenter<V extends BaseCreatePostView> exte
 
     protected boolean creatingPost = false;
     protected PostManager postManager;
-    boolean ismoderator;
+    String ismoderator;
     String residence ;
     public BaseCreatePostPresenter(Context context) {
         super(context);
         postManager = PostManager.getInstance(context);
         SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
-        ismoderator = prefs.getBoolean("sharedprefismoderator", false);
+        ismoderator = String.valueOf(prefs.getBoolean("sharedprefismoderator", false));
         residence = prefs.getString("sharedprefresidence", null);
      }
 
     @StringRes
     protected abstract int getSaveFailMessage();
 
-    protected abstract void savePost(final String title, final String description,boolean ismod,String residence);
+    protected abstract void savePost(final String title, final String description,String ismod,String residence);
 
     protected abstract boolean isImageRequired();
 

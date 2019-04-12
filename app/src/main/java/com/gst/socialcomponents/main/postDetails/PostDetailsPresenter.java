@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +69,7 @@ class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
                     if (obj != null) {
                         post = obj;
                         isPostExist = true;
+
                         view.initLikeController(post);
                         fillInUI(post);
                         view.updateCounters(post);
@@ -104,6 +106,7 @@ class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
     private void fillInUI(@NonNull Post post) {
         ifViewAttached(view -> {
             view.setTitle(post.getTitle());
+
             view.setDescription(post.getDescription());
             view.loadPostDetailImage(post.getImageTitle());
 

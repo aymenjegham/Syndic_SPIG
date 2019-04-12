@@ -1,5 +1,6 @@
 package com.gst.socialcomponents.adapters.holders;
 
+import android.util.Log;
 import android.view.View;
 
 import com.gst.socialcomponents.main.base.BaseActivity;

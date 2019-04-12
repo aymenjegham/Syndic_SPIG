@@ -23,9 +23,11 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
 import com.gst.socialcomponents.main.interactors.PostInteractor;
 import com.gst.socialcomponents.model.Profilefire;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -38,6 +40,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         ApplicationHelper.initDatabaseHelper(this);
         PostInteractor.getInstance(this).subscribeToNewPosts();
