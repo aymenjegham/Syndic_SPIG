@@ -1,5 +1,6 @@
 package com.gst.socialcomponents.main.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.main.main.MainActivity;
+import com.gst.socialcomponents.main.main.TicketActivity;
+import com.gst.socialcomponents.main.profile.ProfileActivity;
+import com.gst.socialcomponents.model.Profile;
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
@@ -79,11 +84,15 @@ public class LoginemailActivity extends AppCompatActivity {
         }
 
         if (!cancel) {
+            ProgressDialog pd = new ProgressDialog(LoginemailActivity.this);
+            pd.setMessage("Connexion");
+            pd.show();
             mAuth.signInWithEmailAndPassword(email, mdp)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                pd.dismiss();
                                 Toast.makeText(getApplicationContext(), "connecté avec succés!", Toast.LENGTH_LONG).show();
                                 finish();
                             }
@@ -94,6 +103,13 @@ public class LoginemailActivity extends AppCompatActivity {
                     });
         }
     }
+    });
+
+    cancel.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
     });
 
     }
