@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,17 +39,9 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.gst.socialcomponents.R;
-import com.gst.socialcomponents.data.PostProfile;
-import com.gst.socialcomponents.data.remote.APIService;
-import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.pickImageBase.PickImageActivity;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.Headers;
 
 public class EditProfileActivity<V extends EditProfileView, P extends EditProfilePresenter<V>> extends PickImageActivity<V, P> implements EditProfileView {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
@@ -81,7 +72,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
 
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.drawer_img);
         nameEditText = findViewById(R.id.nameEditText);
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
          spin = findViewById(R.id.simpleSpinner);

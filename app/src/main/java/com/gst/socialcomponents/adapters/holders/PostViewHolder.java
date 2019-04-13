@@ -162,14 +162,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
 
         if(post.getModerator().equals("true")){
-            linearlayout.setBackgroundResource(R.drawable.drawablemod);
-        }else {
+        // linearlayout.setBackgroundResource(R.drawable.stripes2);
+            linearlayout.setBackgroundColor(0xffB22222);
+         }else {
             linearlayout.setBackgroundColor(Color.WHITE);
 
         }
-
-
-
 
     }
 

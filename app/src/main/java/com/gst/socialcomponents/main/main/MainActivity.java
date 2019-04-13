@@ -22,14 +22,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
- import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
@@ -43,9 +49,12 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -100,7 +109,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     String token;
     boolean isModerator;
     private Menu menu;
+    private Menu menuDr;
     private APIService mAPIService;
+    private DrawerLayout drawerLayout;
+    private  NavigationView navigationView;
+    private ImageView drawerImage;
+    private  TextView drawerUsername;
+    private  TextView drawerresidence;
 
 
 
@@ -110,9 +125,135 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         setContentView(R.layout.activity_main);
          presenter.onProfileMenuActionClicked();
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+               switch (menuItem.getItemId()) {
+                    case R.id.profile:
+                        presenter.onProfileMenuActionClicked();
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+
+                    case R.id.followingPosts:
+                        Intent followingPosts = new Intent(getApplicationContext(), FollowingPostsActivity.class);
+                        startActivity(followingPosts);
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+
+                    case R.id.search:
+                        Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
+                        startActivity(searchIntent);
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+                    case R.id.ticketing:
+
+
+                        if (typeuser ==null){
+                            Intent ticket = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(ticket);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }
+                        if(typeuser != null && typeuser==false){
+                            Intent ticket = new Intent(getApplicationContext(), TicketActivity.class);
+                            startActivity(ticket);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }else if (typeuser != null && typeuser==true){
+                            Intent ticket = new Intent(getApplicationContext(), TicketActivityMod.class);
+                            startActivity(ticket);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }
+                        return true;
+                    case R.id.notif:
+                        Intent notif = new Intent(getApplicationContext(), NotifActivity.class);
+                        startActivity(notif);
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+
+                    case R.id.tools:
+                        if (typeuser ==null){
+
+                            Intent ticket = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(ticket);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }
+                        if(typeuser != null && typeuser==false){
+
+                            Intent tools = new Intent(getApplicationContext(), ToolActivity.class);
+                            startActivity(tools);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }else if (typeuser != null && typeuser==true){
+
+                            Intent tools = new Intent(getApplicationContext(), ToolsActivityMod.class);
+                            startActivity(tools);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+
+                        }
+                        return true;
+
+                    case R.id.gallerie:
+                        Intent gallery = new Intent(getApplicationContext(), GalleryActivity.class);
+                        startActivity(gallery);
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+
+                    case R.id.about:
+                        Intent apropos = new Intent(getApplicationContext(), About.class);
+                        startActivity(apropos);
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+
+                    case R.id.calendar:
+                        if (typeuser ==null){
+
+                            Intent tomain = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(tomain);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }
+                        if(typeuser != null && typeuser==false){
+
+                            Intent tocalendar = new Intent(getApplicationContext(), CalendarActivity.class);
+                            startActivity(tocalendar);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+                        }else if (typeuser != null && typeuser==true){
+
+                            Intent calendaractivitymod = new Intent(getApplicationContext(), CalendarActivityMod.class);
+                            startActivity(calendaractivitymod);
+                            menuItem.setChecked(true);
+                            drawerLayout.closeDrawers();
+
+                        }
+                        return true;
+                }
+                return true;
+            }
+        });
+
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Syndic IG");
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         mAPIService = ApiUtils.getAPIService();
         loadFactures();
@@ -155,7 +296,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                      if(typeuser== true){
 
-                         changesetup();
+                         changesetup(profile);
 
                          reference3 = FirebaseDatabase.getInstance().getReference().child("moderators").child(residence);
                          reference3.setValue(token);
@@ -164,7 +305,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     }
                     if(typeuser== false){
 
-                        changesetuptodefault();
+                        changesetuptodefault(profile);
 
                     }
                     if (!profile.isActive()) {
@@ -226,21 +367,44 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         });
     }
 
-    private void changesetup() {
+    private void changesetup(Profilefire profile) {
 
-       toolbar.setTitle("Moderateur");
+       //toolbar.setTitle("Moderateur");
        toolbar.setBackgroundColor(0xffB22222);
        if(menu != null){
            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+        }
+        View header = navigationView.getHeaderView(0);
+        header.setBackgroundColor(0xffB22222);
+         menuDr = navigationView.getMenu();
+        menuDr.getItem(5).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
 
-       }
+        drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
+        drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);
+        drawerresidence = (TextView) header.findViewById(R.id.residenceheadertv);
+
+        drawerUsername.setText(profile.getUsername());
+        drawerresidence.setText(profile.getResidence());
+        Glide.with(drawerImage.getContext()).load(profile.getPhotoUrl()).into(drawerImage);
 
 
-     }
-    private void changesetuptodefault() {
 
-        toolbar.setTitle("Syndic IG");
+    }
+    private void changesetuptodefault(Profilefire profile) {
+
+        //toolbar.setTitle("Syndic IG");
         toolbar.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+
+        View header = navigationView.getHeaderView(0);
+        header.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+
+        drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
+        drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);
+        drawerresidence = (TextView) header.findViewById(R.id.residenceheadertv);
+
+        drawerUsername.setText(profile.getUsername());
+        drawerresidence.setText(profile.getResidence());
+        Glide.with(drawerImage.getContext()).load(profile.getPhotoUrl()).into(drawerImage);
 
     }
 
@@ -334,11 +498,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
                     if(typeuser== true){
 
-                        changesetup();
+                        changesetup(profile);
 
                     }
                     else if(typeuser == false){
-                        changesetuptodefault();
+                        changesetuptodefault(profile);
                     }
 
 
@@ -574,6 +738,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         // Handle item selection
         switch (item.getItemId()) {
+
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
             case R.id.profile:
                 presenter.onProfileMenuActionClicked();
                 return true;

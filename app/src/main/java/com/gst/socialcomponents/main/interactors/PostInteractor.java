@@ -289,6 +289,8 @@ public class PostInteractor {
                         SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
                         residence = prefs.getString("sharedprefresidence", null);
 
+                        Log.v("checkingstate",mapObj.toString());
+
                          Post post;
                        if(mapObj.get("residence").equals(residence)) {
                          post = new Post();

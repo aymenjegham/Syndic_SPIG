@@ -62,7 +62,7 @@ public class UnfollowConfirmationDialog extends DialogFragment {
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.dialog_confirmation_unfollow, null);
 
-        ImageView imageView = view.findViewById(R.id.imageView);
+        ImageView imageView = view.findViewById(R.id.drawer_img);
         TextView confirmationMessageTextView = view.findViewById(R.id.confirmationMessageTextView);
 
         confirmationMessageTextView.setText(getString(R.string.unfollow_user_message, profile.getUsername()));

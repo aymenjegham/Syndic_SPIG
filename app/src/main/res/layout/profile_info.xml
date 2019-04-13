@@ -146,7 +146,7 @@
             android:visibility="visible" />
 
         <com.gst.socialcomponents.views.CircularImageView
-            android:id="@+id/imageView"
+            android:id="@+id/drawer_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:transitionName="@string/post_author_image_transition_name"

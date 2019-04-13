@@ -50,7 +50,7 @@ public abstract class BaseCreatePostActivity<V extends BaseCreatePostView, P ext
         descriptionEditText = findViewById(R.id.descriptionEditText);
         progressBar = findViewById(R.id.progressBar);
 
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.drawer_img);
 
         imageView.setOnClickListener(v -> onSelectImageClick(v));
 

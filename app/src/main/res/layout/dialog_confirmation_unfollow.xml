@@ -27,7 +27,7 @@
     android:gravity="center_horizontal">
 
     <com.gst.socialcomponents.views.CircularImageView
-        android:id="@+id/imageView"
+        android:id="@+id/drawer_img"
         android:layout_width="@dimen/profile_screen_avatar_size"
         android:layout_height="@dimen/profile_screen_avatar_size"
         app:border="false"

@@ -206,6 +206,12 @@
     <string name="title_activity_detail_ticket">DetailTicketActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="a_propos">A propos</string>
+    <string name="notification">Notification</string>
+    <string name="reclamations">Reclamations</string>
+    <string name="administration">Administration</string>
+    <string name="calendrier">Calendrier</string>
+    <string name="galerie">Galerie</string>
 
 
 </resources>

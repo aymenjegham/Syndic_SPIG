@@ -12,16 +12,16 @@
     <item
         android:id="@+id/followingPosts"
         android:icon="@drawable/ic_following_posts"
-        android:orderInCategory="8"
+        android:orderInCategory="5"
         android:title="@string/following_post_menu_item"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:orderInCategory="0"
         android:title="@string/search_menu_item"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/ticketing"
         android:icon="@drawable/ic_ticket"
@@ -32,28 +32,28 @@
         android:id="@+id/notif"
         android:icon="@drawable/ic_notif"
         android:orderInCategory="6"
-        android:title="@string/notif"
-        app:showAsAction="always" />
+        android:title="@string/notification"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tools"
         android:icon="@drawable/ic_money"
         android:orderInCategory="4"
-        android:title="@string/notif"
+        android:title="@string/notification"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/about"
         android:icon="@drawable/ic_info"
-        android:orderInCategory="5"
+        android:orderInCategory="8"
         android:title="A propos"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/gallerie"
         android:icon="@drawable/ic_galerie"
         android:orderInCategory="7"
         android:title="Galerie"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/calendar"
