@@ -18,9 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.main.TicketDetailActivity"
+        <activity android:name=".main.SendPicticketActivity"></activity>
+        <activity
+            android:name=".main.main.TicketDetailActivity"
             android:parentActivityName=".main.main.TicketActivityMod"
-            android:theme="@style/AppCompat.NoActionBar"/>
+            android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.login.PasswordResetActivity"
             android:noHistory="true" />

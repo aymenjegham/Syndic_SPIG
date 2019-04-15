@@ -379,6 +379,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
          menuDr = navigationView.getMenu();
         menuDr.getItem(5).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
 
+
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
         drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);
         drawerresidence = (TextView) header.findViewById(R.id.residenceheadertv);
@@ -397,6 +398,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(getResources().getColor(R.color.send_button_color));
+        menuDr = navigationView.getMenu();
+        menuDr.getItem(5).setTitle("Factures");
+
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
         drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);

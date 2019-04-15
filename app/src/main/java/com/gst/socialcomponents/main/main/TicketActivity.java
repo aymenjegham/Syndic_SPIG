@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -61,6 +62,7 @@ import com.google.firebase.storage.UploadTask;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.TicketAdapter;
+import com.gst.socialcomponents.main.SendPicticketActivity;
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
@@ -86,6 +88,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class TicketActivity extends AppCompatActivity {
 
@@ -133,7 +137,9 @@ public class TicketActivity extends AppCompatActivity {
         addnewticket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showalert();
+               // showalert();
+                Intent intent =new Intent(getApplicationContext(), SendPicticketActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -209,6 +215,8 @@ public class TicketActivity extends AppCompatActivity {
                         data.getData());
                 bitmap = BitmapFactory.decodeStream(stream);
                 stream.close();
+
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -219,14 +227,14 @@ public class TicketActivity extends AppCompatActivity {
 
         }else if (requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK){
             bitmap = (Bitmap) data.getExtras().get("data");
-        }
+         }
 
     }
 
     void   showalert(){
 
         LayoutInflater factory = LayoutInflater.from(this);
-        final View adddialogview = factory.inflate(R.layout.ticketdialog, null);
+        View adddialogview = factory.inflate(R.layout.ticketdialog, null);
         final AlertDialog adddialog = new AlertDialog.Builder(this).create();
         adddialog.setView(adddialogview);
         adddialog.setCancelable(false);
@@ -249,7 +257,6 @@ public class TicketActivity extends AppCompatActivity {
                 }
                 if (!cancel) {
                     if(bitmap!=null) {
-
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         data = baos.toByteArray();
@@ -304,6 +311,9 @@ public class TicketActivity extends AppCompatActivity {
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, GET_FROM_GALLERY);
+
+
+
             }
         });
         adddialogview.findViewById(R.id.prendre).setOnClickListener(new View.OnClickListener() {
