@@ -150,14 +150,15 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
             @Headers("Content-Type: application/json")
             @Override
             public void onResponse(Call<PostProfile> call, Response<PostProfile> response) {
-
-                if(response.isSuccessful()) {
+                 if(response.isSuccessful()) {
                     Log.v("loggingresponse", "post submitted to API." + response.body().toString());
                 }
             }
             @Override
             public void onFailure(Call<PostProfile> call, Throwable t) {
                 Toast.makeText(context, "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
+                Log.v("loggingresponse", t.getMessage());
+
             }
         });
     }

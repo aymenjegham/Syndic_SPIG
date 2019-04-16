@@ -63,6 +63,7 @@ class LoginPresenter extends BasePresenter<LoginView> {
                 if (!exist) {
                     view.startCreateProfileActivity();
                 } else {
+
                     PreferencesUtil.setProfileCreated(context, true);
                     ProfileInteractor.getInstance(context.getApplicationContext())
                             .addRegistrationToken(FirebaseInstanceId.getInstance().getToken(), userId);
@@ -101,6 +102,7 @@ class LoginPresenter extends BasePresenter<LoginView> {
         ifViewAttached(view -> {
              if (result.isSuccess()) {
                 view.showProgress();
+
 
                 GoogleSignInAccount account = result.getSignInAccount();
 

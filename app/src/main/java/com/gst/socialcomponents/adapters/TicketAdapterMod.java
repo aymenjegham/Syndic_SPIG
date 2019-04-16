@@ -52,7 +52,7 @@ public class TicketAdapterMod extends RecyclerView.Adapter<TicketHolderMod> {
     public void onBindViewHolder(@NonNull TicketHolderMod ticketHolderMod, int i) {
         final TicketRetrieve ticketRetrieve =tickets.get(i);
         final String userkey =ticketscreators.get(i);
-        ticketHolderMod.updateUI(ticketRetrieve,userkey);
+        ticketHolderMod.updateUI(ticketRetrieve,userkey,cxt.getApplicationContext());
 
         ticketHolderMod.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

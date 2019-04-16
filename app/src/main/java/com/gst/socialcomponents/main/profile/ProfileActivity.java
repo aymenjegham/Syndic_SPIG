@@ -178,7 +178,6 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
-                    Log.v("datachanged", String.valueOf(profile.isActive()));
 
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
@@ -253,7 +252,6 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
-                    Log.v("datachanged", String.valueOf(profile.isActive()));
 
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {

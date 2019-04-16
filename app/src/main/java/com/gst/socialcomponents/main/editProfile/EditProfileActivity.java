@@ -17,12 +17,15 @@
 package com.gst.socialcomponents.main.editProfile;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.view.menu.ListMenuItemView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +34,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
@@ -39,9 +44,22 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
+import com.gst.socialcomponents.main.main.GalleryActivity;
+import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImageActivity;
+import com.gst.socialcomponents.model.Chantiers;
+import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditProfileActivity<V extends EditProfileView, P extends EditProfilePresenter<V>> extends PickImageActivity<V, P> implements EditProfileView {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
@@ -53,13 +71,16 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     private EditText numtelEditText;
     protected ImageView imageView;
     private ProgressBar avatarProgressBar;
-    private  Spinner spin;
 
 
 
 
     String[] residencesNames={"Votre residence","Alpes","Arcades","Chott-maryem","Ennakhil","Houda","Houda 2","Jasmins","Jasmins 2","Jasmins 3","Jura","K2","Lotissement Msaken","Maarouf","Palms","Prestige","Pyrenées","Sierra","Vosges"};
     String selecteditem;
+    ArrayList<String> residences;
+
+    private APIService mAPIService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,26 +96,33 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         imageView = findViewById(R.id.drawer_img);
         nameEditText = findViewById(R.id.nameEditText);
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
-         spin = findViewById(R.id.simpleSpinner);
+        residenceEditText = findViewById(R.id.simplespinner);
         numtelEditText=findViewById(R.id.numtelEditText);
+
+        residenceEditText.setFocusable(false);
+
+        mAPIService = ApiUtils.getAPIService();
+        getChantiers();
 
 
 
 
         imageView.setOnClickListener(this::onSelectImageClick);
 
-         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,residencesNames);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-         spin.setAdapter(aa);
-
-        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,getChantiers());
+        //aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         //spin.setAdapter(aa);
+/*
+      spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                residencesNames[0] = "Alpes";
-                selecteditem=residencesNames[position];
-                SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
-                editor.putString("sharedprefresidence", residencesNames[position]);
-                 editor.apply();
+             //   residencesNames[0] = "Alpes";
+             //   selecteditem=residencesNames[position];
+               // SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
+                //editor.putString("sharedprefresidence", residencesNames[position]);
+                 //editor.apply();
+
+
 
             }
 
@@ -104,10 +132,70 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
             }
         });
+      */
+
+
+        residenceEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<String> mAnimals = new ArrayList<String>();
+                mAnimals.add("Cat");
+                mAnimals.add("Dog");
+                mAnimals.add("Horse");
+                mAnimals.add("Elephant");
+                mAnimals.add("Rat");
+                mAnimals.add("Lion");
+                mAnimals.add("Horse");
+                mAnimals.add("Elephant");
+                mAnimals.add("Rat");
+                mAnimals.add("Lion");
+                mAnimals.add("Horse");
+                mAnimals.add("Elephant");
+                mAnimals.add("Rat");
+                mAnimals.add("Lion");
+                final CharSequence[] Animals = mAnimals.toArray(new String[mAnimals.size()]);
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
+                dialogBuilder.setTitle("Animals");
+                dialogBuilder.setItems(Animals, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        String selectedText = Animals[item].toString();
+                    }
+                });
+                 AlertDialog alertDialogObject = dialogBuilder.create();
+                alertDialogObject.show();
+
+            }
+        });
+
 
         initContent();
     }
+    public ArrayList<String> getChantiers() {
+        residences = new ArrayList() ;
+        mAPIService.getListOfChantiers().enqueue(new Callback<List<Chantiers>>() {
 
+
+            @Override
+            public void onResponse(Call<List<Chantiers>> call, Response<List<Chantiers>> response) {
+
+                for(int i=0;i<response.body().size();i++){
+
+
+                    residences.add(response.body().get(i).getC_intitule());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Chantiers>> call, Throwable t) {
+
+            }
+        });
+
+        return residences;
+    }
 
 
 
@@ -166,11 +254,10 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
     @Override
     public void setResidence(String residencename) {
-       // residenceEditText.setText(residencename);
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,residencesNames);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        residencesNames[0] = residencename;
-        spin.setAdapter(aa);
+        residenceEditText.setText(residencename);
+        //aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       // residencesNames[0] = residencename;
+        //spin.setAdapter(aa);
      }
 
     @Override

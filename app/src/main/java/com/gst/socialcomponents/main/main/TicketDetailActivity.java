@@ -1,9 +1,17 @@
 package com.gst.socialcomponents.main.main;
 
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +24,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +56,8 @@ public class TicketDetailActivity extends AppCompatActivity {
 
 
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +65,9 @@ public class TicketDetailActivity extends AppCompatActivity {
        TouchImageView img = (TouchImageView) findViewById(R.id.imageViewdetail);
        commentEt=findViewById(R.id.commentEditText);
        submitBtn=findViewById(R.id.sendButton);
+
+
+
 
         toolbar = findViewById(R.id.toolbarticketmoddetail);
         toolbar.setTitle("Moderateur");
@@ -91,12 +112,86 @@ public class TicketDetailActivity extends AppCompatActivity {
 
         }
 
-        Log.v("varibalepassées",UserKey+" "+TicketKey);
+
         if(ImageUrl.equals("null")){
-            Glide.with(img.getContext()).load(R.drawable.ic_gallery).into(img);
-        }
+            ProgressDialog pd = new ProgressDialog(TicketDetailActivity.this);
+            pd.setMessage("chargement d'image");
+            pd.show();
+            pd.setCancelable(false);
+
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .error(R.drawable.ic_gallery)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.HIGH);
+
+            Glide.with(img.getContext())
+                    .load(R.drawable.ic_gallery)
+                    .apply(options)
+                    .listener(new RequestListener<Drawable>() {
+
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            pd.dismiss();
+                            img.setImageResource(R.drawable.ic_gallery);
+
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            pd.dismiss();
+
+                            return false;
+                        }
+
+                    })
+                    .into(img);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                img.setImageResource(R.drawable.ic_gallery);
+
+            }
+        });}
         else if(!ImageUrl.equals("null")){
-            Glide.with(img.getContext()).load(ImageUrl).into(img);
+             ProgressDialog pd = new ProgressDialog(TicketDetailActivity.this);
+            pd.setMessage("chargement d'image");
+            pd.show();
+
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .error(R.drawable.ic_gallery)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.HIGH);
+
+            Glide.with(img.getContext())
+                    .load(ImageUrl)
+                    .apply(options)
+                    .listener(new RequestListener<Drawable>() {
+
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                             pd.dismiss();
+                            img.setImageResource(R.drawable.ic_gallery);
+                             return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                             pd.dismiss();
+
+                            return false;
+                        }
+                    })
+                    .into(img);
+            pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    img.setImageResource(R.drawable.ic_gallery);
+
+                }
+            });
 
         }
 

@@ -70,7 +70,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
 
 
 
-    public void updateUI(TicketRetrieve ticketRetrieve,String userkey){
+    public void updateUI(TicketRetrieve ticketRetrieve,String userkey,Context cxt){
         String titleString= ticketRetrieve.getTitle();
         String descriptionString=ticketRetrieve.getDescription();
         String url=ticketRetrieve.getPhotolink();
@@ -87,7 +87,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                            if(snapshot.getKey().equals(userkey)){
                                Profilefire profile = snapshot.getValue(Profilefire.class);
-                               Glide.with(photoImageView.getContext()).load(profile.getPhotoUrl()).into(photoImageView);
+                               Glide.with(cxt).load(profile.getPhotoUrl()).into(photoImageView);
                                userTv.setText(profile.getUsername());
                                userresidenceTv.setText(profile.getNumresidence());
 

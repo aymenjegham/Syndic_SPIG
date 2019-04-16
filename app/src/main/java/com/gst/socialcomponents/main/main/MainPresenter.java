@@ -74,6 +74,7 @@ class MainPresenter extends BasePresenter<MainView> {
 
     void onProfileMenuActionClicked() {
         if (checkAuthorization()) {
+
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             ifViewAttached(view -> view.openProfileActivity(userId, null));
 

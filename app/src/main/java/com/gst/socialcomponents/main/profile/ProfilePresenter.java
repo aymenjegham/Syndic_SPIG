@@ -173,7 +173,6 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
                     view.setResidenceName(profile.getResidence());
 
                     if (profile.isType()){
-                        Log.v("profiletypeis",String.valueOf(profile.isType()));
                         view.setProfileType();
 
                     }

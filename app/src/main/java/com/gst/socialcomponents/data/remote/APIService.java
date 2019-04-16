@@ -2,6 +2,10 @@ package com.gst.socialcomponents.data.remote;
 
 import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.PostProfile;
+import com.gst.socialcomponents.model.Chantiers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -13,7 +17,8 @@ import retrofit2.http.Query;
 
 public interface APIService {
 
-    @POST("/servicesMAC/posts.php")
+   //@POST("/servicesMAC/posts.php")
+   @POST("/posts.php")
     @FormUrlEncoded
     Call<PostProfile> savePost(@Field("active") Boolean active,
                                @Field("email") String email,
@@ -29,5 +34,13 @@ public interface APIService {
 
     @GET("/todos/{userId}")
     Call<GetFacture> getFacture(@Path(value = "userId", encoded = true) int numcall);
+
+
+    @POST("/getChantiers.php")
+    Call<List<Chantiers>> getListOfChantiers();
+
+
+    @POST("/getAppartements.php")
+    Call<ArrayList> getListOfAppartements();
 
 }

@@ -19,6 +19,7 @@ package com.gst.socialcomponents.main.main;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -123,7 +124,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         presenter.onProfileMenuActionClicked();
+        presenter.onProfileMenuActionClicked();
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -256,12 +258,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         mAPIService = ApiUtils.getAPIService();
-        loadFactures();
+        //loadFactures();
 
 
 
 
-         initContentView();
+        initContentView();
 
 
 
@@ -269,7 +271,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         if (firebaseUser != null) {
 
-            reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+             reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
+
+
 
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -325,7 +329,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                         });
                     }
 
-
+                    //pd.dismiss();
                 }
 
                 @Override
@@ -335,6 +339,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
             });
 
+
         }
 
 
@@ -343,8 +348,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
-    }
 
+    }
+/*
     public void loadFactures() {
         mAPIService.getFacture(4).enqueue(new Callback<GetFacture>() {
 
@@ -365,7 +371,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
             }
         });
-    }
+    }  */
 
     private void changesetup(Profilefire profile) {
 
@@ -386,7 +392,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         drawerUsername.setText(profile.getUsername());
         drawerresidence.setText(profile.getResidence());
-        Glide.with(drawerImage.getContext()).load(profile.getPhotoUrl()).into(drawerImage);
+        Glide.with(getApplicationContext()).load(profile.getPhotoUrl()).into(drawerImage);
 
 
 
@@ -470,14 +476,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     protected void onResume() {
-        Log.v("checki,ng","reture");
 
-        super.onResume();
         presenter.updateNewPostCounter();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
         if (firebaseUser != null) {
+
 
             reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
 
@@ -507,7 +512,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     }
                     else if(typeuser == false){
                         changesetuptodefault(profile);
+
                     }
+
 
 
                 }
@@ -520,8 +527,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             });
 
         }
-
-
+        super.onResume();
     }
 
     @NonNull
