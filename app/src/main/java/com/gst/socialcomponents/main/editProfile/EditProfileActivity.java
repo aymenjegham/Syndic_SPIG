@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -49,6 +50,7 @@ import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.main.GalleryActivity;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImageActivity;
+import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.GlideApp;
@@ -64,8 +66,7 @@ import retrofit2.Response;
 public class EditProfileActivity<V extends EditProfileView, P extends EditProfilePresenter<V>> extends PickImageActivity<V, P> implements EditProfileView {
     private static final String TAG = EditProfileActivity.class.getSimpleName();
 
-    // UI references.
-    private EditText nameEditText;
+     private EditText nameEditText;
     private EditText residenceEditText;
     private EditText numresidenceEditText;
     private EditText numtelEditText;
@@ -75,9 +76,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
 
 
-    String[] residencesNames={"Votre residence","Alpes","Arcades","Chott-maryem","Ennakhil","Houda","Houda 2","Jasmins","Jasmins 2","Jasmins 3","Jura","K2","Lotissement Msaken","Maarouf","Palms","Prestige","Pyrenées","Sierra","Vosges"};
-    String selecteditem;
-    ArrayList<String> residences;
+     ArrayList<String> residences,appartements;
 
     private APIService mAPIService;
 
@@ -90,8 +89,6 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
-
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
         imageView = findViewById(R.id.drawer_img);
         nameEditText = findViewById(R.id.nameEditText);
@@ -103,98 +100,102 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
         mAPIService = ApiUtils.getAPIService();
         getChantiers();
-
-
-
-
+        getAppartements();
         imageView.setOnClickListener(this::onSelectImageClick);
-
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,getChantiers());
-        //aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-         //spin.setAdapter(aa);
-/*
-      spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-             //   residencesNames[0] = "Alpes";
-             //   selecteditem=residencesNames[position];
-               // SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
-                //editor.putString("sharedprefresidence", residencesNames[position]);
-                 //editor.apply();
-
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setNumresidenceError("selectionne ton residence");
-
-            }
-        });
-      */
-
-
-        residenceEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                List<String> mAnimals = new ArrayList<String>();
-                mAnimals.add("Cat");
-                mAnimals.add("Dog");
-                mAnimals.add("Horse");
-                mAnimals.add("Elephant");
-                mAnimals.add("Rat");
-                mAnimals.add("Lion");
-                mAnimals.add("Horse");
-                mAnimals.add("Elephant");
-                mAnimals.add("Rat");
-                mAnimals.add("Lion");
-                mAnimals.add("Horse");
-                mAnimals.add("Elephant");
-                mAnimals.add("Rat");
-                mAnimals.add("Lion");
-                final CharSequence[] Animals = mAnimals.toArray(new String[mAnimals.size()]);
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
-                dialogBuilder.setTitle("Animals");
-                dialogBuilder.setItems(Animals, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        String selectedText = Animals[item].toString();
-                    }
-                });
-                 AlertDialog alertDialogObject = dialogBuilder.create();
-                alertDialogObject.show();
-
-            }
-        });
-
-
         initContent();
+
     }
+
     public ArrayList<String> getChantiers() {
         residences = new ArrayList() ;
         mAPIService.getListOfChantiers().enqueue(new Callback<List<Chantiers>>() {
-
 
             @Override
             public void onResponse(Call<List<Chantiers>> call, Response<List<Chantiers>> response) {
 
                 for(int i=0;i<response.body().size();i++){
-
-
                     residences.add(response.body().get(i).getC_intitule());
-
                 }
+                residenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            }
+                        final CharSequence[] Residences = residences.toArray(new String[residences.size()]);
+
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
+                        dialogBuilder.setTitle("Residences");
+                        dialogBuilder.setItems(Residences, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                residenceEditText.setText(Residences[item].toString());
+                            }
+                        });
+                        AlertDialog alertDialogObject = dialogBuilder.create();
+                        alertDialogObject.show();
+
+                    }
+                });
+          }
 
             @Override
             public void onFailure(Call<List<Chantiers>> call, Throwable t) {
+                residenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        Toast.makeText(EditProfileActivity.this, "pas de connexion internet, veuillez réessayer plus tard", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         });
 
         return residences;
+    }
+
+    public ArrayList<String> getAppartements() {
+        appartements = new ArrayList() ;
+        mAPIService.getListOfAppartements().enqueue(new Callback<List<Appartements>>() {
+
+            @Override
+            public void onResponse(Call<List<Appartements>> call, Response<List<Appartements>> response) {
+
+                for(int i=0;i<response.body().size();i++){
+                    appartements.add(response.body().get(i).getA_intitule());
+                }
+                numresidenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final CharSequence[] Appartements = appartements.toArray(new String[appartements.size()]);
+
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
+                        dialogBuilder.setTitle("Appartements");
+                        dialogBuilder.setItems(Appartements, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                numresidenceEditText.setText(Appartements[item].toString());
+                            }
+                        });
+                        AlertDialog alertDialogObject = dialogBuilder.create();
+                        alertDialogObject.show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<Appartements>> call, Throwable t) {
+                numresidenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Toast.makeText(EditProfileActivity.this, "pas de connexion internet, veuillez réessayer plus tard", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+
+        return appartements;
     }
 
 
@@ -295,8 +296,8 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
     @Override
     public String getResidenceText() {
-        return selecteditem;
-                //residenceEditText.getText().toString();
+       return residenceEditText.getText().toString();
+        //return selecteditem;
     }
 
     @Override

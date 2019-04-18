@@ -258,7 +258,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         mAPIService = ApiUtils.getAPIService();
-        //loadFactures();
 
 
 
@@ -280,6 +279,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+
 
                     residence =profile.getResidence();
                     isModerator =profile.isType();
@@ -414,7 +414,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         drawerUsername.setText(profile.getUsername());
         drawerresidence.setText(profile.getResidence());
-        Glide.with(drawerImage.getContext()).load(profile.getPhotoUrl()).into(drawerImage);
+        Glide.with(getApplicationContext()).load(profile.getPhotoUrl()).into(drawerImage);
 
     }
 
@@ -476,8 +476,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     @Override
     protected void onResume() {
+        super.onResume();
 
-        presenter.updateNewPostCounter();
+        initContentView();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
@@ -489,8 +490,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
+                    residence =profile.getResidence();
+                    isModerator =profile.isType();
+
+                    SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
+                    editor.putString("sharedprefresidence", residence);
+                    editor.putBoolean("sharedprefismoderator",isModerator);
+                    editor.apply();
 
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
@@ -527,7 +534,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             });
 
         }
-        super.onResume();
+
     }
 
     @NonNull
@@ -546,7 +553,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ProfileActivity.CREATE_POST_FROM_PROFILE_REQUEST:
-                    refreshPostList();
+                   refreshPostList();
                     break;
                 case CreatePostActivity.CREATE_NEW_POST_REQUEST:
                     presenter.onPostCreated();
@@ -569,7 +576,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         if (postsAdapter.getItemCount() > 0) {
             recyclerView.scrollToPosition(0);
         }
+
     }
+
 
     @Override
     public void removePost() {
@@ -590,12 +599,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     private void initContentView() {
         if (recyclerView == null) {
-            progressBar = findViewById(R.id.progressBar);
+             progressBar = findViewById(R.id.progressBar);
             swipeContainer = findViewById(R.id.swipeContainer);
 
             initFloatingActionButton();
             initPostListRecyclerView();
-            initPostCounter();
+           initPostCounter();
         }
     }
 
@@ -607,6 +616,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     private void initPostListRecyclerView() {
+
         recyclerView = findViewById(R.id.recycler_view);
         postsAdapter = new PostsAdapter(this, swipeContainer);
         postsAdapter.setCallback(new PostsAdapter.Callback() {
@@ -618,6 +628,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
             @Override
             public void onListLoadingFinished() {
+
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -634,17 +645,20 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-         recyclerView.setAdapter(postsAdapter);
-        postsAdapter.loadFirstPage();
+       ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+       recyclerView.setAdapter(postsAdapter);
+         postsAdapter.loadFirstPage();
+
+
+
+
     }
 
     private void initPostCounter() {
         newPostsCounterTextView = findViewById(R.id.newPostsCounterTextView);
-        newPostsCounterTextView.setOnClickListener(v -> refreshPostList());
+       newPostsCounterTextView.setOnClickListener(v -> refreshPostList());
 
         presenter.initPostCounter();
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -652,6 +666,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+
     }
 
     @Override

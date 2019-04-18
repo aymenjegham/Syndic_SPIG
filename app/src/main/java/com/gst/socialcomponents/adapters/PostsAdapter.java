@@ -163,7 +163,6 @@ public class PostsAdapter extends BasePostsAdapter {
     }
 
     private void addList(List<Post> list) {
-
         this.postList.addAll(list);
         notifyDataSetChanged();
         isLoading = false;
@@ -193,6 +192,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
                 if (nextItemCreatedDate == 0) {
                     postList.clear();
+
                     notifyDataSetChanged();
                     swipeContainer.setRefreshing(false);
                 }
@@ -200,6 +200,7 @@ public class PostsAdapter extends BasePostsAdapter {
                 hideProgress();
 
                 if (!list.isEmpty()) {
+
                     addList(list);
 
                     if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
@@ -207,6 +208,7 @@ public class PostsAdapter extends BasePostsAdapter {
                     }
                 } else {
                     isLoading = false;
+
                 }
 
                 callback.onListLoadingFinished();

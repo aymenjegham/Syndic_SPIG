@@ -16,6 +16,7 @@
 
 package com.gst.socialcomponents.main.editProfile;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,12 +33,14 @@ import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.base.BaseView;
 import com.gst.socialcomponents.main.editProfile.createProfile.CreateProfileActivity;
 import com.gst.socialcomponents.main.login.LoginActivity;
+import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.ValidationUtil;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +63,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
 
     protected EditProfilePresenter(Context context) {
         super(context);
-        profileManager = ProfileManager.getInstance(context.getApplicationContext());
+         profileManager = ProfileManager.getInstance(context.getApplicationContext());
 
     }
 
@@ -144,20 +147,22 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
     }
 
     public void sendPost(Boolean active, String email,String id,Long likescount,String mobile,String numresidence,String photoUrl,String residence,String token,Boolean typeuser,String username) {
-
-        mAPIService.savePost(active, email, id,likescount,mobile,numresidence,photoUrl,residence,token,typeuser,username).enqueue(new Callback<PostProfile>() {
-
-            @Headers("Content-Type: application/json")
+        mAPIService.savePost(active, email, id,likescount,mobile,numresidence,photoUrl,residence,token,typeuser,username).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<PostProfile> call, Response<PostProfile> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                  if(response.isSuccessful()) {
-                    Log.v("loggingresponse", "post submitted to API." + response.body().toString());
+                     if(response.body().equals("New record created successfully")){
+                         Toast.makeText(context, "Profile sauvegardé avec succées", Toast.LENGTH_SHORT).show();
+                     }else{
+                         Toast.makeText(context, "Propleme connection", Toast.LENGTH_SHORT).show();
+                         Log.v("loggingresponse", "probleme connectivité");
+
+                     }
                 }
             }
             @Override
-            public void onFailure(Call<PostProfile> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(context, "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
-                Log.v("loggingresponse", t.getMessage());
 
             }
         });

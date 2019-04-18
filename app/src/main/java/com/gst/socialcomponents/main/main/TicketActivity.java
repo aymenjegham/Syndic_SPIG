@@ -194,6 +194,7 @@ public class TicketActivity extends AppCompatActivity {
         TicketAdapter adapter;
         adapter=new TicketAdapter(tickets);
         recyclerView.setAdapter(adapter);
+
         LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

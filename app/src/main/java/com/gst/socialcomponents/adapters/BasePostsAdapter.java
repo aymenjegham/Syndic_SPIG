@@ -17,6 +17,7 @@
 package com.gst.socialcomponents.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.gst.socialcomponents.main.base.BaseActivity;
 import com.gst.socialcomponents.managers.PostManager;
@@ -61,6 +62,7 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
             @Override
             public void onObjectChanged(Post obj) {
                 postList.set(postPosition, obj);
+
                 notifyItemChanged(postPosition);
             }
 

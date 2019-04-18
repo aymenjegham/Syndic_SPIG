@@ -158,6 +158,8 @@ public class PostInteractor {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
                 PostListResult result = parsePostList(objectMap);
 
+
+
                 if (result.getPosts().isEmpty() && result.isMoreDataAvailable()) {
                     getPostList(onDataChangedListener, result.getLastItemCreatedDate() - 1);
                 } else {
@@ -203,7 +205,6 @@ public class PostInteractor {
                 if (dataSnapshot.getValue() != null) {
                     if (isPostValid((Map<String, Object>) dataSnapshot.getValue())) {
                         Post post = dataSnapshot.getValue(Post.class);
-                         Log.v("valueis",dataSnapshot.getValue().toString()+"  "+post.getModerator());
 
 
                         if (post != null) {
@@ -289,11 +290,11 @@ public class PostInteractor {
                         SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
                         residence = prefs.getString("sharedprefresidence", null);
 
-                        Log.v("checkingstate",mapObj.toString());
 
+
+                     if(mapObj.get("residence").equals(residence)) {
                          Post post;
-                       if(mapObj.get("residence").equals(residence)) {
-                         post = new Post();
+                          post = new Post();
                             post.setId(key);
                             post.setTitle((String) mapObj.get("title"));
                             post.setDescription((String) mapObj.get("description"));
@@ -312,8 +313,10 @@ public class PostInteractor {
                             if (mapObj.containsKey("watchersCount")) {
                                 post.setWatchersCount((long) mapObj.get("watchersCount"));
                             }
-                           list.add(post);
-                       }
+
+                          list.add(post);
+                          }
+
 
 
 
@@ -327,8 +330,7 @@ public class PostInteractor {
             result.setLastItemCreatedDate(lastItemCreatedDate);
             result.setMoreDataAvailable(isMoreDataAvailable);
         }
-
-        return result;
+         return result;
     }
 
     private boolean isPostValid(Map<String, Object> post) {

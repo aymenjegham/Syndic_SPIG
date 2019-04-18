@@ -84,7 +84,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/numresidence_name"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
+                    android:inputType="none"
+                    android:focusable="false"
                     android:maxLines="1"/>
 
 
