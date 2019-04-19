@@ -49,6 +49,7 @@ import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.main.main.TicketActivityMod;
+import com.gst.socialcomponents.main.main.ToolsActivityMod;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.room.DatabaseClient;
@@ -85,6 +86,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ACTION_TYPE_NEW_MODERATOR =  "new_moderator_activated";
     private static final String ACTION_TYPE_NEW_MODERATOR_NOTIF =  "new_reclamation_sent";
     private static final String ACTION_TYPE_RELAMATION_MODIFIED =  "reclamation_modified";
+    private static final String ACTION_TYPE_NEW_MEMBER_NOTIF =  "new_member_joined";
+
 
 
     String residencepref;
@@ -131,8 +134,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case ACTION_TYPE_RELAMATION_MODIFIED:
                 handlenotifmodifiedreclam(Channel.NEW_COMMENT, remoteMessage);
                 break;
+            case ACTION_TYPE_NEW_MEMBER_NOTIF:
+                handlenotifnewmember(Channel.NEW_COMMENT, remoteMessage);
+                break;
 
         }
+    }
+
+    private void handlenotifnewmember(Channel channel, RemoteMessage remoteMessage) {
+
+
+        String notificationTitle = remoteMessage.getData().get(TITLE_KEY);
+        String notificationBody = remoteMessage.getData().get(BODY_KEY);
+        String notificationImageUrl = remoteMessage.getData().get(ICON_KEY);
+
+
+
+
+
+
+
+        Intent backIntent = new Intent(this, ToolsActivityMod.class);
+        Intent intent = new Intent(this, ToolsActivityMod.class);
+        //intent.putExtra(PostDetailsActivity.POST_ID_EXTRA_KEY, postId);
+
+        Bitmap bitmap = getBitmapFromUrl(notificationImageUrl);
+
+        sendNotification(channel, notificationTitle, notificationBody, bitmap, intent);
+        LogUtil.logDebug("remotedmessagehandler", "Message Notification Body: " + remoteMessage.getData().get(BODY_KEY));
+
     }
     private void handlenotifmodifiedreclam(Channel channel, RemoteMessage remoteMessage) {
 
@@ -212,7 +242,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if(status.equals("true")){
              notificationBody="Votre compte a été activé";
         }else if (status.equals("false")) {
-             notificationBody = "Votre compte a été désactivé";
+             notificationBody = "Votre compte va etre vérifié par un admin";
         }
 
 
