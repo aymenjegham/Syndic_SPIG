@@ -57,6 +57,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -81,6 +82,7 @@ import com.gst.socialcomponents.main.search.SearchActivity;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.AnimationUtils;
+import com.gst.socialcomponents.utils.LogUtil;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -303,11 +305,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                          changesetup(profile);
 
                          reference3 = FirebaseDatabase.getInstance().getReference().child("moderators").child(residence);
-                         reference3.setValue(token);
+                         reference3.child(token).setValue(true);
 
 
                     }
                     if(typeuser== false){
+                        reference3 = FirebaseDatabase.getInstance().getReference().child("moderators").child(residence).child(token);
+                        Task<Void> task = reference3.removeValue();
+                        task.addOnCompleteListener(task1 -> LogUtil.logDebug(TAG, "removeRegistrationToken, success: " + task1.isSuccessful()));
 
                         changesetuptodefault(profile);
 
