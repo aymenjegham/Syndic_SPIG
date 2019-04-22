@@ -7,8 +7,20 @@ public class Chantiers {
     @SerializedName("C_intitule")
     String C_intitule;
 
-    public Chantiers(String c_intitule) {
+    @SerializedName("cbmarq")
+    int cbmarq;
+
+    public Chantiers(String c_intitule, int cbmarq) {
         C_intitule = c_intitule;
+        this.cbmarq = cbmarq;
+    }
+
+    public int getCbmarq() {
+        return cbmarq;
+    }
+
+    public void setCbmarq(int cbmarq) {
+        this.cbmarq = cbmarq;
     }
 
     public String getC_intitule() {

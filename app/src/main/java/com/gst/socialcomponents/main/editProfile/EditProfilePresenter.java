@@ -133,6 +133,9 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setNumresidence(numresidence);
                     profile.setMobile(mobile);
                     profile.setToken( FirebaseInstanceId.getInstance().getToken());
+                    profile.setActive(false);
+
+
                     createOrUpdateProfile(imageUri);
 
                     mAPIService = ApiUtils.getAPIService();
@@ -141,6 +144,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
 
                     SharedPreferences.Editor editor = context.getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
+
+
                 }
             });
         }

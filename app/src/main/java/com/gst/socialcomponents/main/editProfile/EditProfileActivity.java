@@ -72,13 +72,10 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     private EditText numtelEditText;
     protected ImageView imageView;
     private ProgressBar avatarProgressBar;
-
-
-
-
-     ArrayList<String> residences,appartements;
-
+    ArrayList<String> residences,appartements;
+    ArrayList<Integer> numresid;
     private APIService mAPIService;
+    private  Integer num_residence;
 
 
     @Override
@@ -97,17 +94,19 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         numtelEditText=findViewById(R.id.numtelEditText);
 
         residenceEditText.setFocusable(false);
-
         mAPIService = ApiUtils.getAPIService();
-        getChantiers();
-        getAppartements();
         imageView.setOnClickListener(this::onSelectImageClick);
         initContent();
+        getChantiers();
+
+
+
 
     }
 
     public ArrayList<String> getChantiers() {
         residences = new ArrayList() ;
+        numresid =new ArrayList<>();
         mAPIService.getListOfChantiers().enqueue(new Callback<List<Chantiers>>() {
 
             @Override
@@ -115,18 +114,24 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
                 for(int i=0;i<response.body().size();i++){
                     residences.add(response.body().get(i).getC_intitule());
+                    numresid.add(response.body().get(i).getCbmarq());
                 }
                 residenceEditText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         final CharSequence[] Residences = residences.toArray(new String[residences.size()]);
+                        final Integer[] NumResidences = numresid.toArray(new Integer[numresid.size()]);
+
 
                         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
                         dialogBuilder.setTitle("Residences");
                         dialogBuilder.setItems(Residences, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int item) {
                                 residenceEditText.setText(Residences[item].toString());
+                              num_residence=Integer.valueOf(NumResidences[item].toString());
+                                getAppartements(num_residence);
+
                             }
                         });
                         AlertDialog alertDialogObject = dialogBuilder.create();
@@ -152,9 +157,9 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         return residences;
     }
 
-    public ArrayList<String> getAppartements() {
+    public ArrayList<String> getAppartements(Integer numreside) {
         appartements = new ArrayList() ;
-        mAPIService.getListOfAppartements().enqueue(new Callback<List<Appartements>>() {
+        mAPIService.getListOfAppartements(numreside).enqueue(new Callback<List<Appartements>>() {
 
             @Override
             public void onResponse(Call<List<Appartements>> call, Response<List<Appartements>> response) {
