@@ -1,7 +1,9 @@
 package com.gst.socialcomponents.main.main.fragments;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -31,9 +33,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.Adapterappartments;
 import com.gst.socialcomponents.adapters.UserAdapterFacture;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
+import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
 import com.gst.socialcomponents.main.main.FacturationActivity;
 import com.gst.socialcomponents.main.main.ToolsActivityMod;
+import com.gst.socialcomponents.model.Appartements;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Profilefire;
 
 import java.util.ArrayList;
@@ -42,6 +50,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
@@ -59,6 +71,9 @@ public class InvoicingFragment extends Fragment {
     Button facture;
     ToggleButton ajoutall;
     ArrayList<Profilefire> profilestoinvoice= new ArrayList() ;
+    ArrayList<String> residences,appartements;
+    private APIService mAPIService;
+
 
 
 
@@ -98,11 +113,21 @@ public class InvoicingFragment extends Fragment {
 
         SharedPreferences prefs = getContext().getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
+        mAPIService = ApiUtils.getAPIService();
+        mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
+            @Override
+            public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                getAppartements(Integer.valueOf(response.body().getCbmarq()));
+            }
+
+            @Override
+            public void onFailure(Call<NumChantier> call, Throwable t) {
+
+            }
+        });
 
 
-
-
-        getdata("");
+       // getdata("");
 
 
         ajoutall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,12 +135,12 @@ public class InvoicingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-                    getdata("getall");
+                  //  getdata("getall");
                     facture.setEnabled(true);
                     facture.setAlpha(1f);
 
                 } else {
-                    getdata("hideall");
+                  //  getdata("hideall");
                     facture.setEnabled(false);
                     facture.setAlpha(.5f);
 
@@ -144,6 +169,36 @@ public class InvoicingFragment extends Fragment {
         return view;
     }
 
+
+    public ArrayList<String> getAppartements(Integer numreside) {
+        appartements = new ArrayList() ;
+        mAPIService.getListOfAppartements(numreside).enqueue(new Callback<List<Appartements>>() {
+
+            @Override
+            public void onResponse(Call<List<Appartements>> call, Response<List<Appartements>> response) {
+
+                for(int i=0;i<response.body().size();i++){
+                    appartements.add(response.body().get(i).getA_intitule());
+                    recyclerView.setHasFixedSize(true);
+                    Adapterappartments adapter;
+                    adapter=new Adapterappartments(appartements);
+                    recyclerView.setAdapter(adapter);
+                    LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
+                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recyclerView.setLayoutManager(layoutManager);
+                 }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Appartements>> call, Throwable t) {
+
+            }
+        });
+
+        return appartements;
+    }
+/*
     private void getdata(String value) {
 
         ArrayList<Profilefire> profiles = new ArrayList() ;
@@ -193,6 +248,8 @@ public class InvoicingFragment extends Fragment {
         }
 
     }
+
+    */
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

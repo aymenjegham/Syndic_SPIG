@@ -8,6 +8,17 @@ public class Factureitemdata {
     String montant;
     String remise_cle;
     int imgview;
+    int imgview2;
+
+
+
+    public int getImgview2() {
+        return imgview2;
+    }
+
+    public void setImgview2(int imgview2) {
+        this.imgview2 = imgview2;
+    }
 
     public int getImgview() {
         return imgview;
@@ -17,11 +28,12 @@ public class Factureitemdata {
         this.imgview = imgview;
     }
 
-    public Factureitemdata(String name, String montant, String remise_cle,int imageView) {
+    public Factureitemdata(String name, String montant, String remise_cle,int imageView,int imageview2) {
         this.name = name;
         this.montant = montant;
         this.remise_cle = remise_cle;
         this.imgview=imageView;
+        this.imgview2=imageview2;
     }
 
     public String getName() {

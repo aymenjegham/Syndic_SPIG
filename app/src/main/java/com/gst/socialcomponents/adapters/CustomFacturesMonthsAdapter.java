@@ -28,6 +28,8 @@ public class CustomFacturesMonthsAdapter extends ArrayAdapter<Factureitemdata> i
         TextView txtType;
         TextView txtVersion;
         ImageView imageview;
+        ImageView imageview2;
+
      }
 
     public CustomFacturesMonthsAdapter(ArrayList<Factureitemdata> data, Context context) {
@@ -67,9 +69,10 @@ public class CustomFacturesMonthsAdapter extends ArrayAdapter<Factureitemdata> i
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.simplerow, parent, false);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.txtType = (TextView) convertView.findViewById(R.id.version_heading);
-            viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.version_number);
+             viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.version_number);
             viewHolder.imageview=(ImageView)convertView.findViewById(R.id.item_info);
+            viewHolder.imageview2=(ImageView)convertView.findViewById(R.id.keyimageview);
+
 
             result=convertView;
 
@@ -82,9 +85,9 @@ public class CustomFacturesMonthsAdapter extends ArrayAdapter<Factureitemdata> i
          lastPosition = position;
 
         viewHolder.txtName.setText(dataModel.getName());
-        viewHolder.txtType.setText(dataModel.getMontant());
-        viewHolder.txtVersion.setText(dataModel.getRemise_cle());
-        viewHolder.imageview.setImageResource(R.drawable.ic_done);
+         viewHolder.txtVersion.setText(dataModel.getRemise_cle());
+        viewHolder.imageview.setImageResource(dataModel.getImgview());
+        viewHolder.imageview2.setImageResource(dataModel.getImgview2());
         return convertView;
     }
 }

@@ -6,6 +6,7 @@ import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.SoldeAppartement;
 
 import java.util.ArrayList;
@@ -52,6 +53,10 @@ public interface APIService {
    @POST("/getNumAppart.php")
    @FormUrlEncoded
    Call<NumAppart> getNumOfAppartements(@Field("a_intitule") String  a_intitule);
+
+    @POST("/getNumChantier.php")
+    @FormUrlEncoded
+    Call<NumChantier> getNumChantier(@Field("a_intitule") String  a_intitule);
 
     @POST("/getInfoSyndic.php")
     @FormUrlEncoded
