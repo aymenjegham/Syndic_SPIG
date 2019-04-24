@@ -35,6 +35,8 @@ import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.Adapterappartments;
 import com.gst.socialcomponents.adapters.UserAdapterFacture;
+import com.gst.socialcomponents.adapters.holders.UserHolderAppartment;
+import com.gst.socialcomponents.adapters.holders.UserHolderFactureCheck;
 import com.gst.socialcomponents.data.remote.APIService;
 import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.editProfile.EditProfileActivity;
@@ -72,11 +74,8 @@ public class InvoicingFragment extends Fragment {
     ToggleButton ajoutall;
     ArrayList<Profilefire> profilestoinvoice= new ArrayList() ;
     ArrayList<String> residences,appartements;
+    ArrayList<Integer> numresides;
     private APIService mAPIService;
-
-
-
-
 
 
 
@@ -129,24 +128,12 @@ public class InvoicingFragment extends Fragment {
 
        // getdata("");
 
-
+/*
         ajoutall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) {
-                  //  getdata("getall");
-                    facture.setEnabled(true);
-                    facture.setAlpha(1f);
-
-                } else {
-                  //  getdata("hideall");
-                    facture.setEnabled(false);
-                    facture.setAlpha(.5f);
-
-
-                }
-            }
+             }
         });
 
         facture.setOnClickListener(new View.OnClickListener() {
@@ -160,11 +147,13 @@ public class InvoicingFragment extends Fragment {
                 startActivity(intent);
 
 
+
+
             }
         });
 
 
-
+*/
 
         return view;
     }
@@ -172,6 +161,10 @@ public class InvoicingFragment extends Fragment {
 
     public ArrayList<String> getAppartements(Integer numreside) {
         appartements = new ArrayList() ;
+        numresides = new ArrayList() ;
+
+
+
         mAPIService.getListOfAppartements(numreside).enqueue(new Callback<List<Appartements>>() {
 
             @Override
@@ -179,14 +172,52 @@ public class InvoicingFragment extends Fragment {
 
                 for(int i=0;i<response.body().size();i++){
                     appartements.add(response.body().get(i).getA_intitule());
-                    recyclerView.setHasFixedSize(true);
-                    Adapterappartments adapter;
-                    adapter=new Adapterappartments(appartements);
-                    recyclerView.setAdapter(adapter);
-                    LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
-                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recyclerView.setLayoutManager(layoutManager);
+                    numresides.add(response.body().get(i).getCbmarq());
                  }
+                recyclerView.setHasFixedSize(true);
+                Adapterappartments adapter;
+                adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false);
+                recyclerView.setAdapter(adapter);
+                LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(layoutManager);
+
+                ajoutall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (isChecked) {
+
+                            facture.setEnabled(true);
+                            facture.setAlpha(1f);
+
+                            recyclerView.setHasFixedSize(true);
+                            Adapterappartments adapter;
+                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,true);
+                            recyclerView.setAdapter(adapter);
+                            LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
+                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            recyclerView.setLayoutManager(layoutManager);
+
+
+
+
+                        } else {
+                            facture.setEnabled(false);
+                            facture.setAlpha(.5f);
+
+                            recyclerView.setHasFixedSize(true);
+                            Adapterappartments adapter;
+                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false);
+                            recyclerView.setAdapter(adapter);
+                            LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
+                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            recyclerView.setLayoutManager(layoutManager);
+                        }
+
+                    }
+                });
+
 
             }
 
