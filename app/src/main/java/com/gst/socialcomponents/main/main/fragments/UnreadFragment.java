@@ -162,7 +162,7 @@ public class UnreadFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                 if(ticket.getState().equals("envoyé")){
+                                 if(ticket.getState() == 0){
 
                                      tickets.add(ticket);
                                     ticketscreators.add(ds.getKey());
@@ -192,7 +192,7 @@ public class UnreadFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                if((ticket.getState().equals("envoyé"))){
+                                if((ticket.getState() == 0)){
                             ticketstoencours.add(ticket);
                         }
                     }
@@ -208,7 +208,7 @@ public class UnreadFragment extends Fragment {
 
                                                 if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
 
-                                                     reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("en cours");
+                                                     reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue(1);
                                                     getdata();
                                                 }
                                             }
@@ -243,7 +243,7 @@ public class UnreadFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                if((ticket.getState().equals("envoyé"))){
+                                if((ticket.getState() == 0)){
                                     ticketstoencours.add(ticket);
                                 }
                             }
@@ -259,7 +259,7 @@ public class UnreadFragment extends Fragment {
 
                                                 if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
 
-                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("cloturé");
+                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue(2);
                                                     getdata();
                                                 }
                                             }

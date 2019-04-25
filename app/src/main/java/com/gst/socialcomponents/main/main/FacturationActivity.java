@@ -30,6 +30,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.FacesAdapter;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.model.Facture;
 import com.gst.socialcomponents.model.Factureenvoi;
 import com.gst.socialcomponents.model.Profilefire;
@@ -38,6 +40,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FacturationActivity extends AppCompatActivity {
 
@@ -56,6 +62,8 @@ public class FacturationActivity extends AppCompatActivity {
     EditText titre;
     EditText montant;
     LinearLayout linearLayout;
+    private APIService mAPIService;
+
 
 
 
@@ -63,9 +71,9 @@ public class FacturationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facturation);
-        depuis=  findViewById(R.id.deouis);
-        jusqua=  findViewById(R.id.titreET);
-        datelimit=  findViewById(R.id.datelimit);
+        depuis=findViewById(R.id.deouis);
+        jusqua=findViewById(R.id.titreET);
+        datelimit=findViewById(R.id.datelimit);
         titre=findViewById(R.id.editText);
         montant=findViewById(R.id.editText2);
         linearLayout=findViewById(R.id.linearLayoutfacturation);
@@ -91,9 +99,11 @@ public class FacturationActivity extends AppCompatActivity {
 
 
         Gson gson = new Gson();
-        String empty_list = gson.toJson(new ArrayList<Profilefire>());
+        String empty_list = gson.toJson(new ArrayList<Integer>());
 
-        ArrayList<Profilefire> listofprifiles = gson.fromJson(retrievedjson, new TypeToken<ArrayList<Profilefire>>() {}.getType());
+
+                ArrayList<Integer> listofappartments= gson.fromJson(retrievedjson, new TypeToken<ArrayList<Integer>>() {}.getType());
+
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -113,8 +123,8 @@ public class FacturationActivity extends AppCompatActivity {
         */
          recyclerView.setHasFixedSize(false);
         FacesAdapter adapter;
-        adapter=new FacesAdapter(listofprifiles);
-        recyclerView.setAdapter(adapter);
+       // adapter=new FacesAdapter(listofprifiles);
+       // recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -215,24 +225,38 @@ public class FacturationActivity extends AppCompatActivity {
                 }else if ((TextUtils.isEmpty(montant.getText().toString()))){
                     montant.setError(getApplicationContext().getString(R.string.error_field_required));
                     cancel = true;
-                }else if ((TextUtils.isEmpty(depuis.getText().toString()))){
-                    depuis.setError(getApplicationContext().getString(R.string.error_field_required));
-                    cancel = true;
-                }else if ((TextUtils.isEmpty(jusqua.getText().toString()))){
-                    jusqua.setError(getApplicationContext().getString(R.string.error_field_required));
-                    cancel = true;
-                } else if ((TextUtils.isEmpty(datelimit.getText().toString()))){
-                    datelimit.setError(getApplicationContext().getString(R.string.error_field_required));
-                    cancel = true;
                 }
                 if(!cancel){
-                    for(int i=0;i<listofprifiles.size();i++) {
+                  //  for(int i=0;i<listofprifiles.size();i++) {
+                       // Factureenvoi factureenvoi =new Factureenvoi(titre.getText().toString(),montant.getText().toString(),ServerValue.TIMESTAMP,depuis.getText().toString(),jusqua.getText().toString(),datelimit.getText().toString(),false);
+                    //    Log.v("etfieldstestlog",listofprifiles.get(i).getResidence()+"done"+listofprifiles.get(i).getId()+"  ");
+                      //  reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue(factureenvoi);
 
-                        Factureenvoi factureenvoi =new Factureenvoi(titre.getText().toString(),montant.getText().toString(),ServerValue.TIMESTAMP,depuis.getText().toString(),jusqua.getText().toString(),datelimit.getText().toString(),false);
+                    for (int i=0;i<listofappartments.size();i++){
+                        mAPIService = ApiUtils.getAPIService();
+                        mAPIService.insertReglement(Integer.valueOf(montant.getText().toString()), listofappartments.get(i),titre.getText().toString(),1,7).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.isSuccessful()) {
+                                    if(response.body().equals("New record created successfully")){
+                                        Toast.makeText(getApplicationContext(), "Reglement sauvegardé avec succées", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "Propleme connection", Toast.LENGTH_SHORT).show();
+                                        Log.v("loggingresponse", "probleme connectivité");
 
-                        Log.v("etfieldstestlog",listofprifiles.get(i).getResidence()+"done"+listofprifiles.get(i).getId()+"  ");
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
 
-                        reference.child("Frais").child(listofprifiles.get(i).getResidence()).child(listofprifiles.get(i).getId()).push().setValue(factureenvoi);
+                            }
+                        });
+                    }
+
+
+
                         int duration = Snackbar.LENGTH_LONG;
                         showSnackbar(v, "Facture envoyé vers recipient", duration);
                         finish();
@@ -240,11 +264,11 @@ public class FacturationActivity extends AppCompatActivity {
 
 
                      }
-                }
+             //   }
 
             }
         });
-
+/*
         linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -264,7 +288,7 @@ public class FacturationActivity extends AppCompatActivity {
                 }
             }
         });
-
+*/
 
 
     }

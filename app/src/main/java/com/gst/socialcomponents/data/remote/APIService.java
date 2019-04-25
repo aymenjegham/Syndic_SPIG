@@ -66,4 +66,12 @@ public interface APIService {
     @FormUrlEncoded
     Call<SoldeAppartement> getSoldeappartement(@Field("sAppartement") int  sAppartment);
 
+    @POST("/insetReglement.php")
+    @FormUrlEncoded
+    Call<String> insertReglement(@Field("rMontant") Integer rMontant,
+                                 @Field("rAppartement") Integer rAppartement,
+                                 @Field("rDescription") String rDescription,
+                                 @Field("rStatut") Integer rStatut,
+                                 @Field("rCategorie") Integer rCategorie);
+
 }

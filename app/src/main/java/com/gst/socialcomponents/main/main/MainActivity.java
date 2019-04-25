@@ -54,6 +54,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -68,6 +69,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.CustomFacturesMonthsAdapter;
 import com.gst.socialcomponents.adapters.PostsAdapter;
 import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.remote.APIService;
@@ -79,10 +81,21 @@ import com.gst.socialcomponents.main.post.createPost.CreatePostActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.main.profile.ProfileActivity;
 import com.gst.socialcomponents.main.search.SearchActivity;
+import com.gst.socialcomponents.model.Factureitemdata;
+import com.gst.socialcomponents.model.InfoSyndic;
+import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
+import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.AnimationUtils;
 import com.gst.socialcomponents.utils.LogUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -101,6 +114,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeContainer;
     Constants constants;
+    final Date[] strtodate = new Date[1];
+
 
 
     FirebaseUser firebaseUser;
@@ -263,7 +278,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
-
         initContentView();
 
 
@@ -274,6 +288,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
              reference = FirebaseDatabase.getInstance().getReference("profiles").child(firebaseUser.getUid());
 
+            getdateofpay();
 
 
             reference.addValueEventListener(new ValueEventListener() {
@@ -862,4 +877,91 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+void getdateofpay() {
+    reference2 = FirebaseDatabase.getInstance().getReference().child("profiles").child(firebaseUser.getUid()).child("numresidence");
+    reference2.keepSynced(true);
+    reference2.addListenerForSingleValueEvent(
+            new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String appart = dataSnapshot.getValue().toString();
+                    mAPIService = ApiUtils.getAPIService();
+                    mAPIService.getNumOfAppartements(appart).enqueue(new Callback<NumAppart>() {
+                        @Override
+                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                            Integer numap=Integer.valueOf(response.body().getCbmarq());
+                            mAPIService.getSoldeappartement(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<SoldeAppartement>() {
+
+                                @Override
+                                public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                    try {
+                                        strtodate[0] = format.parse (response.body().getDate());
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                                    Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+
+                                    cal.setTime(strtodate[0]);
+                                    int year = cal.get(Calendar.YEAR);
+                                    int month = cal.get(Calendar.MONTH);
+                                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                                    int yearactual=cal2.get(Calendar.YEAR);
+                                    int monthactual=cal2.get(Calendar.MONTH);
+
+
+                                    if((year ==yearactual && month<monthactual) || (year <yearactual)){
+                                        mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+
+                                            @Override
+                                            public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                                Log.v("testingreceived",response.body().getPeriodicity()+"  ");
+
+                                                int periode=6;
+                                                if(response.body().getPeriodicity()==1){
+                                                    periode=6;
+                                                }else {
+                                                    periode=12;
+                                                }
+                                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                                alertDialog.setTitle("Frais Syndic");
+                                                alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez payez un montant de: "+response.body().getFraisupposed()+" dt pour les "+periode+" mois prochains");
+                                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                alertDialog.show();
+
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<InfoSyndic> call, Throwable t) {
+
+                                            }
+                                        });
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                        @Override
+                        public void onFailure(Call<NumAppart> call, Throwable t) {
+                        }
+                    });
+                    }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+}
 }

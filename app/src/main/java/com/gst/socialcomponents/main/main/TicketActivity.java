@@ -165,6 +165,7 @@ public class TicketActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         tickets.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Log.v("resourcesback",dataSnapshot.getValue().toString());
                             Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
                               TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
                              tickets.add(ticket);
@@ -231,7 +232,7 @@ public class TicketActivity extends AppCompatActivity {
          }
 
     }
-
+/*
     void   showalert(){
 
         LayoutInflater factory = LayoutInflater.from(this);
@@ -284,7 +285,7 @@ public class TicketActivity extends AppCompatActivity {
                                     public void onSuccess(Uri uri) {
 
                                          String photoLink = uri.toString();
-                                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink,"empty");
+                                      //  Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP, "envoyé", photoLink,"empty");
                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                         pd.dismiss();
                                         adddialog.dismiss();
@@ -296,7 +297,7 @@ public class TicketActivity extends AppCompatActivity {
                         });
                     }else
                     {
-                        Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null","empty");
+                      //  Ticket ticket = new Ticket(titletext, description,ServerValue.TIMESTAMP , "envoyé", "null","empty");
                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                         adddialog.dismiss();
                         Toast.makeText(TicketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
@@ -338,6 +339,7 @@ public class TicketActivity extends AppCompatActivity {
 
         adddialog.show();
     }
+    */
     public void uploadImage(Bitmap bitmap) {
     }
 

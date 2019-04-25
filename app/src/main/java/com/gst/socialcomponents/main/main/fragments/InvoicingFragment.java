@@ -176,7 +176,7 @@ public class InvoicingFragment extends Fragment {
                  }
                 recyclerView.setHasFixedSize(true);
                 Adapterappartments adapter;
-                adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false);
+                adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false,getContext());
                 recyclerView.setAdapter(adapter);
                 LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -193,7 +193,7 @@ public class InvoicingFragment extends Fragment {
 
                             recyclerView.setHasFixedSize(true);
                             Adapterappartments adapter;
-                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,true);
+                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,true,getContext());
                             recyclerView.setAdapter(adapter);
                             LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -208,7 +208,7 @@ public class InvoicingFragment extends Fragment {
 
                             recyclerView.setHasFixedSize(true);
                             Adapterappartments adapter;
-                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false);
+                            adapter=new Adapterappartments(appartements,numresides,ajoutall,facture,false,getContext());
                             recyclerView.setAdapter(adapter);
                             LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -11,7 +11,10 @@ public class InfoSyndic {
     @SerializedName("iDateRemiseCle")
     String dateRemiseCle;
 
-    public InfoSyndic(Integer fraisupposed, String dateRemiseCle) {
+    @SerializedName("iPeriodicity")
+    Integer periodicity;
+
+    public InfoSyndic(Integer fraisupposed, String dateRemiseCle,Integer periodicity) {
         this.fraisupposed = fraisupposed;
         this.dateRemiseCle = dateRemiseCle;
     }
@@ -31,5 +34,13 @@ public class InfoSyndic {
 
     public void setDateRemiseCle(String dateRemiseCle) {
         this.dateRemiseCle = dateRemiseCle;
+    }
+
+    public Integer getPeriodicity() {
+        return periodicity;
+    }
+
+    public void setPeriodicity(Integer periodicity) {
+        this.periodicity = periodicity;
     }
 }

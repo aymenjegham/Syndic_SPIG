@@ -48,6 +48,7 @@
             android:ems="10"
             android:hint="Date limit"
             android:textColorHint="@android:color/holo_red_dark"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/Datelimit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/Datelimit" />
@@ -60,6 +61,7 @@
             android:layout_marginTop="32dp"
             android:text="Date limit"
             android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titreET" />
 
@@ -73,6 +75,7 @@
             android:editable="false"
             android:ems="10"
             android:hint="Jusqu'a"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/datereunion"
             app:layout_constraintTop_toBottomOf="@+id/deouis" />
@@ -85,6 +88,7 @@
             android:layout_marginTop="8dp"
             android:text="Periode"
             android:textSize="18sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/titreET"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deouis" />
@@ -135,13 +139,15 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/google_button_color_pressed"
+            android:background="@drawable/mybutton"
             android:text="confirmer"
             android:textColor="@color/com_facebook_button_background_color_focused"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -164,24 +170,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:ems="10"
             android:hint="Titre"
             android:inputType="textPersonName"
             app:layout_constraintBaseline_toBaselineOf="@+id/titre"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/titre" />
 
         <EditText
             android:id="@+id/editText2"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="$$"
             android:inputType="number"
             app:layout_constraintBaseline_toBaselineOf="@+id/sujet"
-            app:layout_constraintStart_toStartOf="@+id/titreET"
+            app:layout_constraintStart_toEndOf="@+id/sujet"
             app:layout_constraintTop_toBottomOf="@+id/editText" />
 
         <EditText
@@ -195,6 +200,7 @@
             android:editable="false"
             android:ems="10"
             android:hint="De"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/datereunion"
             app:layout_constraintTop_toBottomOf="@+id/editText2" />

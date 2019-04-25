@@ -143,7 +143,7 @@ public class ProcessessFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                if(ticket.getState().equals("en cours")){
+                                if(ticket.getState() == 1){
                                     tickets.add(ticket);
                                     ticketscreators.add(ds.getKey());
                                     ticketsid.add(ds2.getKey());
@@ -172,7 +172,7 @@ public class ProcessessFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             for (DataSnapshot ds2 : ds.getChildren()){
                                 TicketRetrieve ticket = ds2.getValue(TicketRetrieve.class);
-                                if((ticket.getState().equals("en cours"))){
+                                if((ticket.getState() == 1)){
                                     ticketstoencours.add(ticket);
                                 }
                             }
@@ -188,7 +188,7 @@ public class ProcessessFragment extends Fragment {
 
                                                 if(((ticket.getTimestamp().toString()).equals((newticket.getTimestamp()).toString()) )){
 
-                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue("cloturé");
+                                                    reference2.child(ds.getKey()).child(ds2.getKey()).child("state").setValue(2);
                                                     getdata();
                                                 }
                                             }

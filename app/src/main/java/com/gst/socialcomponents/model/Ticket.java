@@ -14,21 +14,25 @@ import static java.text.DateFormat.getDateTimeInstance;
         public String title;
         public String description;
         public Map<String, String> timestamp;
-        public String state;
+        public Integer state;
         public String photolink;
          public String comment;
+         public Integer idResidence;
+         public Integer idAppart;
 
         public Ticket() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public Ticket(String title, String description,Map<String, String> timestamp,String state,String photolink,String comment) {
+        public Ticket(String title, String description,Map<String, String> timestamp,Integer state,String photolink,String comment,Integer idResidence,Integer idAppart) {
             this.title = title;
             this.description = description;
             this.timestamp=timestamp;
             this.state=state;
             this.photolink=photolink;
             this.comment=comment;
+            this.idResidence=idResidence;
+            this.idAppart=idAppart;
         }
 
 

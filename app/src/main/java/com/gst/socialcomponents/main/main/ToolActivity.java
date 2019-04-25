@@ -1,5 +1,6 @@
 package com.gst.socialcomponents.main.main;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -160,23 +161,29 @@ public class ToolActivity extends AppCompatActivity {
         final String[] date = new String[1];
         final int[] frais = new int[1];
         final Date[] strtodate = new Date[1];
-        mAPIService.getNumOfAppartements(appartId).enqueue(new Callback<NumAppart>() {
 
+        ProgressDialog pd = new ProgressDialog(ToolActivity.this);
+        pd.setMessage("chargement des données");
+        pd.show();
+        pd.setCancelable(false);
+        mAPIService.getNumOfAppartements(appartId).enqueue(new Callback<NumAppart>() {
              @Override
             public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                if(response.isSuccessful()) {
+                 pd.dismiss();
+                 if(response.isSuccessful()) {
                      mAPIService.getInfoSyndic(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<InfoSyndic>() {
                             int numAppart =Integer.valueOf(response.body().getCbmarq());
-
 
                         @Override
                         public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
                             date[0] =response.body().getDateRemiseCle();
                             frais[0] =response.body().getFraisupposed();
-                            Log.v("numappartispass",numAppart+"  ");
                             mAPIService.getSoldeappartement(numAppart).enqueue(new Callback<SoldeAppartement>() {
                                 @Override
                                 public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+
+
+
                                     balance.setText(String.valueOf(response.body().getSolde()));
                                     dataModels= new ArrayList<>();
                                     dataModels.add(new Factureitemdata("Janvier", "", "",0,0));
@@ -224,12 +231,21 @@ public class ToolActivity extends AppCompatActivity {
                                         reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
                                         retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
+                                        Log.v("loggingeconnexionechoué",monthspayable+"  "+month);
 
                                         dataModels.get(month).setImgview2(R.drawable.remise_key);
-                                        for(int i =month;i<month+monthspayable;i++){
-                                            dataModels.get(i).setImgview(R.drawable.ic_done);
-                                            dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                        if((month+monthspayable)<12){
+                                            for(int i =month;i<month+monthspayable;i++){
+                                                dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                            }
+                                        }else{
+                                            for(int i =month;i<12;i++){
+                                                dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                            }
                                         }
+
 
                                     }else {
                                         int nummonthspayable=12;
@@ -252,7 +268,7 @@ public class ToolActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<SoldeAppartement> call, Throwable t) {
-                                    Toast.makeText(ToolActivity.this, "Connexion échouée", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -261,6 +277,8 @@ public class ToolActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<InfoSyndic> call, Throwable t) {
                             Toast.makeText(ToolActivity.this, "Connexion échouée", Toast.LENGTH_SHORT).show();
+                            Log.v("loggingeconnexionechoué","2"+t.getMessage());
+
                         }
                     });
 
@@ -269,6 +287,9 @@ public class ToolActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<NumAppart> call, Throwable t) {
                 Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                pd.dismiss();
+
+
 
             }
         });
@@ -304,5 +325,7 @@ public class ToolActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+
 
 }

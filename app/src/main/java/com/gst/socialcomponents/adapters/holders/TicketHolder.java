@@ -67,7 +67,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         String titleString= ticketRetrieve.getTitle();
         String descriptionString=ticketRetrieve.getDescription();
         String url=ticketRetrieve.getPhotolink();
-        String statestring=ticketRetrieve.getState();
+        Integer statestring=ticketRetrieve.getState();
         Long timelong=ticketRetrieve.getTimestamp();
         String commentaire=ticketRetrieve.getComment();
 
@@ -89,18 +89,18 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         }
 
 
-        if(statestring.equals("en cours")){
+        if(statestring ==1){
                stateimageview.setImageResource(R.drawable.ic_encours);
-               state.setText(statestring);
+               state.setText("en cours");
 
            }
-           else if(statestring.equals("cloturé")){
+           else if(statestring == 2){
                stateimageview.setImageResource(R.drawable.ic_thumbs_up);
-               state.setText(statestring);
+               state.setText("cloturé");
 
-           }else if (statestring.equals("envoyé")){
+           }else if (statestring == 0){
                stateimageview.setImageResource(R.drawable.ic_sent);
-               state.setText(statestring);
+               state.setText("envoyé");
 
            }
 
