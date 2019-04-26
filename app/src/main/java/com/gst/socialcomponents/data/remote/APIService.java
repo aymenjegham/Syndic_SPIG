@@ -4,9 +4,12 @@ import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.PostProfile;
 import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Chantiers;
+import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumChantier;
+import com.gst.socialcomponents.model.NumReunion;
+import com.gst.socialcomponents.model.NumUser;
 import com.gst.socialcomponents.model.SoldeAppartement;
 
 import java.util.ArrayList;
@@ -73,5 +76,19 @@ public interface APIService {
                                  @Field("rDescription") String rDescription,
                                  @Field("rStatut") Integer rStatut,
                                  @Field("rCategorie") Integer rCategorie);
+
+
+
+    @POST("/getIdUser.php")
+    @FormUrlEncoded
+    Call<NumUser> getIdUser(@Field("email") String  email);
+
+    @POST("/getIdReunion.php")
+    @FormUrlEncoded
+    Call<List<NumReunion>> getIdReunion(@Field("profile-id") Integer  profileid);
+
+    @POST("/getReunion.php")
+    @FormUrlEncoded
+    Call<DataReunion> getReunion(@Field("cbmarq") Integer  cbmarq);
 
 }

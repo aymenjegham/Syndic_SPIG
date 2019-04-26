@@ -19,19 +19,19 @@
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toEndOf="@+id/photoImageView"
-        app:layout_constraintTop_toBottomOf="@+id/matriculeresidence"
-        tools:text="Vosges" />
+        app:layout_constraintTop_toBottomOf="@+id/residence"
+        tools:text="95852543" />
 
     <TextView
         android:id="@+id/residence"
         android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginStart="4dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toEndOf="@+id/matriculeresidence"
-        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+        app:layout_constraintStart_toEndOf="@+id/photoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/matriculeresidence"
         tools:text="Vosges" />
 
     <com.gst.socialcomponents.views.CircularImageView
@@ -79,17 +79,16 @@
 
     <Switch
         android:id="@+id/activeButton"
-         android:textColor="@color/like_icon_activated"
-        android:textSize="12dp"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:width="65dp"
+        android:textColor="@color/like_icon_activated"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text=" Activé"
-        android:layout_height="25dp"
-        android:width="65dp"
-        android:layout_width="100dp" />
+        tools:text=" Activé" />
 
 </android.support.constraint.ConstraintLayout>

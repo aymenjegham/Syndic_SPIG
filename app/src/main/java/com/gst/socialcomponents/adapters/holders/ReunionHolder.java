@@ -1,21 +1,16 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.model.Coming;
 import com.gst.socialcomponents.model.ReunionRetrieve;
-import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.FormatterUtil;
 
 import java.util.ArrayList;
@@ -43,7 +38,7 @@ public class ReunionHolder extends RecyclerView.ViewHolder {
     public ReunionHolder(View reunionCard) {
         super(reunionCard);
 
-        this.titre=itemView.findViewById(R.id.titretv);
+        this.titre=itemView.findViewById(R.id.objettv);
         this.timestamp=itemView.findViewById(R.id.timestamptv);
         this.sujet=itemView.findViewById(R.id.sujettv);
         this.date=itemView.findViewById(R.id.datetv);

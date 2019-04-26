@@ -24,7 +24,7 @@
 
 
             <TextView
-                android:id="@+id/titretv"
+                android:id="@+id/objettv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -52,7 +52,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titretv" />
+                app:layout_constraintTop_toBottomOf="@+id/objettv" />
 
             <TextView
                 android:id="@+id/timestamptv"

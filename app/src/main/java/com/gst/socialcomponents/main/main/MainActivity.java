@@ -125,6 +125,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     String residence;
     String token;
+    String email;
     boolean isModerator;
     private Menu menu;
     private Menu menuDr;
@@ -301,9 +302,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     residence =profile.getResidence();
                     isModerator =profile.isType();
                     token=profile.gettoken();
+                    email=profile.getEmail();
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                     editor.putBoolean("sharedprefismoderator",isModerator);
+                    editor.putString("sharedprefemail",email);
                     editor.apply();
 
 
@@ -425,7 +428,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(getResources().getColor(R.color.send_button_color));
         menuDr = navigationView.getMenu();
-        menuDr.getItem(5).setTitle("Factures");
+        menuDr.getItem(5).setTitle("Reglements");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
@@ -928,13 +931,13 @@ void getdateofpay() {
                                                 }
                                                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                                                 alertDialog.setTitle("Frais Syndic");
-                                                alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez payez un montant de: "+response.body().getFraisupposed()+" dt pour les "+periode+" mois prochains");
-                                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                dialog.dismiss();
-                                                            }
-                                                        });
+                                                alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez payez un montant de: "+response.body().getFraisupposed()+" dt ");//pour les "+periode+" mois prochains");
+
+                                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
                                                 alertDialog.show();
 
                                             }

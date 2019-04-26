@@ -1,8 +1,6 @@
 package com.gst.socialcomponents.main.main;
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,39 +13,36 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
-import com.gst.socialcomponents.adapters.ReunionsAdapter;
-import com.gst.socialcomponents.adapters.TicketAdapter;
-import com.gst.socialcomponents.model.Coming;
-import com.gst.socialcomponents.model.ReunionRetrieve;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.gst.socialcomponents.adapters.ReunionAdapter;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
+import com.gst.socialcomponents.model.DataReunion;
+import com.gst.socialcomponents.model.NumReunion;
+import com.gst.socialcomponents.model.NumUser;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import org.threeten.bp.LocalDate;
-
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Locale;
+import java.util.List;
 
 
-import sun.bob.mcalendarview.MCalendarView;
-import sun.bob.mcalendarview.vo.DateData;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CalendarActivity extends AppCompatActivity {
 
     public ActionBar actionBar;
     String residence;
+    String email;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
     MaterialCalendarView calendarView;
+    private APIService mAPIService;
+
 
 
 
@@ -76,6 +71,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
+        email=prefs.getString("sharedprefemail",null);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -83,7 +79,65 @@ public class CalendarActivity extends AppCompatActivity {
             reference = FirebaseDatabase.getInstance().getReference();
         }
 
+        ArrayList<Response<DataReunion>> reunions = new ArrayList() ;
+        ArrayList<Integer> intuser = new ArrayList() ;
 
+
+
+        mAPIService = ApiUtils.getAPIService();
+        mAPIService.getIdUser(email).enqueue(new Callback<NumUser>() {
+            @Override
+            public void onResponse(Call<NumUser> call, Response<NumUser> response) {
+                 Integer iDUser=response.body().getCbmarq();
+                mAPIService.getIdReunion(iDUser).enqueue(new Callback<List<NumReunion>>() {
+                    @Override
+                    public void onResponse(Call<List<NumReunion>> call, Response<List<NumReunion>> response) {
+                         reunions.clear();
+                         intuser.clear();
+
+                        for (int i = 0; i < response.body().size(); i++) {
+                            Log.v("bodynull",   response.body().get(i).getReunionid()+"  ");
+                            mAPIService.getReunion(response.body().get(i).getReunionid()).enqueue(new Callback<DataReunion>() {
+                            @Override
+                            public void onResponse(Call<DataReunion> call, Response<DataReunion> response) {
+
+                                reunions.add(response);
+                                intuser.add(iDUser);
+                                setupRecyclerview(reunions,intuser);
+                            }
+
+                            @Override
+                            public void onFailure(Call<DataReunion> call, Throwable t) {
+
+                                Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        });
+                    }
+
+
+                    }
+                    @Override
+                    public void onFailure(Call<List<NumReunion>> call, Throwable t) {
+                        Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+                        Log.v("findingbug",t.getMessage()+"  2");
+
+                    }
+                });
+        }
+        @Override
+        public void onFailure(Call<NumUser> call, Throwable t) {
+            Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+            Log.v("findingbug",t.getMessage()+  " 3");
+
+
+        }
+        });
+    }
+
+
+/*
         ArrayList<ReunionRetrieve> reunions = new ArrayList() ;
 
         reference = FirebaseDatabase.getInstance().getReference().child("Reunions").child(residence);
@@ -121,8 +175,10 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                 });
 
-    }
+        */
 
+
+/*
     private void setupCalendar(ArrayList<ReunionRetrieve> reunions) throws ParseException {
 
         ArrayList<Integer> Day=new ArrayList<Integer>();
@@ -167,7 +223,21 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
     }
+*/
 
+    private void setupRecyclerview(ArrayList<Response<DataReunion>> reunions, ArrayList<Integer> intuser) {
+        RecyclerView recyclerView =findViewById(R.id.recyclerviewreunions);
+        recyclerView.setHasFixedSize(false);
+
+        ReunionAdapter adapter;
+        adapter=new ReunionAdapter(reunions,getApplicationContext(),intuser);
+
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -231,7 +231,6 @@ public class ToolActivity extends AppCompatActivity {
                                         reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
                                         retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
-                                        Log.v("loggingeconnexionechoué",monthspayable+"  "+month);
 
                                         dataModels.get(month).setImgview2(R.drawable.remise_key);
                                         if((month+monthspayable)<12){
@@ -269,6 +268,7 @@ public class ToolActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<SoldeAppartement> call, Throwable t) {
                                     Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                                    Log.v("errorcom",t.getMessage()+ "  1");
 
                                 }
                             });
@@ -277,7 +277,7 @@ public class ToolActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<InfoSyndic> call, Throwable t) {
                             Toast.makeText(ToolActivity.this, "Connexion échouée", Toast.LENGTH_SHORT).show();
-                            Log.v("loggingeconnexionechoué","2"+t.getMessage());
+                            Log.v("errorcom","2"+t.getMessage());
 
                         }
                     });
@@ -287,6 +287,8 @@ public class ToolActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<NumAppart> call, Throwable t) {
                 Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                Log.v("errorcom",t.getMessage()+ "  3");
+
                 pd.dismiss();
 
 
