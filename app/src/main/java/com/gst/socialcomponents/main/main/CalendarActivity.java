@@ -20,6 +20,7 @@ import com.gst.socialcomponents.adapters.ReunionAdapter;
 import com.gst.socialcomponents.data.remote.APIService;
 import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.model.DataReunion;
+import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumReunion;
 import com.gst.socialcomponents.model.NumUser;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -38,10 +39,12 @@ public class CalendarActivity extends AppCompatActivity {
     public ActionBar actionBar;
     String residence;
     String email;
+    String numresidence;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
     MaterialCalendarView calendarView;
     private APIService mAPIService;
+    Integer numuserprofile;
 
 
 
@@ -72,6 +75,7 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
         email=prefs.getString("sharedprefemail",null);
+        numresidence=prefs.getString("sharedprefnumresidence",null);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -85,24 +89,36 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         mAPIService = ApiUtils.getAPIService();
-        mAPIService.getIdUser(email).enqueue(new Callback<NumUser>() {
+        mAPIService.getNumOfAppartements(numresidence).enqueue(new Callback<NumAppart>() {
             @Override
-            public void onResponse(Call<NumUser> call, Response<NumUser> response) {
-                 Integer iDUser=response.body().getCbmarq();
-                mAPIService.getIdReunion(iDUser).enqueue(new Callback<List<NumReunion>>() {
+            public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                 String iDUser=response.body().getCbmarq();
+                mAPIService.getIdReunion(Integer.valueOf(iDUser)).enqueue(new Callback<List<NumReunion>>() {
                     @Override
                     public void onResponse(Call<List<NumReunion>> call, Response<List<NumReunion>> response) {
                          reunions.clear();
                          intuser.clear();
 
+                        mAPIService.getIdUser(email).enqueue(new Callback<NumUser>() {
+                            @Override
+                            public void onResponse(Call<NumUser> call, Response<NumUser> response) {
+                               numuserprofile=response.body().getCbmarq();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<NumUser> call, Throwable t) {
+
+                            }
+
+                            });
+
                         for (int i = 0; i < response.body().size(); i++) {
-                            Log.v("bodynull",   response.body().get(i).getReunionid()+"  ");
                             mAPIService.getReunion(response.body().get(i).getReunionid()).enqueue(new Callback<DataReunion>() {
                             @Override
                             public void onResponse(Call<DataReunion> call, Response<DataReunion> response) {
-
                                 reunions.add(response);
-                                intuser.add(iDUser);
+                                intuser.add(Integer.valueOf(numuserprofile));
                                 setupRecyclerview(reunions,intuser);
                             }
 
@@ -120,14 +136,13 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<List<NumReunion>> call, Throwable t) {
-                        Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
-                        Log.v("findingbug",t.getMessage()+"  2");
+                        Toast.makeText(CalendarActivity.this, "Pas de reunions pour vous !", Toast.LENGTH_LONG).show();
 
                     }
                 });
         }
         @Override
-        public void onFailure(Call<NumUser> call, Throwable t) {
+        public void onFailure(Call<NumAppart> call, Throwable t) {
             Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
             Log.v("findingbug",t.getMessage()+  " 3");
 
@@ -230,7 +245,7 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(false);
 
         ReunionAdapter adapter;
-        adapter=new ReunionAdapter(reunions,getApplicationContext(),intuser);
+        adapter=new ReunionAdapter(reunions,getApplicationContext(),intuser,getApplicationContext());
 
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());

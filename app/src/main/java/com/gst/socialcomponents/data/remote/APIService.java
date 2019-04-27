@@ -2,6 +2,7 @@ package com.gst.socialcomponents.data.remote;
 
 import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.PostProfile;
+import com.gst.socialcomponents.model.AcceptInfo;
 import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.DataReunion;
@@ -90,5 +91,19 @@ public interface APIService {
     @POST("/getReunion.php")
     @FormUrlEncoded
     Call<DataReunion> getReunion(@Field("cbmarq") Integer  cbmarq);
+
+
+    @POST("/insetReponseReunion.php")
+    @FormUrlEncoded
+    Call<String> insertReponseReunion(@Field("profile_id") Integer rMontant,
+                                      @Field("reunion_id") Integer rAppartement);
+
+
+    @POST("/getReunionAcceptInfo.php")
+    @FormUrlEncoded
+    Call<AcceptInfo> getReunionAcceptInfo(@Field("profile_id") Integer rMontant,
+                                          @Field("reunion_id") Integer rAppartement);
+
+
 
 }

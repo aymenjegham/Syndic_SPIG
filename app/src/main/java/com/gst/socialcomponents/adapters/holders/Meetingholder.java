@@ -7,9 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
+import com.gst.socialcomponents.model.AcceptInfo;
 import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.utils.FormatterUtil;
@@ -18,6 +22,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Meetingholder extends RecyclerView.ViewHolder {
@@ -29,6 +35,7 @@ public class Meetingholder extends RecyclerView.ViewHolder {
     private TextView emplacement;
     private TextView datecreation;
     private Context cxt;
+    private APIService mAPIService;
     public FloatingActionButton accept;
 
 
@@ -52,7 +59,8 @@ public class Meetingholder extends RecyclerView.ViewHolder {
 
     }
 
-    public void updateUI(Response<DataReunion> reunionResponse, Integer iduser){
+    public void updateUI(Response<DataReunion> reunionResponse, Integer iduser,Context cxt){
+        mAPIService = ApiUtils.getAPIService();
         String reunionobject =reunionResponse.body().r_objet;
         String reunionsujet=reunionResponse.body().r_description;
         String debutreunion=reunionResponse.body().r_datedebut;
@@ -84,10 +92,43 @@ public class Meetingholder extends RecyclerView.ViewHolder {
             e.printStackTrace();
         }
 
+        mAPIService.getReunionAcceptInfo(iduser,reunionid).enqueue(new Callback<AcceptInfo>() {
+            @Override
+            public void onResponse(Call<AcceptInfo> call, Response<AcceptInfo> response) {
+                Log.v("checkingtosend",response.body().getProfile_id().toString());
+                accept.setEnabled(false);
+                 accept.setAlpha(.5f);
+
+            }
+
+            @Override
+            public void onFailure(Call<AcceptInfo> call, Throwable t) {
+                Log.v("checkingtosend",t.getMessage());
+
+
+            }
+        });
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-Log.v("checkingtosend",reunionid+"  "+iduser);
+                mAPIService.insertReponseReunion(iduser,reunionid).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(cxt, "Reponse envoyée", Toast.LENGTH_SHORT).show();
+                        accept.setEnabled(false);
+                        accept.setAlpha(.5f);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(cxt, "Erreur connectivité,réessayer ultérieurement", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
+
             }
         });
 

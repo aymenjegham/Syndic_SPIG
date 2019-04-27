@@ -20,14 +20,16 @@ public class ReunionAdapter extends RecyclerView.Adapter<Meetingholder> {
 
     ArrayList<Response<DataReunion>> reunions;
     ArrayList<Integer> intuser;
+    Context cxt;
 
 
 
 
 
-    public ReunionAdapter(ArrayList<Response<DataReunion>> reunions, Context applicationContext, ArrayList<Integer> intuser) {
+    public ReunionAdapter(ArrayList<Response<DataReunion>> reunions, Context applicationContext, ArrayList<Integer> intuser,Context cxt) {
         this.reunions=reunions;
         this.intuser=intuser;
+        this.cxt=cxt;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ReunionAdapter extends RecyclerView.Adapter<Meetingholder> {
     public void onBindViewHolder(@NonNull Meetingholder meetingholder, int i) {
         final Response<DataReunion> reunionResponse =reunions.get(i);
         final Integer iduser=intuser.get(i);
-        meetingholder.updateUI(reunionResponse,iduser);
+        meetingholder.updateUI(reunionResponse,iduser,cxt);
 
     }
 

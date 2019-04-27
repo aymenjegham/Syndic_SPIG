@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     String token;
     String email;
     boolean isModerator;
+    String numresidence;
     private Menu menu;
     private Menu menuDr;
     private APIService mAPIService;
@@ -303,10 +304,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     isModerator =profile.isType();
                     token=profile.gettoken();
                     email=profile.getEmail();
+                    numresidence=profile.getNumresidence();
+
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                     editor.putBoolean("sharedprefismoderator",isModerator);
                     editor.putString("sharedprefemail",email);
+                    editor.putString("sharedprefnumresidence",numresidence);
                     editor.apply();
 
 
@@ -516,10 +520,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
                     residence =profile.getResidence();
                     isModerator =profile.isType();
+                    numresidence=profile.getNumresidence();
 
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                     editor.putBoolean("sharedprefismoderator",isModerator);
+                    editor.putString("sharedprefnumresidence",numresidence);
                     editor.apply();
 
                     if (!profile.isActive()) {
