@@ -37,6 +37,7 @@ import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
+import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.ValidationUtil;
 
@@ -57,6 +58,10 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
     protected Profile profile;
     protected ProfileManager profileManager;
     private APIService mAPIService;
+    String numresidence;
+    String cbresidence;
+    Boolean ismoderator;
+
 
 
 
@@ -64,11 +69,17 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
     protected EditProfilePresenter(Context context) {
         super(context);
          profileManager = ProfileManager.getInstance(context.getApplicationContext());
+        SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+        numresidence=prefs.getString("sharedprefnumresidence",null);
+        ismoderator=prefs.getBoolean("sharedprefismoderator",false);
 
     }
 
     public void loadProfile() {
         ifViewAttached(BaseView::showProgress);
+
+
+
         profileManager.getProfileSingleValue(getCurrentUserId(), new OnObjectChangedListenerSimple<Profile>() {
             @Override
             public void onObjectChanged(Profile obj) {
@@ -85,6 +96,18 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                             view.setProfilePhoto(profile.getPhotoUrl());
                         }
                     }
+                    mAPIService = ApiUtils.getAPIService();
+                    mAPIService.getNumOfAppartements(numresidence).enqueue(new Callback<NumAppart>() {
+                        @Override
+                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                          cbresidence=response.body().getCbmarq();
+                        }
+
+                        @Override
+                        public void onFailure(Call<NumAppart> call, Throwable t) {
+
+                        }
+                    });
 
                     view.hideProgress();
                     view.setNameError(null);
@@ -133,14 +156,14 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setNumresidence(numresidence);
                     profile.setMobile(mobile);
                     profile.setToken( FirebaseInstanceId.getInstance().getToken());
-                    profile.setActive(false);
+                    profile.setActive(ismoderator);
 
 
                     createOrUpdateProfile(imageUri);
 
                     mAPIService = ApiUtils.getAPIService();
-                    sendPost(profile.isActive(), profile.getEmail(),profile.getId(),profile.getLikesCount(),profile.getMobile(),profile.getNumresidence(),profile.getPhotoUrl(),profile.getResidence(),profile.getToken(),profile.isType(),profile.getUsername());
-
+                    //sendPost(profile.isActive(), profile.getEmail(),profile.getId(),profile.getLikesCount(),profile.getMobile(),profile.getNumresidence(),profile.getPhotoUrl(),profile.getResidence(),profile.getToken(),profile.isType(),profile.getUsername());
+                   sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),Integer.valueOf(cbresidence));
 
                     SharedPreferences.Editor editor = context.getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
@@ -151,8 +174,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
         }
     }
 
-    public void sendPost(Boolean active, String email,String id,Long likescount,String mobile,String numresidence,String photoUrl,String residence,String token,Boolean typeuser,String username) {
-        mAPIService.savePost(active, email, id,likescount,mobile,numresidence,photoUrl,residence,token,typeuser,username).enqueue(new Callback<String>() {
+    public void sendPost(String photoUrl,Boolean active, String email,String id,String mobile,String username,String residence,Integer numresidence) {
+        mAPIService.savePost(photoUrl,active, email, id,mobile,username,residence,numresidence).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                  if(response.isSuccessful()) {

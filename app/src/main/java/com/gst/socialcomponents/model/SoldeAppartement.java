@@ -10,12 +10,16 @@ public class SoldeAppartement {
     @SerializedName("sSoldeActuel")
     int  solde;
 
+    @SerializedName("sRetenu")
+    int  sRetenu;
+
     @SerializedName("sDatefinpaye")
     String date;
 
-    public SoldeAppartement(int solde,String date) {
+    public SoldeAppartement(int solde,String date,int sRetenu) {
         this.solde = solde;
         this.date=date;
+        this.sRetenu=sRetenu;
     }
 
     public int getSolde() {
@@ -32,5 +36,13 @@ public class SoldeAppartement {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getsRetenu() {
+        return sRetenu;
+    }
+
+    public void setsRetenu(int sRetenu) {
+        this.sRetenu = sRetenu;
     }
 }

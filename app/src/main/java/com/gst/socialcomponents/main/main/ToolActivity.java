@@ -62,7 +62,7 @@ public class ToolActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference reference,reference2;
     private APIService mAPIService;
-    private TextView balance,reste,yeartv,retenu;
+    private TextView balance,reste,yeartv,retenu,retenu_annuel;
     private ListView listview ;
     private CustomFacturesMonthsAdapter listAdapter ;
     ArrayList<Factureitemdata> dataModels;
@@ -80,6 +80,7 @@ public class ToolActivity extends AppCompatActivity {
         reste =findViewById(R.id.brest);
         yeartv =findViewById(R.id.tvyear);
         retenu =findViewById(R.id.retenu);
+        retenu_annuel=findViewById(R.id.retenueannuel);
 
 
 
@@ -183,7 +184,7 @@ public class ToolActivity extends AppCompatActivity {
                                 public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
 
 
-
+                                    retenu_annuel.setText(String.valueOf(response.body().getsRetenu()));
                                     balance.setText(String.valueOf(response.body().getSolde()));
                                     dataModels= new ArrayList<>();
                                     dataModels.add(new Factureitemdata("Janvier", "", "",0,0));
@@ -223,12 +224,12 @@ public class ToolActivity extends AppCompatActivity {
 
                                     if(year==yearlocal){
                                         int nummonthspayable=12-month;
-                                        int monthamount =response.body().getSolde()/nummonthspayable;
+                                        int monthamount =(response.body().getSolde()+response.body().getsRetenu())/nummonthspayable;
                                         int monthlyfrais=frais[0]/12;
-                                        int monthspayable=response.body().getSolde()/monthlyfrais;
+                                        int monthspayable=(response.body().getSolde()+response.body().getsRetenu())/monthlyfrais;
                                         int totalpayed =nummonthspayable*monthamount;
                                         int totalmustbepayed=nummonthspayable*monthlyfrais;
-                                        reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
+                                        reste.setText(String.valueOf(totalmustbepayed-(response.body().getSolde()+response.body().getsRetenu())));
                                         retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
 

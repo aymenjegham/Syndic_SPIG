@@ -406,11 +406,16 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
        toolbar.setBackgroundColor(0xffB22222);
        if(menu != null){
            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
-        }
+           menu.getItem(3).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali_white));
+           menu.getItem(3).setTitle("Publications signalés");
+
+       }
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(0xffB22222);
          menuDr = navigationView.getMenu();
         menuDr.getItem(5).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+        menuDr.getItem(6).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
+        menuDr.getItem(6).setTitle("Publications signalés");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
@@ -906,6 +911,8 @@ void getdateofpay() {
                                 @Override
                                 public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                                    Log.v("tesstingvalues",response.body().getSolde()+"   "+response.body().getDate()+"      hello");
                                     try {
                                         strtodate[0] = format.parse (response.body().getDate());
                                     } catch (ParseException e) {

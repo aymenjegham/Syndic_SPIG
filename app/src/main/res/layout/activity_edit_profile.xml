@@ -12,7 +12,7 @@
         android:id="@+id/regForm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.015">
+        android:layout_weight="0.019">
 
         <LinearLayout
             android:id="@+id/email_login_form"

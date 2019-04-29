@@ -193,7 +193,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
                     @Override
                     public void onClick(View v) {
 
-                        Toast.makeText(EditProfileActivity.this, "pas de connexion internet, veuillez réessayer plus tard", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, "pas d'appartements disponibles a ce moment, réesayer ultérieurement", Toast.LENGTH_SHORT).show();
 
                     }
                 });

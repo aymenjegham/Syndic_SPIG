@@ -59,8 +59,8 @@ public class CalendarActivityMod extends AppCompatActivity implements Facturesli
         final ViewPager viewPager =findViewById(R.id.view_pagercalendarmod);
         ViewPagerAdapter viewPagerAdapter =new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragment(new ReunionslistFragment(),"Réunions");
-        viewPagerAdapter.addFragment(new FactureslistFragment(),"Factures");
+        viewPagerAdapter.addFragment(new ReunionslistFragment(),"Publication signalés");
+        //viewPagerAdapter.addFragment(new FactureslistFragment(),"Factures");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

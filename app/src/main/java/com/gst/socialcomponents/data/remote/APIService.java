@@ -30,17 +30,17 @@ public interface APIService {
    //@POST("/servicesMAC/posts.php")
    @POST("/posts.php")
     @FormUrlEncoded
-    Call<String> savePost(@Field("active") Boolean active,
-                                @Field("email") String email,
-                                @Field("id") String id,
-                                @Field("likescount") Long likescount ,
-                                @Field("mobile") String mobile,
-                                @Field("numresidence") String numresidence,
-                                @Field("photoUrl") String photoUrl,
-                                @Field("residence") String residence,
-                                @Field("token") String token,
-                                @Field("type") Boolean type,
-                                @Field("username") String username);
+    Call<String> savePost(  @Field("photoUrl") String photoUrl,
+                            @Field("active") Boolean active,
+                            @Field("email") String email,
+                            @Field("id") String id,
+                            @Field("mobile") String mobile,
+                            @Field("username") String username,
+                            @Field("residence") String residence,
+                            @Field("numresidence") Integer numresidence);
+
+
+
 
     @GET("/todos/{userId}")
     Call<GetFacture> getFacture(@Path(value = "userId", encoded = true) int numcall);

@@ -21,10 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.PostsAdapter;
+import com.gst.socialcomponents.adapters.PostsAdapterReclam;
 import com.gst.socialcomponents.adapters.ReunionsAdapter;
 import com.gst.socialcomponents.adapters.ReunionsAdaptermod;
 import com.gst.socialcomponents.main.main.CalendarActivity;
 import com.gst.socialcomponents.model.Coming;
+import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.ReunionRetrieve;
 
 import java.text.ParseException;
@@ -81,35 +84,26 @@ public class ReunionslistFragment extends Fragment {
         }
 
 
-        ArrayList<ReunionRetrieve> reunions = new ArrayList() ;
+        ArrayList<Post> posts = new ArrayList() ;
+        ArrayList<String> ids = new ArrayList() ;
+        posts.clear();
 
-        reference = FirebaseDatabase.getInstance().getReference().child("Reunions").child(residence);
+
+        reference = FirebaseDatabase.getInstance().getReference().child("posts");//.child(residence);
         reference.keepSynced(true);
         reference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        reunions.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                            ReunionRetrieve reunion = ds.getValue(ReunionRetrieve.class);
-                          //  ArrayList<Coming> members=new ArrayList<>();
-                           // members=reunion.getUserids();
+                            Post post = ds.getValue(Post.class);
+                            if(post.isHasComplain()){
+                                posts.add(post);
+                                ids.add(ds.getKey());
 
-                            //for(int i=0;i<members.size();i++){
-
-                              //  if(members.get(i).getUsersid() .equals(firebaseUser.getUid())){
-                                  reunions.add(reunion);
-                                //}
-                            //}
-
-                            setupRecyclerview(reunions,view);
+                            }
                          }
-                        //try {
-                          // setupCalendar(reunions);
-                      //  } catch (ParseException e) {
-                        //    e.printStackTrace();
-                        //}
-
+                         setupRecyclerview(posts,ids);
 
                     }
 
@@ -122,12 +116,11 @@ public class ReunionslistFragment extends Fragment {
         return  view;
     }
 
-    private void setupRecyclerview(ArrayList<ReunionRetrieve> reunions,View v) {
+    private void setupRecyclerview(ArrayList<Post> posts,ArrayList<String> ids) {
 
-        Collections.reverse(reunions);
         recyclerView.setHasFixedSize(false);
-        ReunionsAdaptermod adapter;
-        adapter=new ReunionsAdaptermod(reunions,getContext());
+        PostsAdapterReclam adapter;
+        adapter=new PostsAdapterReclam(posts,getContext(),ids);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager =new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

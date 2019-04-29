@@ -111,7 +111,7 @@ public class Meetingholder extends RecyclerView.ViewHolder {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAPIService.insertReponseReunion(iduser,reunionid).enqueue(new Callback<String>() {
+                mAPIService.insertReponseReunion(reunionid,iduser).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         Toast.makeText(cxt, "Reponse envoyée", Toast.LENGTH_SHORT).show();

@@ -23,10 +23,16 @@ import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumReunion;
 import com.gst.socialcomponents.model.NumUser;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 import retrofit2.Call;
@@ -98,12 +104,33 @@ public class CalendarActivity extends AppCompatActivity {
                     public void onResponse(Call<List<NumReunion>> call, Response<List<NumReunion>> response) {
                          reunions.clear();
                          intuser.clear();
+                         Integer  sizeReunion= response.body().size();
+                         List<NumReunion> response1=response.body();
 
                         mAPIService.getIdUser(email).enqueue(new Callback<NumUser>() {
                             @Override
                             public void onResponse(Call<NumUser> call, Response<NumUser> response) {
                                numuserprofile=response.body().getCbmarq();
+                                for (int i = 0; i < sizeReunion; i++) {
+                                    mAPIService.getReunion(response1.get(i).getReunionid()).enqueue(new Callback<DataReunion>() {
+                                        @Override
+                                        public void onResponse(Call<DataReunion> call, Response<DataReunion> response) {
+                                            reunions.add(response);
+                                            intuser.add(Integer.valueOf(numuserprofile));
+                                            setupRecyclerview(reunions,intuser);
+                                            try {
+                                                setupCalendar(reunions);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        @Override
+                                        public void onFailure(Call<DataReunion> call, Throwable t) {
 
+                                            Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             }
 
                             @Override
@@ -113,24 +140,7 @@ public class CalendarActivity extends AppCompatActivity {
 
                             });
 
-                        for (int i = 0; i < response.body().size(); i++) {
-                            mAPIService.getReunion(response.body().get(i).getReunionid()).enqueue(new Callback<DataReunion>() {
-                            @Override
-                            public void onResponse(Call<DataReunion> call, Response<DataReunion> response) {
-                                reunions.add(response);
-                                intuser.add(Integer.valueOf(numuserprofile));
-                                setupRecyclerview(reunions,intuser);
-                            }
 
-                            @Override
-                            public void onFailure(Call<DataReunion> call, Throwable t) {
-
-                                Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
-
-
-                            }
-                        });
-                    }
 
 
                     }
@@ -193,39 +203,47 @@ public class CalendarActivity extends AppCompatActivity {
         */
 
 
-/*
-    private void setupCalendar(ArrayList<ReunionRetrieve> reunions) throws ParseException {
+
+    private void setupCalendar(ArrayList<Response<DataReunion>> reunions) throws ParseException {
 
         ArrayList<Integer> Day=new ArrayList<Integer>();
         ArrayList<Integer> Month=new ArrayList<Integer>();
         ArrayList<Integer> Year=new ArrayList<Integer>();
 
+
         for(int i=0;i<reunions.size();i++) {
 
-            String selectedDate = reunions.get(i).getDate();
+            String selectedDate = reunions.get(i).body().getR_datedebut();
 
-            String parts[] = selectedDate.split("/");
 
-            int day = Integer.parseInt(parts[0]);
-            Day.add(day);
-            int month = Integer.parseInt(parts[1]);
-            Month.add(month);
-            int year = Integer.parseInt(parts[2]);
-            Year.add(year);
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date datedebu   = format.parse ( selectedDate );
+                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                cal.setTime(datedebu);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                 Day.add(day);
+                Month.add(month);
+                Year.add(year);
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         }
 
         for(int i=0 ;i< Day.size();i++){
-
             String year =Year.get(i).toString();
-            String yeari=String.valueOf("20"+year);
-            int intye =Integer.valueOf(yeari);
-            calendarView.setDateSelected(CalendarDay.from(intye,Month.get(i),Day.get(i)),true);
-            setupRecyclerview(reunions);
-        }
+             int intye =Integer.valueOf(year);
+            calendarView.setDateSelected(CalendarDay.from(intye,Month.get(i)+1,Day.get(i)),true);
+         }
 
     }
-
+/*
     private void setupRecyclerview(ArrayList<ReunionRetrieve> reunions) {
         RecyclerView recyclerView =findViewById(R.id.recyclerviewreunions);
         recyclerView.setHasFixedSize(false);
