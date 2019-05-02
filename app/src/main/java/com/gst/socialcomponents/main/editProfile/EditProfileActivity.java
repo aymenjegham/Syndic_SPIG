@@ -20,16 +20,19 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.view.menu.ListMenuItemView;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -76,6 +79,8 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     ArrayList<Integer> numresid;
     private APIService mAPIService;
     private  Integer num_residence;
+    private CardView cardviewinformaion;
+    private LinearLayout linearlayout;
 
 
     @Override
@@ -92,6 +97,8 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
         residenceEditText = findViewById(R.id.simplespinner);
         numtelEditText=findViewById(R.id.numtelEditText);
+        linearlayout=findViewById(R.id.rootviewlayout);
+        cardviewinformaion=findViewById(R.id.cardviewinfo);
 
         residenceEditText.setFocusable(false);
         mAPIService = ApiUtils.getAPIService();
@@ -100,6 +107,27 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         getChantiers();
 
 
+        linearlayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+
+                        Rect r = new Rect();
+                        linearlayout.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = linearlayout.getRootView().getHeight();
+
+
+                        int keypadHeight = screenHeight - r.bottom;
+
+
+                        if (keypadHeight > screenHeight * 0.15) {
+                             cardviewinformaion.setVisibility(View.GONE);
+                        }
+                        else {
+                            cardviewinformaion.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
 
 
     }
@@ -360,6 +388,8 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         }
 
     }
+
+
 
 
 

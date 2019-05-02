@@ -50,6 +50,9 @@ public interface ProfileView extends BaseView {
 
     void setResidenceName(String username);
 
+    void setapparteName(String appartname);
+
+
     void setProfileType();
 
 

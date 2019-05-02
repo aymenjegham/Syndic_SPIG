@@ -68,6 +68,9 @@ public class Post implements Serializable, LazyLoading {
 
 
 
+
+
+
     public String getResidence() {
         return residence;
     }

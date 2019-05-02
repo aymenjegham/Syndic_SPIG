@@ -24,9 +24,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -45,11 +48,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -84,6 +92,7 @@ import com.gst.socialcomponents.main.search.SearchActivity;
 import com.gst.socialcomponents.model.Factureitemdata;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
 import com.gst.socialcomponents.model.SoldeAppartement;
@@ -96,6 +105,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -138,6 +149,24 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private  TextView drawerresidence;
 
 
+    private TextView horizontalTextView;
+    private LinearLayout  horizontalOuterLayout;
+    private HorizontalScrollView horizontalScrollview;
+
+    private int scrollMax;
+    private int scrollPos =	0;
+    private TimerTask clickSchedule;
+    private TimerTask scrollerSchedule;
+    private TimerTask faceAnimationSchedule;
+    private Button clickedButton	=	null;
+    private Timer scrollTimer		=	null;
+    private Timer clickTimer		=	null;
+    private Timer faceTimer         =   null;
+    private Boolean isFaceDown      =   true;
+    private String[] nameArray = {"Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana"};
+    private String[] imageNameArray = {"apple", "banana", "grapes", "orange", "strawberry","apple", "banana"};
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +177,23 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        horizontalTextView    = (TextView)findViewById(R.id.horizontal_textview_id);
+
+        horizontalScrollview  = (HorizontalScrollView) findViewById(R.id.horiztonal_scrollview_id);
+        horizontalOuterLayout =	(LinearLayout)findViewById(R.id.horiztonal_outer_layout_id);
+        horizontalScrollview.setHorizontalScrollBarEnabled(false);
+        addImagesToView();
+
+        ViewTreeObserver vto 	=	horizontalOuterLayout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                horizontalOuterLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                getScrollMaxAmount();
+                startAutoScrolling();
+            }
+        });
+
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -376,6 +422,163 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
+    }
+
+    public void addImagesToView(){
+        for (int i=0;i<imageNameArray.length;i++){
+            final Button imageButton =	new Button(this);
+            int imageResourceId =getResources().getIdentifier(imageNameArray[i], "drawable",getPackageName());
+            Drawable image  =this.getResources().getDrawable(imageResourceId);
+            imageButton.setBackgroundDrawable(image);
+            imageButton.setTag(i);
+            imageButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View arg0) {
+                    if(isFaceDown){
+                        if(clickTimer!= null){
+                            clickTimer.cancel();
+                            clickTimer			=	null;
+                        }
+                        clickedButton			=	(Button)arg0;
+                        stopAutoScrolling();
+                        clickedButton.startAnimation(scaleFaceUpAnimation());
+                        clickedButton.setSelected(true);
+                        clickTimer				=	new Timer();
+
+                        if(clickSchedule != null) {
+                            clickSchedule.cancel();
+                            clickSchedule = null;
+                        }
+
+                        clickSchedule = new TimerTask(){
+                            public void run() {
+                                startAutoScrolling();
+                            }
+                        };
+
+                        clickTimer.schedule( clickSchedule, 1500);
+                    }
+                }
+            });
+
+            LinearLayout.LayoutParams params 	=	new LinearLayout.LayoutParams(256,256);
+            params.setMargins(0, 25, 0, 25);
+            imageButton.setLayoutParams(params);
+            horizontalOuterLayout.addView(imageButton);
+        }
+    }
+
+    public void getScrollMaxAmount(){
+        int actualWidth = (horizontalOuterLayout.getMeasuredWidth()-512);
+        scrollMax   = actualWidth;
+    }
+
+    public void startAutoScrolling(){
+        if (scrollTimer == null) {
+            scrollTimer	=	new Timer();
+            final Runnable Timer_Tick 	= 	new Runnable() {
+                public void run() {
+                    moveScrollView();
+                }
+            };
+
+            if(scrollerSchedule != null){
+                scrollerSchedule.cancel();
+                scrollerSchedule = null;
+            }
+            scrollerSchedule = new TimerTask(){
+                @Override
+                public void run(){
+                    runOnUiThread(Timer_Tick);
+                }
+            };
+
+            scrollTimer.schedule(scrollerSchedule, 30, 30);
+        }
+    }
+
+
+    public void stopAutoScrolling(){
+        if (scrollTimer != null) {
+            scrollTimer.cancel();
+            scrollTimer	=	null;
+        }
+    }
+
+    public void moveScrollView(){
+        scrollPos= 	(int) (horizontalScrollview.getScrollX() + 1.0);
+        if(scrollPos >= scrollMax){
+            scrollPos=	0;
+        }
+        horizontalScrollview.scrollTo(scrollPos, 0);
+
+    }
+
+    public Animation scaleFaceUpAnimation(){
+        Animation scaleFace = new ScaleAnimation(1.0f, 1.2f, 1.0f, 1.2f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        scaleFace.setDuration(500);
+        scaleFace.setFillAfter(true);
+        scaleFace.setInterpolator(new AccelerateInterpolator());
+        Animation.AnimationListener	scaleFaceAnimationListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                horizontalTextView.setText(nameArray[(Integer) clickedButton.getTag()]);
+                isFaceDown = false;
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {}
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                if(faceTimer != null){
+                    faceTimer.cancel();
+                    faceTimer = null;
+                }
+
+                faceTimer = new Timer();
+                if(faceAnimationSchedule != null){
+                    faceAnimationSchedule.cancel();
+                    faceAnimationSchedule = null;
+                }
+                faceAnimationSchedule = new TimerTask() {
+                    @Override
+                    public void run() {
+                        faceScaleHandler.sendEmptyMessage(0);
+                    }
+                };
+
+                faceTimer.schedule(faceAnimationSchedule, 750);
+            }
+        };
+        scaleFace.setAnimationListener(scaleFaceAnimationListener);
+        return scaleFace;
+    }
+
+    private Handler faceScaleHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if(clickedButton.isSelected() == true)
+                clickedButton.startAnimation(scaleFaceDownAnimation(500));
+        }
+    };
+
+    public Animation scaleFaceDownAnimation(int duration){
+        Animation scaleFace = new ScaleAnimation(1.2f, 1.0f, 1.2f, 1.0f, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        scaleFace.setDuration(duration);
+        scaleFace.setFillAfter(true);
+        scaleFace.setInterpolator(new AccelerateInterpolator());
+        Animation.AnimationListener	scaleFaceAnimationListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {}
+            @Override
+            public void onAnimationRepeat(Animation arg0) {}
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                horizontalTextView.setText("");
+                isFaceDown = true;
+            }
+        };
+        scaleFace.setAnimationListener(scaleFaceAnimationListener);
+        return scaleFace;
     }
 /*
     public void loadFactures() {
@@ -894,87 +1097,105 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 void getdateofpay() {
-    reference2 = FirebaseDatabase.getInstance().getReference().child("profiles").child(firebaseUser.getUid()).child("numresidence");
+    reference2 = FirebaseDatabase.getInstance().getReference().child("profiles").child(firebaseUser.getUid());//.child("numresidence");
     reference2.keepSynced(true);
     reference2.addListenerForSingleValueEvent(
             new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String appart = dataSnapshot.getValue().toString();
+                     Profilefire profilefire=dataSnapshot.getValue(Profilefire.class);
+                     String numappart= profilefire.getNumresidence();
+                    String intituleResidence =profilefire.getResidence();
+
                     mAPIService = ApiUtils.getAPIService();
-                    mAPIService.getNumOfAppartements(appart).enqueue(new Callback<NumAppart>() {
+                    mAPIService.getNumChantier(intituleResidence).enqueue(new Callback<NumChantier>() {
                         @Override
-                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                            Integer numap=Integer.valueOf(response.body().getCbmarq());
-                            mAPIService.getSoldeappartement(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<SoldeAppartement>() {
-
+                        public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                            Integer numchantier=Integer.valueOf(response.body().getCbmarq());
+                            mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
                                 @Override
-                                public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-                                    Log.v("tesstingvalues",response.body().getSolde()+"   "+response.body().getDate()+"      hello");
-                                    try {
-                                        strtodate[0] = format.parse (response.body().getDate());
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-                                    Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-
-                                    cal.setTime(strtodate[0]);
-                                    int year = cal.get(Calendar.YEAR);
-                                    int month = cal.get(Calendar.MONTH);
-                                    int day = cal.get(Calendar.DAY_OF_MONTH);
-                                    int yearactual=cal2.get(Calendar.YEAR);
-                                    int monthactual=cal2.get(Calendar.MONTH);
+                                public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                                      Integer numap=Integer.valueOf(response.body().getCbmarq());
 
 
-                                    if((year ==yearactual && month<monthactual) || (year <yearactual)){
-                                        mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
 
-                                            @Override
-                                            public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
-                                                Log.v("testingreceived",response.body().getPeriodicity()+"  ");
+                                    mAPIService.getSoldeappartement(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<SoldeAppartement>() {
 
-                                                int periode=6;
-                                                if(response.body().getPeriodicity()==1){
-                                                    periode=6;
-                                                }else {
-                                                    periode=12;
-                                                }
-                                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                                                alertDialog.setTitle("Frais Syndic");
-                                                alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez payez un montant de: "+response.body().getFraisupposed()+" dt ");//pour les "+periode+" mois prochains");
+                                        @Override
+                                        public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        dialog.dismiss();
+                                            try {
+                                                strtodate[0] = format.parse (response.body().getDate());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                                            Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+
+                                            cal.setTime(strtodate[0]);
+                                            int year = cal.get(Calendar.YEAR);
+                                            int month = cal.get(Calendar.MONTH);
+                                            int day = cal.get(Calendar.DAY_OF_MONTH);
+                                            int yearactual=cal2.get(Calendar.YEAR);
+                                            int monthactual=cal2.get(Calendar.MONTH);
+
+
+                                            if((year ==yearactual && month<monthactual) || (year <yearactual)){
+                                                mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+
+                                                    @Override
+                                                    public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+
+                                                        int periode=12;
+
+                                                        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                                        alertDialog.setTitle("Frais Syndic");
+                                                        alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez consulter votre rubrique reglement et payez le montant adéquat");//pour les "+periode+" mois prochains");
+
+                                                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                        alertDialog.show();
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                                        Log.v("tesstingvalues",t.getMessage()+"  1");
+
                                                     }
                                                 });
-                                                alertDialog.show();
-
                                             }
+                                        }
+                                        @Override
+                                        public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+                                            Log.v("tesstingvalues",t.getMessage()+"  2");
 
-                                            @Override
-                                            public void onFailure(Call<InfoSyndic> call, Throwable t) {
-
-                                            }
-                                        });
-                                    }
+                                        }
+                                    });
                                 }
                                 @Override
-                                public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+                                public void onFailure(Call<NumAppart> call, Throwable t) {
+                                    Log.v("tesstingvalues",t.getMessage()+"  3");
 
                                 }
                             });
                         }
+
                         @Override
-                        public void onFailure(Call<NumAppart> call, Throwable t) {
+                        public void onFailure(Call<NumChantier> call, Throwable t) {
+                            Log.v("tesstingvalues",t.getMessage()+"  4");
+
                         }
                     });
+
                     }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.v("tesstingvalues",databaseError.getMessage());
 
                 }
 

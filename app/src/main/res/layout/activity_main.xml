@@ -18,20 +18,58 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="45dp"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:titleTextAppearance="@style/Toolbar.TitleText"/>
+            app:titleTextAppearance="@style/Toolbar.TitleText" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horiztonal_scrollview_id"
+            android:fadingEdge="none">
+            <LinearLayout android:id="@+id/horiztonal_outer_layout_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#ffffff"
+                android:gravity="center_vertical"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip">
+            </LinearLayout>
+        </HorizontalScrollView>
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_below="@id/horiztonal_scrollview_id"
+            android:layout_above="@id/recycler_view"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/horizontal_textview_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="-24dp"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -46,10 +84,15 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
+
         <com.gst.socialcomponents.views.SwipeRefreshPreLollyPop
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -60,17 +103,19 @@
 
         </com.gst.socialcomponents.views.SwipeRefreshPreLollyPop>
 
+
+
         <TextView
             android:id="@+id/newPostsCounterTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="166dp"
+            android:layout_height="84dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:padding="@dimen/intrinsic_padding"
             android:background="@drawable/posts_counter_bg"
-            android:textColor="@android:color/white"
             android:gravity="center_vertical"
-            android:visibility="gone"/>
+            android:padding="@dimen/intrinsic_padding"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

@@ -31,7 +31,7 @@
     <color name="facebook_button_color">#3B5999</color>
     <color name="facebook_button_color_pressed">#2f477a</color>
     <color name="google_button_color">#D44837</color>
-    <color name="google_button_color_pressed">#FFA43528</color>
+    <color name="google_button_color_pressed">#A43528</color>
     <color name="button_pressed_text_color">#bcbcbc</color>
 
     <color name="follow_button_color">#0097D3</color>

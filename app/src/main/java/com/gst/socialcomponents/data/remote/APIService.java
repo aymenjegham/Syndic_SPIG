@@ -37,7 +37,9 @@ public interface APIService {
                             @Field("mobile") String mobile,
                             @Field("username") String username,
                             @Field("residence") String residence,
-                            @Field("numresidence") Integer numresidence);
+                            @Field("numresidence") Integer numresidence,
+                            @Field("type") boolean type,
+                            @Field("type") boolean principal);
 
 
 
@@ -56,7 +58,8 @@ public interface APIService {
 
    @POST("/getNumAppart.php")
    @FormUrlEncoded
-   Call<NumAppart> getNumOfAppartements(@Field("a_intitule") String  a_intitule);
+   Call<NumAppart> getNumOfAppartements(@Field("a_intitule") String  a_intitule,
+                                        @Field("cbmarq") Integer  cbmarq);
 
     @POST("/getNumChantier.php")
     @FormUrlEncoded
@@ -104,6 +107,10 @@ public interface APIService {
     Call<AcceptInfo> getReunionAcceptInfo(@Field("profile_id") Integer rMontant,
                                           @Field("reunion_id") Integer rAppartement);
 
+
+    @POST("/getnumChantiers.php")
+    @FormUrlEncoded
+    Call<NumChantier> getnumChantiers(@Field("C_intitule") String  C_intitule);
 
 
 }

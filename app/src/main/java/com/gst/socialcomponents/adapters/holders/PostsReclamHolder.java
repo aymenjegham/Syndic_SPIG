@@ -1,6 +1,7 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
+import com.gst.socialcomponents.adapters.PostsAdapterReclam;
+import com.gst.socialcomponents.main.main.CalendarActivityMod;
+import com.gst.socialcomponents.main.main.MainActivity;
+import com.gst.socialcomponents.main.main.ToolsActivityMod;
+import com.gst.socialcomponents.main.main.fragments.ReunionslistFragment;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
@@ -107,9 +113,12 @@ public class PostsReclamHolder extends RecyclerView.ViewHolder {
         ignore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference1 = FirebaseDatabase.getInstance().getReference().child("posts").child("hasComplain");
-
+                reference1 = FirebaseDatabase.getInstance().getReference().child("posts").child(id).child("hasComplain");
                 reference1.setValue(false);
+                Toast.makeText(cxt, "Publication instaurée", Toast.LENGTH_SHORT).show();
+                Intent intent =new Intent(cxt.getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                cxt.getApplicationContext().startActivity(intent);
 
             }
         });
@@ -117,79 +126,17 @@ public class PostsReclamHolder extends RecyclerView.ViewHolder {
         supprime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(cxt, "deleted", Toast.LENGTH_SHORT).show();
-
+                reference1 = FirebaseDatabase.getInstance().getReference().child("posts").child(id);
+                reference1.removeValue();
+                Toast.makeText(cxt, "Publication retirée", Toast.LENGTH_SHORT).show();
+                Intent intent =new Intent(cxt.getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                cxt.getApplicationContext().startActivity(intent);
             }
         });
 
 
 
-    /*    Query query = FirebaseDatabase.getInstance().getReference().child("profiles");
-        query.addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                           if(snapshot.getKey().equals(userkey)){
-                               Profilefire profile = snapshot.getValue(Profilefire.class);
-                               Glide.with(cxt).load(profile.getPhotoUrl()).into(photoImageView);
-                               userTv.setText(profile.getUsername());
-                               userresidenceTv.setText(profile.getNumresidence());
-
-                           }
-
-                        }
-
-
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-
-
-
-        title.setText(titleString);
-        description.setText(descriptionString);
-        Glide.with(photolink.getContext()).load(url).into(photolink);
-
-
-        if(statestring == 1){
-               stateimageview.setImageResource(R.drawable.ic_encours);
-               state.setText("en cours");
-
-           }
-           else if(statestring == 2){
-               stateimageview.setImageResource(R.drawable.ic_thumbs_up);
-               state.setText("cloturé");
-
-           }else if (statestring == 0){
-               stateimageview.setImageResource(R.drawable.ic_sent);
-               state.setText("envoyé");
-
-           }
-
-        if(commentaire.equals("empty")){
-            comment.setVisibility(View.GONE);
-            commentlabel.setVisibility(View.GONE);
-        }else{
-            comment.setText(commentaire);
-        }
-
-
-         String timelongtostring = String.valueOf(timelong);
-         int strlength=timelongtostring.length();
-        matricule.setText(timelongtostring.substring(4, strlength-1));
-
-        CharSequence date = FormatterUtil.getRelativeTimeSpanString(cxt, timelong);
-
-        time.setText(date);
-
-
-
-
-*/
     }
 
 }

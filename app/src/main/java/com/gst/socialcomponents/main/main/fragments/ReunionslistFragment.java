@@ -96,6 +96,7 @@ public class ReunionslistFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Log.v("checkingresult",ds.getValue().toString());
                             Post post = ds.getValue(Post.class);
                             if(post.isHasComplain()){
                                 posts.add(post);

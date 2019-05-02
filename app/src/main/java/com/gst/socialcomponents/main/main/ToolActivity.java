@@ -34,6 +34,7 @@ import com.gst.socialcomponents.model.Facture;
 import com.gst.socialcomponents.model.Factureitemdata;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.model.TicketRetrieve;
 
@@ -158,6 +159,7 @@ public class ToolActivity extends AppCompatActivity {
 
 
     }
+
     public void getcbmarq(String appartId) {
         final String[] date = new String[1];
         final int[] frais = new int[1];
@@ -167,136 +169,150 @@ public class ToolActivity extends AppCompatActivity {
         pd.setMessage("chargement des données");
         pd.show();
         pd.setCancelable(false);
-        mAPIService.getNumOfAppartements(appartId).enqueue(new Callback<NumAppart>() {
-             @Override
-            public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                 pd.dismiss();
-                 if(response.isSuccessful()) {
-                     mAPIService.getInfoSyndic(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<InfoSyndic>() {
-                            int numAppart =Integer.valueOf(response.body().getCbmarq());
+        mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
+            @Override
+            public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                Integer numchantier=Integer.valueOf(response.body().getCbmarq());
 
-                        @Override
-                        public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
-                            date[0] =response.body().getDateRemiseCle();
-                            frais[0] =response.body().getFraisupposed();
-                            mAPIService.getSoldeappartement(numAppart).enqueue(new Callback<SoldeAppartement>() {
+                mAPIService.getNumOfAppartements(appartId,numchantier).enqueue(new Callback<NumAppart>() {
+                    @Override
+                    public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                        pd.dismiss();
+                        if(response.isSuccessful()) {
+                            mAPIService.getInfoSyndic(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<InfoSyndic>() {
+                                int numAppart =Integer.valueOf(response.body().getCbmarq());
+
                                 @Override
-                                public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+                                public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                    date[0] =response.body().getDateRemiseCle();
+                                    frais[0] =response.body().getFraisupposed();
+                                    mAPIService.getSoldeappartement(numAppart).enqueue(new Callback<SoldeAppartement>() {
+                                        @Override
+                                        public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
 
 
-                                    retenu_annuel.setText(String.valueOf(response.body().getsRetenu()));
-                                    balance.setText(String.valueOf(response.body().getSolde()));
-                                    dataModels= new ArrayList<>();
-                                    dataModels.add(new Factureitemdata("Janvier", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Fevrier", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Mars","","",0,0));
-                                    dataModels.add(new Factureitemdata("Avril", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("May", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Juin", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Juillet","","",0,0));
-                                    dataModels.add(new Factureitemdata("Aout", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Septembre", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Octobre", "", "",0,0));
-                                    dataModels.add(new Factureitemdata("Novembre","","",0,0));
-                                    dataModels.add(new Factureitemdata("Decembre", "", "",0,0));
-                                    listAdapter = new CustomFacturesMonthsAdapter(dataModels, getApplicationContext());
-                                    listview.setAdapter( listAdapter );
+                                            retenu_annuel.setText(String.valueOf(response.body().getsRetenu()));
+                                            balance.setText(String.valueOf(response.body().getSolde()));
+                                            dataModels= new ArrayList<>();
+                                            dataModels.add(new Factureitemdata("Janvier", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Fevrier", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Mars","","",0,0));
+                                            dataModels.add(new Factureitemdata("Avril", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("May", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Juin", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Juillet","","",0,0));
+                                            dataModels.add(new Factureitemdata("Aout", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Septembre", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Octobre", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Novembre","","",0,0));
+                                            dataModels.add(new Factureitemdata("Decembre", "", "",0,0));
+                                            listAdapter = new CustomFacturesMonthsAdapter(dataModels, getApplicationContext());
+                                            listview.setAdapter( listAdapter );
 
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                    String dateString = format.format( new Date()   );
-                                    try {
-                                        strtodate[0] = format.parse ( date[0] );
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-                                    Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-
-                                    cal2.setTime(strtodate[0]);
-                                    int year = cal2.get(Calendar.YEAR);
-                                    int month = cal2.get(Calendar.MONTH);
-                                    int day = cal2.get(Calendar.DAY_OF_MONTH);
-
-                                    int yearlocal = cal.get(Calendar.YEAR);
-
-                                    yeartv.setText(String.valueOf(yearlocal));
-
-
-                                    if(year==yearlocal){
-                                        int nummonthspayable=12-month;
-                                        int monthamount =(response.body().getSolde()+response.body().getsRetenu())/nummonthspayable;
-                                        int monthlyfrais=frais[0]/12;
-                                        int monthspayable=(response.body().getSolde()+response.body().getsRetenu())/monthlyfrais;
-                                        int totalpayed =nummonthspayable*monthamount;
-                                        int totalmustbepayed=nummonthspayable*monthlyfrais;
-                                        reste.setText(String.valueOf(totalmustbepayed-(response.body().getSolde()+response.body().getsRetenu())));
-                                        retenu.setText(String.valueOf(monthspayable*monthlyfrais));
-
-
-                                        dataModels.get(month).setImgview2(R.drawable.remise_key);
-                                        if((month+monthspayable)<12){
-                                            for(int i =month;i<month+monthspayable;i++){
-                                                dataModels.get(i).setImgview(R.drawable.ic_done);
-                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                            String dateString = format.format( new Date()   );
+                                            try {
+                                                strtodate[0] = format.parse ( date[0] );
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
                                             }
-                                        }else{
-                                            for(int i =month;i<12;i++){
-                                                dataModels.get(i).setImgview(R.drawable.ic_done);
-                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                                            Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+
+                                            cal2.setTime(strtodate[0]);
+                                            int year = cal2.get(Calendar.YEAR);
+                                            int month = cal2.get(Calendar.MONTH);
+                                            int day = cal2.get(Calendar.DAY_OF_MONTH);
+
+                                            int yearlocal = cal.get(Calendar.YEAR);
+
+                                            yeartv.setText(String.valueOf(yearlocal));
+
+
+                                            if(year==yearlocal){
+                                                int nummonthspayable=12-month;
+                                                int monthamount =(response.body().getSolde()+response.body().getsRetenu())/nummonthspayable;
+                                                int monthlyfrais=frais[0]/12;
+                                                int monthspayable=(response.body().getSolde()+response.body().getsRetenu())/monthlyfrais;
+                                                int totalpayed =nummonthspayable*monthamount;
+                                                int totalmustbepayed=nummonthspayable*monthlyfrais;
+                                                reste.setText(String.valueOf(totalmustbepayed-(response.body().getSolde()+response.body().getsRetenu())));
+                                                retenu.setText(String.valueOf(monthspayable*monthlyfrais));
+
+
+                                                dataModels.get(month).setImgview2(R.drawable.remise_key);
+                                                if((month+monthspayable)<12){
+                                                    for(int i =month;i<month+monthspayable;i++){
+                                                        dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                        dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                    }
+                                                }else{
+                                                    for(int i =month;i<12;i++){
+                                                        dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                        dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                    }
+                                                }
+
+
+                                            }else {
+                                                int nummonthspayable=12;
+                                                int monthamount =response.body().getSolde()/nummonthspayable;
+                                                int monthlyfrais=frais[0]/12;
+                                                int monthspayable=response.body().getSolde()/monthlyfrais;
+                                                int totalpayed =nummonthspayable*monthamount;
+                                                int totalmustbepayed=frais[0];
+                                                reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
+                                                retenu.setText(String.valueOf(monthspayable*monthlyfrais));
+
+
+                                                for(int i =0;i<monthspayable;i++){
+                                                    dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                    dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                }
+
                                             }
                                         }
 
+                                        @Override
+                                        public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+                                            Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                                            Log.v("errorcom",t.getMessage()+ "  1");
 
-                                    }else {
-                                        int nummonthspayable=12;
-                                        int monthamount =response.body().getSolde()/nummonthspayable;
-                                        int monthlyfrais=frais[0]/12;
-                                        int monthspayable=response.body().getSolde()/monthlyfrais;
-                                        int totalpayed =nummonthspayable*monthamount;
-                                        int totalmustbepayed=frais[0];
-                                        reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
-                                        retenu.setText(String.valueOf(monthspayable*monthlyfrais));
-
-
-                                        for(int i =0;i<monthspayable;i++){
-                                            dataModels.get(i).setImgview(R.drawable.ic_done);
-                                            dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
                                         }
-
-                                    }
+                                    });
                                 }
 
                                 @Override
-                                public void onFailure(Call<SoldeAppartement> call, Throwable t) {
-                                    Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
-                                    Log.v("errorcom",t.getMessage()+ "  1");
+                                public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                    Toast.makeText(ToolActivity.this, "Connexion échouée", Toast.LENGTH_SHORT).show();
+                                    Log.v("errorcom","2"+t.getMessage());
 
                                 }
                             });
-                        }
-
-                        @Override
-                        public void onFailure(Call<InfoSyndic> call, Throwable t) {
-                            Toast.makeText(ToolActivity.this, "Connexion échouée", Toast.LENGTH_SHORT).show();
-                            Log.v("errorcom","2"+t.getMessage());
 
                         }
-                    });
+                    }
+                    @Override
+                    public void onFailure(Call<NumAppart> call, Throwable t) {
+                        Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
 
-                 }
+                    }
+
+                });
             }
+
             @Override
-            public void onFailure(Call<NumAppart> call, Throwable t) {
-                Toast.makeText(ToolActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
-                Log.v("errorcom",t.getMessage()+ "  3");
-
-                pd.dismiss();
-
-
+            public void onFailure(Call<NumChantier> call, Throwable t) {
 
             }
         });
+
+
     }
+
+
+
+
 
 /*
     void retrivedata(ArrayList factures) {
@@ -332,3 +348,4 @@ public class ToolActivity extends AppCompatActivity {
 
 
 }
+

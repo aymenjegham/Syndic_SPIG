@@ -88,7 +88,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     // UI references.
     private TextView nameEditText;
-    private TextView residentTextView;
+    private TextView numappartement,residentTextView;
     private TextView moderator;
 
     private ImageView imageView;
@@ -150,6 +150,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         imageView = findViewById(R.id.drawer_img);
         nameEditText = findViewById(R.id.nameEditText);
         residentTextView=findViewById(R.id.nameresidencText);
+        numappartement=findViewById(R.id.refappartement);
         moderator=findViewById(R.id.moderator);
         postsCounterTextView = findViewById(R.id.postsCounterTextView);
         likesCountersTextView = findViewById(R.id.likesCountersTextView);
@@ -498,6 +499,10 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         residentTextView.setText(username);
     }
 
+    @Override
+    public void setapparteName(String appartname) {
+        numappartement.setText(appartname);
+    }
 
     @Override
     public void setProfileType() {

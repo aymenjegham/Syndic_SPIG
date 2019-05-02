@@ -54,25 +54,6 @@ public class PostsAdapterReclam extends RecyclerView.Adapter<PostsReclamHolder> 
         final String id=ids.get(i);
          postsReclamHolder.updateUI(post,cxt.getApplicationContext(),id);
 
-       /* ticketHolderMod.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final TicketRetrieve ticketRetrieve =tickets.get(i);
-                final String userkey =ticketscreators.get(i);
-                final String ticketkey =ticketsid.get(i);
-
-                Intent intent =new Intent(cxt.getApplicationContext(), TicketDetailActivity.class);
-                intent.putExtra("ImageUrl",ticketRetrieve.getPhotolink() );
-                intent.putExtra("UserKey",userkey );
-                intent.putExtra("TicketKey",ticketkey );
-
-
-
-                cxt.startActivity(intent);
-             }
-        });
-
-*/
 
     }
 

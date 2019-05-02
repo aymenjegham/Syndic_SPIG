@@ -14,7 +14,7 @@ public class SoldeAppartement {
     int  sRetenu;
 
     @SerializedName("sDatefinpaye")
-    String date;
+    String date="";
 
     public SoldeAppartement(int solde,String date,int sRetenu) {
         this.solde = solde;

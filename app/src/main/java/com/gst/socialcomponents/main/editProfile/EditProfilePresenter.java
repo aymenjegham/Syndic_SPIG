@@ -38,6 +38,7 @@ import com.gst.socialcomponents.main.pickImageBase.PickImagePresenter;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListenerSimple;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.utils.ValidationUtil;
 
@@ -97,17 +98,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                         }
                     }
                     mAPIService = ApiUtils.getAPIService();
-                    mAPIService.getNumOfAppartements(numresidence).enqueue(new Callback<NumAppart>() {
-                        @Override
-                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                          cbresidence=response.body().getCbmarq();
-                        }
 
-                        @Override
-                        public void onFailure(Call<NumAppart> call, Throwable t) {
-
-                        }
-                    });
 
                     view.hideProgress();
                     view.setNameError(null);
@@ -159,11 +150,40 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setActive(ismoderator);
 
 
+
+                    mAPIService.getNumChantier(profile.getResidence()).enqueue(new Callback<NumChantier>() {
+                        @Override
+                        public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                            Integer numchantier=Integer.valueOf(response.body().getCbmarq());
+
+                            mAPIService.getNumOfAppartements(numresidence,numchantier).enqueue(new Callback<NumAppart>() {
+                                @Override
+                                public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                                    cbresidence=response.body().getCbmarq();
+                                    Log.v("testing",cbresidence+"  "+ismoderator);
+                                    sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),Integer.valueOf(cbresidence),ismoderator,false);
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<NumAppart> call, Throwable t) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(Call<NumChantier> call, Throwable t) {
+
+                        }
+                    });
+
+
                     createOrUpdateProfile(imageUri);
 
                     mAPIService = ApiUtils.getAPIService();
                     //sendPost(profile.isActive(), profile.getEmail(),profile.getId(),profile.getLikesCount(),profile.getMobile(),profile.getNumresidence(),profile.getPhotoUrl(),profile.getResidence(),profile.getToken(),profile.isType(),profile.getUsername());
-                   sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),Integer.valueOf(cbresidence));
+               //     sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),1,ismoderator);
 
                     SharedPreferences.Editor editor = context.getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
@@ -174,11 +194,12 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
         }
     }
 
-    public void sendPost(String photoUrl,Boolean active, String email,String id,String mobile,String username,String residence,Integer numresidence) {
-        mAPIService.savePost(photoUrl,active, email, id,mobile,username,residence,numresidence).enqueue(new Callback<String>() {
+    public void sendPost(String photoUrl,Boolean active, String email,String id,String mobile,String username,String residence,Integer numresidence,boolean type,boolean principal) {
+        mAPIService.savePost(photoUrl,active, email, id,mobile,username,residence,numresidence,type,principal).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                 if(response.isSuccessful()) {
+
+                if(response.isSuccessful()) {
                      if(response.body().equals("New record created successfully")){
                          Toast.makeText(context, "Profile sauvegardé avec succées", Toast.LENGTH_SHORT).show();
                      }else{
