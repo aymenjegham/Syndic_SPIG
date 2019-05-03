@@ -84,8 +84,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
 
         }else if(url == null){
             photolink.setBackground(cxt.getResources().getDrawable(R.drawable.ic_photo_camera));
-            Log.v("photolinksource",url);
-
+ 
         }
 
 

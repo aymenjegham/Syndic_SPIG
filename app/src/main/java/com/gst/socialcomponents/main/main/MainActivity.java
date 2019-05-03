@@ -163,8 +163,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private Timer clickTimer		=	null;
     private Timer faceTimer         =   null;
     private Boolean isFaceDown      =   true;
-    private String[] nameArray = {"Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana"};
-    private String[] imageNameArray = {"apple", "banana", "grapes", "orange", "strawberry","apple", "banana"};
+    private String[] nameArray = {"Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana","Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana"};
+    private String[] imageNameArray = {"apple", "banana", "grapes", "orange", "strawberry","apple", "banana","apple", "banana", "grapes", "orange", "strawberry","apple", "banana"};
 
 
 
@@ -438,6 +438,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             Drawable image  =this.getResources().getDrawable(imageResourceId);
             imageButton.setBackgroundDrawable(image);
             imageButton.setTag(i);
+            imageButton.setTextSize(50);
             imageButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View arg0) {
