@@ -47,10 +47,16 @@
             android:icon="@drawable/ic_galerie"
             android:orderInCategory="7"
             android:title="@string/galerie" />
+
+        <item
+            android:id="@+id/config"
+            android:icon="@drawable/ic_settings"
+            android:orderInCategory="8"
+            android:title="Configuration" />
         <item
             android:id="@+id/about"
             android:icon="@drawable/ic_info"
-            android:orderInCategory="8"
+            android:orderInCategory="9"
             android:title="@string/a_propos"
             />
 

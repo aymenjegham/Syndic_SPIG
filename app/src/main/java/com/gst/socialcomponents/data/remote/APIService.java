@@ -9,6 +9,7 @@ import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumChantier;
+import com.gst.socialcomponents.model.NumPrincipal;
 import com.gst.socialcomponents.model.NumReunion;
 import com.gst.socialcomponents.model.NumUser;
 import com.gst.socialcomponents.model.SoldeAppartement;
@@ -38,8 +39,7 @@ public interface APIService {
                             @Field("username") String username,
                             @Field("residence") String residence,
                             @Field("numresidence") Integer numresidence,
-                            @Field("type") boolean type,
-                            @Field("type") boolean principal);
+                            @Field("type") boolean type);
 
 
 
@@ -112,5 +112,9 @@ public interface APIService {
     @FormUrlEncoded
     Call<NumChantier> getnumChantiers(@Field("C_intitule") String  C_intitule);
 
+
+    @POST("/getPrincipal.php")
+    @FormUrlEncoded
+    Call<NumPrincipal> getPrincipal(@Field("email") String  email);
 
 }

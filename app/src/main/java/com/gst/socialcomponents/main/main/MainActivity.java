@@ -207,6 +207,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                         drawerLayout.closeDrawers();
                         return true;
 
+                   case R.id.config:
+                       Intent config = new Intent(getApplicationContext(), SettingsActivity.class);
+                       startActivity(config);
+                       menuItem.setChecked(true);
+                       drawerLayout.closeDrawers();
+                       return true;
+
                     case R.id.followingPosts:
                         Intent followingPosts = new Intent(getApplicationContext(), FollowingPostsActivity.class);
                         startActivity(followingPosts);
@@ -1064,6 +1071,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             case R.id.about:
                 Intent apropos = new Intent(this, About.class);
                 startActivity(apropos);
+                return true;
+
+            case R.id.config:
+                Intent config = new Intent(this, SettingsActivity.class);
+                startActivity(config);
                 return true;
 
             case R.id.calendar:

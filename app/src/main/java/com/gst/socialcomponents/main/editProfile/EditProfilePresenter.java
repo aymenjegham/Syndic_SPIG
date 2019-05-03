@@ -160,8 +160,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                                 @Override
                                 public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
                                     cbresidence=response.body().getCbmarq();
-                                    Log.v("testing",cbresidence+"  "+ismoderator);
-                                    sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),Integer.valueOf(cbresidence),ismoderator,false);
+                                     sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),profile.getMobile(),profile.getUsername(),profile.getResidence(),Integer.valueOf(cbresidence),ismoderator);
 
                                 }
 
@@ -194,8 +193,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
         }
     }
 
-    public void sendPost(String photoUrl,Boolean active, String email,String id,String mobile,String username,String residence,Integer numresidence,boolean type,boolean principal) {
-        mAPIService.savePost(photoUrl,active, email, id,mobile,username,residence,numresidence,type,principal).enqueue(new Callback<String>() {
+    public void sendPost(String photoUrl,Boolean active, String email,String id,String mobile,String username,String residence,Integer numresidence,boolean type) {
+        mAPIService.savePost(photoUrl,active, email, id,mobile,username,residence,numresidence,type).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 

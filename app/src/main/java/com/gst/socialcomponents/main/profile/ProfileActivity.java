@@ -121,6 +121,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
        toolbar= findViewById(R.id.toolbar);
+       toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 

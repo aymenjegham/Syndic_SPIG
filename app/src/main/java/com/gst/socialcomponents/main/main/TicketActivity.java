@@ -124,10 +124,11 @@ public class TicketActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = findViewById(R.id.toolbarticket);
+        toolbar.setTitle("Mes reclamations");
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
-        toolbar.setTitle("Mes reclamations");
+
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -165,8 +166,7 @@ public class TicketActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         tickets.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                            Log.v("resourcesback",dataSnapshot.getValue().toString());
-                            Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
+                             Map<String, TicketRetrieve> td = (HashMap<String, TicketRetrieve>) ds.getValue();
                               TicketRetrieve ticket = ds.getValue(TicketRetrieve.class);
                              tickets.add(ticket);
                               retrivedata(tickets);

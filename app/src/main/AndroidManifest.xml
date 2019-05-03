@@ -18,7 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.SendPicticketActivity"></activity>
+        <activity
+            android:name=".main.main.SettingsActivity"
+            android:parentActivityName=".main.main.TicketActivityMod"
+            android:theme="@style/AppCompat.NoActionBar">
+        </activity>
+        <activity android:name=".main.SendPicticketActivity" />
         <activity
             android:name=".main.main.TicketDetailActivity"
             android:parentActivityName=".main.main.TicketActivityMod"
@@ -55,7 +60,11 @@
             android:name=".main.main.FacturationActivity"
             android:parentActivityName=".main.main.ToolsActivityMod"
             android:theme="@style/AppCompat.NoActionBar" />
-        <activity android:name=".main.main.About" />
+        <activity
+            android:name=".main.main.About"
+            android:parentActivityName=".main.main.MainActivity"
+            android:theme="@style/AppCompat.NoActionBar" />
+
         <activity
             android:name=".main.main.ToolActivity"
             android:parentActivityName=".main.main.MainActivity"
@@ -70,6 +79,7 @@
             android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.NotifActivity"
+            android:parentActivityName=".main.main.MainActivity"
             android:theme="@style/AppCompat.NoActionBar" />
         <activity
             android:name=".main.main.TicketActivity"
