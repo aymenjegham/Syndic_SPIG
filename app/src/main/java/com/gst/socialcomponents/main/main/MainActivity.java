@@ -147,6 +147,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private ImageView drawerImage;
     private  TextView drawerUsername;
     private  TextView drawerresidence;
+    private  TextView drawernumresidence;
+
 
 
     private TextView horizontalTextView;
@@ -470,7 +472,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             });
 
             LinearLayout.LayoutParams params 	=	new LinearLayout.LayoutParams(980,300);
-            params.setMargins(25, 0, 25, 0);
+            params.setMargins(50, 0, 50, 0);
             imageButton.setLayoutParams(params);
             horizontalOuterLayout.addView(imageButton);
         }
@@ -632,6 +634,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
         drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);
         drawerresidence = (TextView) header.findViewById(R.id.residenceheadertv);
+        drawernumresidence = (TextView) header.findViewById(R.id.residencenumtv);
+
 
         drawerUsername.setText(profile.getUsername());
         drawerresidence.setText(profile.getResidence());
@@ -654,9 +658,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
         drawerUsername = (TextView) header.findViewById(R.id.drawernameTv);
         drawerresidence = (TextView) header.findViewById(R.id.residenceheadertv);
+        drawernumresidence = (TextView) header.findViewById(R.id.residencenumtv);
+
 
         drawerUsername.setText(profile.getUsername());
         drawerresidence.setText(profile.getResidence());
+        drawernumresidence.setText(profile.getNumresidence());
         Glide.with(getApplicationContext()).load(profile.getPhotoUrl()).into(drawerImage);
 
     }
@@ -1138,8 +1145,14 @@ void getdateofpay() {
                                         public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+                                            Log.v("checkingondate",response.body().getDate()+"  ");
                                             try {
-                                                strtodate[0] = format.parse (response.body().getDate());
+                                                if(response.body().getDate() != null){
+                                                    strtodate[0] = format.parse (response.body().getDate());
+                                                }
+                                                else{
+                                                    return;
+                                                }
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
                                             }

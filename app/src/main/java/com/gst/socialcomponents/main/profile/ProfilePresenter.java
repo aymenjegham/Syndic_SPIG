@@ -172,6 +172,7 @@ class ProfilePresenter extends BasePresenter<ProfileView> {
                     view.setProfileName(profile.getUsername());
                     view.setResidenceName(profile.getResidence());
                     view.setapparteName(profile.getNumresidence());
+                    view.setid(profile.getId());
 
                     if (profile.isType()){
                         view.setProfileType();

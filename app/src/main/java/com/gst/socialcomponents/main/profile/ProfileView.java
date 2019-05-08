@@ -52,6 +52,9 @@ public interface ProfileView extends BaseView {
 
     void setapparteName(String appartname);
 
+    void setid(String id);
+
+
 
     void setProfileType();
 

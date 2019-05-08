@@ -66,13 +66,15 @@ import retrofit2.Response;
 public class SendPicticketActivity extends AppCompatActivity {
 
     Button addbtn, cnclbtn;
-    LinearLayout joindrebtn,joindrevid, prendrebtn;
+    LinearLayout joindrebtn,joindrevid, prendrebtn,prendrevid;
 
     private Bitmap bitmap;
 
     public ActionBar actionBar;
     public static final int GET_FROM_GALLERY = 3;
     public static final int TAKE_PICTURE = 4;
+    public static final int TAKE_VIDEO = 5;
+
 
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
@@ -111,6 +113,7 @@ public class SendPicticketActivity extends AppCompatActivity {
         checkbxpub=findViewById(R.id.cbpublic);
         joindrevid=findViewById(R.id.joindrevideo);
         videoView=findViewById(R.id.videoView);
+        prendrevid=findViewById(R.id.prendrevideo);
 
         Toolbar toolbar = findViewById(R.id.toolbarsendticket);
         toolbar.setTitle("Envoi reclamation");
@@ -205,6 +208,19 @@ public class SendPicticketActivity extends AppCompatActivity {
                     Intent cameraIntent = new Intent(
                             android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, TAKE_PICTURE);
+                } catch (ActivityNotFoundException ex) {
+
+                }
+            }
+        });
+
+        prendrevid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent cameraIntent = new Intent(
+                            MediaStore.ACTION_VIDEO_CAPTURE);
+                    startActivityForResult(cameraIntent, TAKE_VIDEO);
                 } catch (ActivityNotFoundException ex) {
 
                 }
@@ -438,6 +454,18 @@ public class SendPicticketActivity extends AppCompatActivity {
             ivtick.setVisibility(View.VISIBLE);
             Glide.with(getApplicationContext()).load(bitmap).into(ivtick);
         }
+
+        else if (requestCode == TAKE_VIDEO && resultCode == Activity.RESULT_OK){
+
+            Toast.makeText(this, "video captured", Toast.LENGTH_SHORT).show();
+            selectedMediaUri = data.getData();
+            if (selectedMediaUri.toString().contains("video")) {
+                videoView.setVisibility(View.VISIBLE);
+                videoView.setVideoURI(selectedMediaUri);
+                videoView.start();
+
+            }
+    }
 
     }
 

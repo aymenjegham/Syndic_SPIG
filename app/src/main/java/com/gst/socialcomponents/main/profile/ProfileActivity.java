@@ -59,6 +59,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.PostsByUserAdapter;
+import com.gst.socialcomponents.data.remote.APIService;
+import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.dialogs.UnfollowConfirmationDialog;
 import com.gst.socialcomponents.enums.FollowState;
 import com.gst.socialcomponents.main.base.BaseActivity;
@@ -72,14 +74,27 @@ import com.gst.socialcomponents.main.usersList.UsersListActivity;
 import com.gst.socialcomponents.main.usersList.UsersListType;
 import com.gst.socialcomponents.managers.FollowManager;
 import com.gst.socialcomponents.managers.ProfileManager;
+import com.gst.socialcomponents.model.InfoSyndic;
+import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profile;
 import com.gst.socialcomponents.model.Profilefire;
+import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.GlideApp;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
 import com.gst.socialcomponents.utils.LogoutHelper;
 import com.gst.socialcomponents.views.FollowButton;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter> implements ProfileView, GoogleApiClient.OnConnectionFailedListener, UnfollowConfirmationDialog.Callback {
     private static final String TAG = ProfileActivity.class.getSimpleName();
@@ -105,6 +120,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     private PostsByUserAdapter postsAdapter;
     private SwipeRefreshLayout swipeContainer;
     private TextView likesCountersTextView;
+    private TextView frais;
     private TextView followersCounterTextView;
     private TextView followingsCounterTextView;
     private FollowButton followButton;
@@ -115,6 +131,9 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     Toolbar toolbar;
 
     public Boolean typeuser;
+    private APIService mAPIService;
+    String numappart,residence;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +143,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
+        mAPIService = ApiUtils.getAPIService();
+
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -160,6 +181,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         postsProgressBar = findViewById(R.id.postsProgressBar);
         followButton = findViewById(R.id.followButton);
         swipeContainer = findViewById(R.id.swipeContainer);
+        frais=findViewById(R.id.fraismensuell);
 
         initListeners();
 
@@ -181,6 +203,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
                     Profilefire profile = dataSnapshot.getValue(Profilefire.class);
 
+                    residence=profile.getResidence();
+                    numappart=profile.getNumresidence();
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -191,6 +215,9 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                     }
 
                     typeuser=profile.isType();
+                    String id =profile.getId();
+
+
 
                     if(typeuser== true){
 
@@ -503,6 +530,53 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     @Override
     public void setapparteName(String appartname) {
         numappartement.setText(appartname);
+    }
+
+    @Override
+    public void setid(String id) {
+        Log.v("gyugyugy",id);
+        String finalFirebaseUser = firebaseUser.getUid();
+
+        if(id.equals(finalFirebaseUser)){
+            frais.setVisibility(View.VISIBLE);
+
+
+            mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
+                @Override
+                public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                    Integer numchantier=Integer.valueOf(response.body().getCbmarq());
+                    mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
+                        @Override
+                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                            Integer numap=Integer.valueOf(response.body().getCbmarq());
+                            mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+                                @Override
+                                public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                    frais.setVisibility(View.VISIBLE);
+                                    Integer fraissyndic=response.body().getFraisupposed();
+                                    frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
+                                }
+
+                                @Override
+                                public void onFailure(Call<InfoSyndic> call, Throwable t) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(Call<NumAppart> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<NumChantier> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     @Override

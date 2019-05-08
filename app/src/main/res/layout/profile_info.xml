@@ -10,6 +10,24 @@
     android:paddingRight="@dimen/intrinsic_padding">
 
     <TextView
+        android:id="@+id/fraismensuell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:padding="@dimen/small_intrinsic_padding"
+        android:textAppearance="@style/TextAppearance.Title"
+        android:textColor="@color/com_facebook_button_background_color"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/followButton"
+        app:layout_constraintStart_toStartOf="@+id/followButton"
+        app:layout_constraintTop_toBottomOf="@+id/postsCounterTextView"
+        tools:visibility="visible" />
+
+    <TextView
         android:id="@+id/followingsCounterTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
