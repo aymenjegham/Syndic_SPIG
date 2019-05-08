@@ -163,8 +163,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private Timer clickTimer		=	null;
     private Timer faceTimer         =   null;
     private Boolean isFaceDown      =   true;
-    private String[] nameArray = {"Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana","Apple", "Banana", "Grapes", "Orange", "Strawberry","Apple", "Banana"};
-    private String[] imageNameArray = {"apple", "banana", "grapes", "orange", "strawberry","apple", "banana","apple", "banana", "grapes", "orange", "strawberry","apple", "banana"};
+    private String[]      nameArray = {"ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7", "ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7"};
+    private String[] imageNameArray = {"ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7", "ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7"};
 
 
 
@@ -469,8 +469,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 }
             });
 
-            LinearLayout.LayoutParams params 	=	new LinearLayout.LayoutParams(256,256);
-            params.setMargins(0, 25, 0, 25);
+            LinearLayout.LayoutParams params 	=	new LinearLayout.LayoutParams(980,300);
+            params.setMargins(25, 0, 25, 0);
             imageButton.setLayoutParams(params);
             horizontalOuterLayout.addView(imageButton);
         }

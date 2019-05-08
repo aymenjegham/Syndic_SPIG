@@ -1,24 +1,34 @@
 package com.gst.socialcomponents.adapters.holders;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.github.rtoshiro.view.video.FullscreenVideoLayout;
 import com.google.firebase.database.collection.LLRBNode;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.main.main.TicketActivity;
 import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.FormatterUtil;
 
+import java.io.IOException;
+
 import static com.gst.socialcomponents.R.drawable.com_facebook_button_background;
+import static com.gst.socialcomponents.R.drawable.ic_video;
 
 public class TicketHolder extends RecyclerView.ViewHolder {
 
@@ -34,6 +44,11 @@ public class TicketHolder extends RecyclerView.ViewHolder {
     private ImageView stateimageview;
      private  TextView comment;
     private  TextView commenttv;
+    private VideoView videoview;
+     ProgressBar progDailog;
+
+
+
 
 
 
@@ -51,6 +66,9 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         this.stateimageview=itemView.findViewById(R.id.stateImageView);
          this.comment=itemView.findViewById(R.id.commenttv);
         this.commenttv=itemView.findViewById(R.id.commenttvv);
+        this.videoview=itemView.findViewById(R.id.videoView2);
+        this.progDailog=itemView.findViewById(R.id.progressBar2);
+
 
 
 
@@ -63,13 +81,14 @@ public class TicketHolder extends RecyclerView.ViewHolder {
 
 
 
-    public void updateUI(TicketRetrieve ticketRetrieve){
+    public void updateUI(TicketRetrieve ticketRetrieve,Context cxt){
         String titleString= ticketRetrieve.getTitle();
         String descriptionString=ticketRetrieve.getDescription();
         String url=ticketRetrieve.getPhotolink();
         Integer statestring=ticketRetrieve.getState();
         Long timelong=ticketRetrieve.getTimestamp();
         String commentaire=ticketRetrieve.getComment();
+        Integer type=ticketRetrieve.getType();
 
 
 
@@ -79,13 +98,44 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         description.setText(descriptionString);
 
 
-        if(url != null){
+        if(url != null && type==0){
+            progDailog.setVisibility(View.GONE);
             Glide.with(photolink.getContext()).load(url).into(photolink);
 
-        }else if(url == null){
+
+        }else if (url != null && type==1){
+
+
+
+            videoview.setVisibility(View.VISIBLE);
+             videoview.setMediaController(new MediaController(cxt));
+            videoview.setVideoURI(Uri.parse(url));
+            videoview.requestFocus();
+            videoview.start();
+
+
+            videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                public void onPrepared(MediaPlayer mp) {
+                    progDailog.setVisibility(View.GONE);
+                }
+            });
+
+            videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoview.start();
+                }
+            });
+
+
+
+        }else if(url == null) {
             photolink.setBackground(cxt.getResources().getDrawable(R.drawable.ic_photo_camera));
- 
+            progDailog.setVisibility(View.GONE);
+
         }
+
 
 
         if(statestring ==1){

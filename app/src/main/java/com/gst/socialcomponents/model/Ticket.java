@@ -19,12 +19,13 @@ import static java.text.DateFormat.getDateTimeInstance;
          public String comment;
          public Integer idResidence;
          public Integer idAppart;
+         public Integer type;
 
         public Ticket() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public Ticket(String title, String description,Map<String, String> timestamp,Integer state,String photolink,String comment,Integer idResidence,Integer idAppart) {
+        public Ticket(String title, String description,Map<String, String> timestamp,Integer state,String photolink,String comment,Integer idResidence,Integer idAppart,Integer type) {
             this.title = title;
             this.description = description;
             this.timestamp=timestamp;
@@ -33,6 +34,7 @@ import static java.text.DateFormat.getDateTimeInstance;
             this.comment=comment;
             this.idResidence=idResidence;
             this.idAppart=idAppart;
+            this.type=type;
         }
 
 

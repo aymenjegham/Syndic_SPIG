@@ -262,6 +262,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception exception) {
                                                 Toast.makeText(SendPicticketActivity.this, "Connection a échoué", Toast.LENGTH_SHORT).show();
+                                                pd.dismiss();
                                             }
                                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
@@ -275,7 +276,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
 
                                                         photoLink = uri.toString();
-                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement);
+                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement,0);
                                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                                         pd.dismiss();
                                                         bitmap = null;
@@ -298,7 +299,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                             }
                                         });
                                     } else if(bitmap ==null && selectedMediaUri ==null) {
-                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, "null", "empty",idResidence,idAppartement);
+                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, "null", "empty",idResidence,idAppartement,2);
                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                         Toast.makeText(SendPicticketActivity.this, "Reclamation envoyée avec sucées", Toast.LENGTH_SHORT).show();
                                         if(checkbxpub.isChecked()){
@@ -317,8 +318,8 @@ public class SendPicticketActivity extends AppCompatActivity {
                                     }
 
 
-                                    if(selectedMediaUri !=null){
-
+                                    if(selectedMediaUri !=null && bitmap ==null){
+/*
                                         FirebaseStorage storage = FirebaseStorage.getInstance();
                                         StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/images");
                                         StorageReference imagesRef = storageRef.child(selectedMediaUri.getLastPathSegment());
@@ -330,6 +331,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(SendPicticketActivity.this, "Connection échoué", Toast.LENGTH_SHORT).show();
+                                                pd.dismiss();
                                             }
                                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
@@ -343,7 +345,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
 
                                                         photoLink = uri.toString();
-                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement);
+                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement,1);
                                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                                         pd.dismiss();
                                                         bitmap = null;
@@ -365,7 +367,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                                 });
 
                                             }
-                                        });
+                                        });  */
                                     }
 
                                 }

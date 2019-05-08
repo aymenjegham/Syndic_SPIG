@@ -239,6 +239,7 @@ public class ToolActivity extends AppCompatActivity {
                                                 reste.setText(String.valueOf(totalmustbepayed-(response.body().getSolde()+response.body().getsRetenu())));
                                                 retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
+                                                Log.v("checkingfraisold",response.body().getSolde()+"   "+response.body().getsRetenu()+"   1"+"  "+year+"   "+yearlocal);
 
                                                 dataModels.get(month).setImgview2(R.drawable.remise_key);
                                                 if((month+monthspayable)<12){
@@ -255,13 +256,16 @@ public class ToolActivity extends AppCompatActivity {
 
 
                                             }else {
+
+                                                Log.v("checkingfraisold",response.body().getSolde()+"   "+response.body().getsRetenu()+"   2"+"  "+year+"   "+yearlocal);
+
                                                 int nummonthspayable=12;
                                                 int monthamount =response.body().getSolde()/nummonthspayable;
                                                 int monthlyfrais=frais[0]/12;
                                                 int monthspayable=response.body().getSolde()/monthlyfrais;
                                                 int totalpayed =nummonthspayable*monthamount;
                                                 int totalmustbepayed=frais[0];
-                                                reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()));
+                                                reste.setText(String.valueOf(totalmustbepayed-response.body().getSolde()-response.body().getsRetenu()));
                                                 retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.gst.socialcomponents.R;
@@ -28,9 +29,11 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketHolder> {
     private ArrayList<TicketRetrieve> tickets;
     TicketActivity ticketActivity;
     SwipeController swipeController = null;
+    Context cxt;
 
-    public TicketAdapter(ArrayList<TicketRetrieve> tickets) {
+    public TicketAdapter(ArrayList<TicketRetrieve> tickets,Context cxt) {
         this.tickets=tickets;
+        this.cxt=cxt;
      }
 
     @Override
@@ -48,7 +51,11 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketHolder> {
     @Override
     public void onBindViewHolder(@NonNull TicketHolder ticketHolder, int i) {
         final TicketRetrieve ticketRetrieve =tickets.get(i);
-        ticketHolder.updateUI(ticketRetrieve);
+        ticketHolder.updateUI(ticketRetrieve,cxt);
+           ProgressBar progdialog = ticketHolder.itemView.findViewById(R.id.progressBar2);
+           if(ticketRetrieve.type == 1){
+               progdialog.setVisibility(View.VISIBLE);
+           }
 
 
     }

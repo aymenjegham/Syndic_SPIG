@@ -150,8 +150,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setActive(ismoderator);
 
 
-
-                    mAPIService.getNumChantier(profile.getResidence()).enqueue(new Callback<NumChantier>() {
+                    mAPIService = ApiUtils.getAPIService();
+                     mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
                         @Override
                         public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                             Integer numchantier=Integer.valueOf(response.body().getCbmarq());

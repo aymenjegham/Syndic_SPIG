@@ -140,7 +140,7 @@ public class TicketActivity extends AppCompatActivity {
         RecyclerView recyclerView =findViewById(R.id.recyclerView2);
         //recyclerView.setHasFixedSize(true);
         TicketAdapter adapter;
-        adapter=new TicketAdapter(tickets);
+        adapter=new TicketAdapter(tickets,this);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager layoutManager =new LinearLayoutManager(getApplicationContext());
