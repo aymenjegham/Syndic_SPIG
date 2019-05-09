@@ -37,9 +37,6 @@ import com.gst.socialcomponents.model.Like;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.utils.*;
 
-/**
- * Created by Kristina on 10/28/16.
- */
 
 public class PostManager extends FirebaseListenersManager {
 

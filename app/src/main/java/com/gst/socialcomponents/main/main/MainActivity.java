@@ -66,6 +66,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,6 +75,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
@@ -99,6 +102,7 @@ import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.AnimationUtils;
 import com.gst.socialcomponents.utils.LogUtil;
 
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -126,6 +130,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private SwipeRefreshLayout swipeContainer;
     Constants constants;
     final Date[] strtodate = new Date[1];
+    Date datenow;
 
 
 
@@ -195,6 +200,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                 startAutoScrolling();
             }
         });
+
+
+
 
 
 
@@ -423,7 +431,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
         }
-
 
 
 
@@ -1119,6 +1126,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 void getdateofpay() {
     reference2 = FirebaseDatabase.getInstance().getReference().child("profiles").child(firebaseUser.getUid());//.child("numresidence");
     reference2.keepSynced(true);
+    FirebaseFunctions.getInstance().getHttpsCallable("getTime")
+            .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+        @Override
+        public void onSuccess(HttpsCallableResult httpsCallableResult) {
+            Long timestamp = (long) httpsCallableResult.getData();
     reference2.addListenerForSingleValueEvent(
             new ValueEventListener() {
                 @Override
@@ -1156,16 +1168,28 @@ void getdateofpay() {
                                             } catch (ParseException e) {
                                                 e.printStackTrace();
                                             }
+
+
+
                                             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
                                             Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
 
+
+
+
+
+                                            Date datenow = new Date(timestamp);
+
+
                                             cal.setTime(strtodate[0]);
+                                            cal2.setTime(datenow);
                                             int year = cal.get(Calendar.YEAR);
                                             int month = cal.get(Calendar.MONTH);
                                             int day = cal.get(Calendar.DAY_OF_MONTH);
                                             int yearactual=cal2.get(Calendar.YEAR);
-                                            int monthactual=cal2.get(Calendar.MONTH);
+                                            int monthactual=cal2.get(Calendar.MONTH)+1;
 
+ 
 
                                             if((year ==yearactual && month<monthactual) || (year <yearactual)){
                                                 mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
@@ -1226,5 +1250,7 @@ void getdateofpay() {
                 }
 
             });
+        }
+    });
 }
 }

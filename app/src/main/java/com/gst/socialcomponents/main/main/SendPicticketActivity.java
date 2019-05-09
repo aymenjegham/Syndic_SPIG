@@ -335,7 +335,8 @@ public class SendPicticketActivity extends AppCompatActivity {
 
 
                                     if(selectedMediaUri !=null && bitmap ==null){
-/*
+
+ /*
                                         FirebaseStorage storage = FirebaseStorage.getInstance();
                                         StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/images");
                                         StorageReference imagesRef = storageRef.child(selectedMediaUri.getLastPathSegment());

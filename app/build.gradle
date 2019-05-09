@@ -123,6 +123,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
 
     implementation 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
+    implementation 'com.google.firebase:firebase-functions:16.3.0'
+
 
 }
 

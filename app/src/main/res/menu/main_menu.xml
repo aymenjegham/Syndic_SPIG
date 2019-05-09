@@ -39,7 +39,7 @@
         android:id="@+id/tools"
         android:icon="@drawable/ic_money"
         android:orderInCategory="4"
-        android:title="@string/notification"
+        android:title="Reglements"
         app:showAsAction="collapseActionView" />
 
     <item
