@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.CustomFacturesMonthsAdapter;
 import com.gst.socialcomponents.adapters.FacesAdapter;
@@ -169,6 +172,13 @@ public class ToolActivity extends AppCompatActivity {
         pd.setMessage("chargement des données");
         pd.show();
         pd.setCancelable(false);
+
+        FirebaseFunctions.getInstance().getHttpsCallable("getTime")
+                .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+            @Override
+            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                Long timestamp = (long) httpsCallableResult.getData();
+
         mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
             @Override
             public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
@@ -219,7 +229,9 @@ public class ToolActivity extends AppCompatActivity {
                                             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
                                             Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
 
+                                            Date datenow = new Date(timestamp);
                                             cal2.setTime(strtodate[0]);
+                                            cal.setTime(datenow);
                                             int year = cal2.get(Calendar.YEAR);
                                             int month = cal2.get(Calendar.MONTH);
                                             int day = cal2.get(Calendar.DAY_OF_MONTH);
@@ -257,7 +269,6 @@ public class ToolActivity extends AppCompatActivity {
 
                                             }else {
 
-                                                Log.v("checkingfraisold",response.body().getSolde()+"   "+response.body().getsRetenu()+"   2"+"  "+year+"   "+yearlocal);
 
                                                 int nummonthspayable=12;
                                                 int monthamount =response.body().getSolde()/nummonthspayable;
@@ -307,6 +318,9 @@ public class ToolActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<NumChantier> call, Throwable t) {
+
+            }
+        });
 
             }
         });

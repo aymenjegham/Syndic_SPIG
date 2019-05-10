@@ -125,6 +125,9 @@ dependencies {
     implementation 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
     implementation 'com.google.firebase:firebase-functions:16.3.0'
 
+    implementation 'com.squareup.okhttp:okhttp:2.1.0'
+
+
 
 }
 

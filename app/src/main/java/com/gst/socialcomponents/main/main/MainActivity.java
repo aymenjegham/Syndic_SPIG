@@ -1157,8 +1157,7 @@ void getdateofpay() {
                                         public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                                            Log.v("checkingondate",response.body().getDate()+"  ");
-                                            try {
+                                             try {
                                                 if(response.body().getDate() != null){
                                                     strtodate[0] = format.parse (response.body().getDate());
                                                 }
@@ -1189,7 +1188,7 @@ void getdateofpay() {
                                             int yearactual=cal2.get(Calendar.YEAR);
                                             int monthactual=cal2.get(Calendar.MONTH)+1;
 
- 
+
 
                                             if((year ==yearactual && month<monthactual) || (year <yearactual)){
                                                 mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
