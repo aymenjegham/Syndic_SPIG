@@ -110,6 +110,7 @@ public class SendPicticketActivity extends AppCompatActivity {
     Uri selectedMediaUri;
     private static final String SERVER_PATH = "http://syndicspig.gloulougroupe.com";
     private String pathToStoredVideo;
+    String link;
 
 
 
@@ -351,8 +352,9 @@ public class SendPicticketActivity extends AppCompatActivity {
                                     if(selectedMediaUri !=null && bitmap ==null){
 
                                         checkPermissions();
+
                                          pathToStoredVideo = getRealPathFromURIPath(selectedMediaUri, SendPicticketActivity.this);
-                                        uploadVideoToServer(pathToStoredVideo);
+                                        uploadVideoToServer(pathToStoredVideo,titletext,description);
 
                                     }
 
@@ -414,7 +416,7 @@ public class SendPicticketActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadVideoToServer(String pathToVideoFile){
+    private void uploadVideoToServer(String pathToVideoFile,String titletext,String description){
         File videoFile = new File(pathToVideoFile);
         RequestBody videoBody = RequestBody.create(MediaType.parse("video/*"), videoFile);
         MultipartBody.Part vFile = MultipartBody.Part.createFormData("video", videoFile.getName(), videoBody);
@@ -429,8 +431,14 @@ public class SendPicticketActivity extends AppCompatActivity {
             public void onResponse(Call<ResultObject> call, Response<ResultObject> response) {
                 ResultObject result = response.body();
               if(!TextUtils.isEmpty(result.getSuccess())){
-                  Toast.makeText(SendPicticketActivity.this, "Result " + result.getSuccess(), Toast.LENGTH_LONG).show();
-                    Log.v("checkingsendingvideo",  response.body().getSuccess().toString());
+                     Log.v("checkingsendingvideo",  response.body().getSuccess());
+                     link=response.body().getSuccess();
+                  Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, link, "empty",idResidence,idAppartement,1);
+
+                  reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
+                  Toast.makeText(SendPicticketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
+                  finish();
+
                }
             }
             @Override
@@ -438,7 +446,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                 Log.v("checkingsendingvideo", "Error message " + t.getMessage());
             }
         });
-    }
+     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -487,7 +495,7 @@ public class SendPicticketActivity extends AppCompatActivity {
 
         else if (requestCode == TAKE_VIDEO && resultCode == Activity.RESULT_OK){
 
-            Toast.makeText(this, "video captured", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "video capturé", Toast.LENGTH_SHORT).show();
             selectedMediaUri = data.getData();
             if (selectedMediaUri.toString().contains("video")) {
                 videoView.setVisibility(View.VISIBLE);

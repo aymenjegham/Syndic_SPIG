@@ -106,6 +106,7 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         }else if (url != null && type==1){
 
 
+            Log.v("tcheckingvie",url);
 
             videoview.setVisibility(View.VISIBLE);
              videoview.setMediaController(new MediaController(cxt));
