@@ -21,6 +21,7 @@ import com.gst.socialcomponents.data.remote.APIService;
 import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.NumReunion;
 import com.gst.socialcomponents.model.NumUser;
@@ -47,6 +48,8 @@ public class CalendarActivity extends AppCompatActivity {
     String residence;
     String email;
     String numresidence;
+    String bloc;
+
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
     MaterialCalendarView calendarView;
@@ -83,6 +86,8 @@ public class CalendarActivity extends AppCompatActivity {
         residence = prefs.getString("sharedprefresidence", null);
         email=prefs.getString("sharedprefemail",null);
         numresidence=prefs.getString("sharedprefnumresidence",null);
+        bloc=prefs.getString("sharedprefbloc",null);
+
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -101,13 +106,13 @@ public class CalendarActivity extends AppCompatActivity {
             public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
             Integer numchantier=Integer.valueOf(response.body().getCbmarq());
 
-                mAPIService.getNumOfAppartements(numresidence,numchantier).enqueue(new Callback<NumAppart>() {
-                    @Override
-                    public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                        String iDUser=response.body().getCbmarq();
+
+                mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
+                    @Override public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                        Integer cbmarqbloc = Integer.valueOf(response.body().getCbmarq());
 
 
-                        mAPIService.getIdReunion(Integer.valueOf(iDUser)).enqueue(new Callback<List<NumReunion>>() {
+                        mAPIService.getIdReunionBlocs(cbmarqbloc).enqueue(new Callback<List<NumReunion>>() {
                             @Override
                             public void onResponse(Call<List<NumReunion>> call, Response<List<NumReunion>> response) {
                                 reunions.clear();
@@ -147,24 +152,91 @@ public class CalendarActivity extends AppCompatActivity {
                                     }
 
                                 });
+
+                                Log.v("testreposnse",response.body().get(0).getReunionid().toString());
                             }
+
                             @Override
                             public void onFailure(Call<List<NumReunion>> call, Throwable t) {
-                                Toast.makeText(CalendarActivity.this, "Pas de reunions pour vous !", Toast.LENGTH_LONG).show();
-                                Log.v("testingresult",t.getMessage()+"   3");
+
+                            }
+                        });
+
+
+
+                        mAPIService.getNumOfAppartements(numresidence,cbmarqbloc).enqueue(new Callback<NumAppart>() {
+                            @Override
+                            public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                                String iDUser=response.body().getCbmarq();
+
+
+                                mAPIService.getIdReunion(Integer.valueOf(iDUser)).enqueue(new Callback<List<NumReunion>>() {
+                                    @Override
+                                    public void onResponse(Call<List<NumReunion>> call, Response<List<NumReunion>> response) {
+                                        reunions.clear();
+                                        intuser.clear();
+                                        Integer  sizeReunion= response.body().size();
+                                        List<NumReunion> response1=response.body();
+
+                                        mAPIService.getIdUser(email).enqueue(new Callback<NumUser>() {
+                                            @Override
+                                            public void onResponse(Call<NumUser> call, Response<NumUser> response) {
+                                                numuserprofile=response.body().getCbmarq();
+                                                for (int i = 0; i < sizeReunion; i++) {
+                                                    mAPIService.getReunion(response1.get(i).getReunionid()).enqueue(new Callback<DataReunion>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataReunion> call, Response<DataReunion> response) {
+                                                            reunions.add(response);
+                                                            intuser.add(Integer.valueOf(numuserprofile));
+                                                            setupRecyclerview(reunions,intuser);
+                                                            try {
+                                                                setupCalendar(reunions);
+                                                            } catch (ParseException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public void onFailure(Call<DataReunion> call, Throwable t) {
+                                                            Log.v("testingresult",t.getMessage()+"   1");
+                                                            Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                            @Override
+                                            public void onFailure(Call<NumUser> call, Throwable t) {
+                                                Log.v("testingresult",t.getMessage()+  "  2");
+
+                                            }
+
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailure(Call<List<NumReunion>> call, Throwable t) {
+                                        Toast.makeText(CalendarActivity.this, "Pas de reunions pour vous !", Toast.LENGTH_LONG).show();
+                                        Log.v("testingresult",t.getMessage()+"   3");
+
+
+                                    }
+                                });
+
+                            }
+                            @Override
+                            public void onFailure(Call<NumAppart> call, Throwable t) {
+                                Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
+                                Log.v("testingresult",t.getMessage()+"   4");
 
 
                             }
                         });
-                    }
-                    @Override
-                    public void onFailure(Call<NumAppart> call, Throwable t) {
-                        Toast.makeText(CalendarActivity.this, "Probleme connection", Toast.LENGTH_SHORT).show();
-                        Log.v("testingresult",t.getMessage()+"   4");
 
+                    }@Override
+                    public void onFailure(Call<NumBloc> call, Throwable t) {
 
                     }
                 });
+
+
             }
 
             @Override

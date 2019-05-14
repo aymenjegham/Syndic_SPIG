@@ -116,7 +116,7 @@ public class InvoicingFragment extends Fragment {
         mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
             @Override
             public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
-                getAppartements(Integer.valueOf(response.body().getCbmarq()));
+               getAppartements(Integer.valueOf(response.body().getCbmarq()));
             }
 
             @Override
@@ -229,6 +229,8 @@ public class InvoicingFragment extends Fragment {
 
         return appartements;
     }
+
+
 /*
     private void getdata(String value) {
 

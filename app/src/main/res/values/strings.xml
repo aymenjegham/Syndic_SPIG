@@ -121,22 +121,22 @@
     <string name="posted_by_label" translatable="false">Publié par:</string>
 
     <plurals name="posts_counter_format">
-        <item quantity="one">publication</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">publication</item>
         <item quantity="other">publications</item>
     </plurals>
 
     <plurals name="likes_counter_format">
-        <item quantity="one">like</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">like</item>
         <item quantity="other">likes</item>
     </plurals>
 
     <plurals name="followers_counter_format">
-        <item quantity="one">follower</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">follower</item>
         <item quantity="other">followers</item>
     </plurals>
 
     <plurals name="followings_counter_format">
-        <item quantity="one">following</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">following</item>
         <item quantity="other">followings</item>
     </plurals>
 
@@ -203,15 +203,15 @@
     <string name="ajouter_tout" translatable="false">Ajouter tout</string>
     <string name="facturer" translatable="false">Facturer</string>
 
-    <string name="title_activity_detail_ticket">DetailTicketActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="a_propos">A propos</string>
-    <string name="notification">Notification</string>
-    <string name="reclamations">Reclamations</string>
-    <string name="administration">Administration</string>
-    <string name="calendrier">Calendrier</string>
-    <string name="galerie">Galerie</string>
+    <string name="title_activity_detail_ticket" translatable="false">DetailTicketActivity</string>
+    <string name="dummy_button" translatable="false">Dummy Button</string>
+    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
+    <string name="a_propos" translatable="false">A propos</string>
+    <string name="notification" translatable="false">Notification</string>
+     <string name="administration" translatable="false">Administration</string>
+    <string name="calendrier" translatable="false">Calendrier</string>
+    <string name="galerie" translatable="false">Galerie</string>
+    <string name="reclamations" translatable="false">Reclamations</string>
 
 
 </resources>

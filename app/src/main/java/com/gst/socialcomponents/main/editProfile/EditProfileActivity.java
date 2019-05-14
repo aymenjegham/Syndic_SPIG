@@ -54,6 +54,7 @@ import com.gst.socialcomponents.main.main.GalleryActivity;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.main.pickImageBase.PickImageActivity;
 import com.gst.socialcomponents.model.Appartements;
+import com.gst.socialcomponents.model.Blocs;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.GlideApp;
@@ -72,13 +73,16 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
      private EditText nameEditText;
     private EditText residenceEditText;
     private EditText numresidenceEditText;
+    private EditText blocresidenceEditText;
+
     private EditText numtelEditText;
     protected ImageView imageView;
     private ProgressBar avatarProgressBar;
     ArrayList<String> residences,appartements;
-    ArrayList<Integer> numresid;
+    ArrayList<Integer> blocs,numresid;
     private APIService mAPIService;
     private  Integer num_residence;
+    private  Integer bloc_residence;
     private CardView cardviewinformaion;
     private LinearLayout linearlayout;
 
@@ -95,6 +99,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         imageView = findViewById(R.id.drawer_img);
         nameEditText = findViewById(R.id.nameEditText);
         numresidenceEditText=findViewById(R.id.numresidenceEditText);
+        blocresidenceEditText=findViewById(R.id.blocresidenceEditText);
         residenceEditText = findViewById(R.id.simplespinner);
         numtelEditText=findViewById(R.id.numtelEditText);
         linearlayout=findViewById(R.id.rootviewlayout);
@@ -158,7 +163,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
                             public void onClick(DialogInterface dialog, int item) {
                                 residenceEditText.setText(Residences[item].toString());
                               num_residence=Integer.valueOf(NumResidences[item].toString());
-                                getAppartements(num_residence);
+                                getAppartementsbloc(num_residence);
 
                             }
                         });
@@ -185,12 +190,66 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         return residences;
     }
 
-    public ArrayList<String> getAppartements(Integer numreside) {
+    public ArrayList<String> getAppartementsbloc(Integer numreside) {
         appartements = new ArrayList() ;
-        mAPIService.getListOfAppartements(numreside).enqueue(new Callback<List<Appartements>>() {
+        blocs =new ArrayList<>();
+
+        mAPIService.getListOfAppartementsbloc(numreside).enqueue(new Callback<List<Blocs>>() {
+
+            @Override
+            public void onResponse(Call<List<Blocs>> call, Response<List<Blocs>> response) {
+
+                for(int i=0;i<response.body().size();i++){
+                    appartements.add(response.body().get(i).getB_intitule());
+                    blocs.add(response.body().get(i).getCbmarq());
+                }
+                blocresidenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final CharSequence[] Appartementsbloc = appartements.toArray(new String[appartements.size()]);
+                        final Integer[] blocResidences = blocs.toArray(new Integer[blocs.size()]);
+
+
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
+                        dialogBuilder.setTitle("Blocs");
+                        dialogBuilder.setItems(Appartementsbloc, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                blocresidenceEditText.setText(Appartementsbloc[item].toString());
+                                bloc_residence=Integer.valueOf(blocResidences[item].toString());
+                                getAppartements(bloc_residence);
+                            }
+                        });
+                        AlertDialog alertDialogObject = dialogBuilder.create();
+                        alertDialogObject.show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<Blocs>> call, Throwable t) {
+                blocresidenceEditText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Toast.makeText(EditProfileActivity.this, "pas d'appartements disponibles a ce moment, réesayer ultérieurement", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+
+        return appartements;
+    }
+
+    public ArrayList<String> getAppartements(Integer bloc) {
+        appartements = new ArrayList() ;
+        mAPIService.getListOfAppartements(bloc).enqueue(new Callback<List<Appartements>>() {
 
             @Override
             public void onResponse(Call<List<Appartements>> call, Response<List<Appartements>> response) {
+
 
                 for(int i=0;i<response.body().size();i++){
                     appartements.add(response.body().get(i).getA_intitule());
@@ -202,7 +261,7 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
                         final CharSequence[] Appartements = appartements.toArray(new String[appartements.size()]);
 
                         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(EditProfileActivity.this);
-                        dialogBuilder.setTitle("Appartements");
+                        dialogBuilder.setTitle("appartements");
                         dialogBuilder.setItems(Appartements, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int item) {
                                 numresidenceEditText.setText(Appartements[item].toString());
@@ -230,8 +289,6 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
 
         return appartements;
     }
-
-
 
 
 
@@ -284,6 +341,11 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
     @Override
     public void setToken(String token) {
 
+    }
+
+    @Override
+    public void setBloc(String bloc) {
+        blocresidenceEditText.setText(bloc);
     }
 
     @Override
@@ -343,6 +405,10 @@ public class EditProfileActivity<V extends EditProfileView, P extends EditProfil
         return numtelEditText.getText().toString();
     }
 
+    @Override
+    public String getBlocText() {
+        return blocresidenceEditText.getText().toString();
+    }
 
 
     @Override

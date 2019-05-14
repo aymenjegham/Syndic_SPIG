@@ -23,10 +23,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -95,6 +98,7 @@ import com.gst.socialcomponents.main.search.SearchActivity;
 import com.gst.socialcomponents.model.Factureitemdata;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profilefire;
@@ -102,6 +106,12 @@ import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.AnimationUtils;
 import com.gst.socialcomponents.utils.LogUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,6 +154,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     String email;
     boolean isModerator;
     String numresidence;
+    String bloc;
     private Menu menu;
     private Menu menuDr;
     private APIService mAPIService;
@@ -180,6 +191,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         presenter.onProfileMenuActionClicked();
+
+
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -368,12 +381,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                     token=profile.gettoken();
                     email=profile.getEmail();
                     numresidence=profile.getNumresidence();
+                    bloc=profile.getBloc();
 
                     SharedPreferences.Editor editor = getSharedPreferences("Myprefsfile",MODE_PRIVATE).edit();
                     editor.putString("sharedprefresidence", residence);
                     editor.putBoolean("sharedprefismoderator",isModerator);
                     editor.putString("sharedprefemail",email);
                     editor.putString("sharedprefnumresidence",numresidence);
+                    editor.putString("sharedprefbloc",bloc);
                     editor.apply();
 
 
@@ -1138,100 +1153,115 @@ void getdateofpay() {
                      Profilefire profilefire=dataSnapshot.getValue(Profilefire.class);
                      String numappart= profilefire.getNumresidence();
                     String intituleResidence =profilefire.getResidence();
+                    String bloc = profilefire.getBloc();
 
                     mAPIService = ApiUtils.getAPIService();
                     mAPIService.getNumChantier(intituleResidence).enqueue(new Callback<NumChantier>() {
                         @Override
                         public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                             Integer numchantier=Integer.valueOf(response.body().getCbmarq());
-                            mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
+
+                            mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                                 @Override
-                                public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                                      Integer numap=Integer.valueOf(response.body().getCbmarq());
-
-
-
-                                    mAPIService.getSoldeappartement(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<SoldeAppartement>() {
-
+                                public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                                     Integer cbmarqbloc=Integer.valueOf(response.body().getCbmarq());
+                                    mAPIService.getNumOfAppartements(numappart,cbmarqbloc).enqueue(new Callback<NumAppart>() {
                                         @Override
-                                        public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
-                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                                            Integer numap=Integer.valueOf(response.body().getCbmarq());
 
-                                             try {
-                                                if(response.body().getDate() != null){
-                                                    strtodate[0] = format.parse (response.body().getDate());
-                                                }
-                                                else{
-                                                    return;
-                                                }
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
+                                            mAPIService.getSoldeappartement(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<SoldeAppartement>() {
 
+                                                @Override
+                                                public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+                                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-
-                                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-                                            Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
-
-
-
-
-
-                                            Date datenow = new Date(timestamp);
-
-
-                                            cal.setTime(strtodate[0]);
-                                            cal2.setTime(datenow);
-                                            int year = cal.get(Calendar.YEAR);
-                                            int month = cal.get(Calendar.MONTH);
-                                            int day = cal.get(Calendar.DAY_OF_MONTH);
-                                            int yearactual=cal2.get(Calendar.YEAR);
-                                            int monthactual=cal2.get(Calendar.MONTH)+1;
+                                                    try {
+                                                        if(response.body().getDate() != null){
+                                                            strtodate[0] = format.parse (response.body().getDate());
+                                                        }
+                                                        else{
+                                                            return;
+                                                        }
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
+                                                    }
 
 
 
-                                            if((year ==yearactual && month<monthactual) || (year <yearactual)){
-                                                mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+                                                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                                                    Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
 
-                                                    @Override
-                                                    public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
 
-                                                        int periode=12;
 
-                                                        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                                                        alertDialog.setTitle("Frais Syndic");
-                                                        alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez consulter votre rubrique reglement et payez le montant adéquat");//pour les "+periode+" mois prochains");
 
-                                                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                dialog.dismiss();
+
+                                                    Date datenow = new Date(timestamp);
+
+
+                                                    cal.setTime(strtodate[0]);
+                                                    cal2.setTime(datenow);
+                                                    int year = cal.get(Calendar.YEAR);
+                                                    int month = cal.get(Calendar.MONTH);
+                                                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                                                    int yearactual=cal2.get(Calendar.YEAR);
+                                                    int monthactual=cal2.get(Calendar.MONTH)+1;
+
+
+
+                                                    if((year ==yearactual && month<monthactual) || (year <yearactual)){
+                                                        mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+
+                                                            @Override
+                                                            public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+
+                                                                int periode=12;
+
+                                                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                                                alertDialog.setTitle("Frais Syndic");
+                                                                alertDialog.setMessage("votre solde pour les frais syndic est epuisée,veuillez consulter votre rubrique reglement et payez le montant adéquat");//pour les "+periode+" mois prochains");
+
+                                                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                });
+                                                                alertDialog.show();
+
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                                                Log.v("tesstingvalues",t.getMessage()+"  1");
+
                                                             }
                                                         });
-                                                        alertDialog.show();
-
                                                     }
+                                                }
+                                                @Override
+                                                public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+                                                    Log.v("tesstingvalues",t.getMessage()+"  2");
 
-                                                    @Override
-                                                    public void onFailure(Call<InfoSyndic> call, Throwable t) {
-                                                        Log.v("tesstingvalues",t.getMessage()+"  1");
-
-                                                    }
-                                                });
-                                            }
+                                                }
+                                            });
                                         }
                                         @Override
-                                        public void onFailure(Call<SoldeAppartement> call, Throwable t) {
-                                            Log.v("tesstingvalues",t.getMessage()+"  2");
+                                        public void onFailure(Call<NumAppart> call, Throwable t) {
+                                            Log.v("tesstingvalues",t.getMessage()+"  3");
 
                                         }
                                     });
+
                                 }
+
                                 @Override
-                                public void onFailure(Call<NumAppart> call, Throwable t) {
-                                    Log.v("tesstingvalues",t.getMessage()+"  3");
+                                public void onFailure(Call<NumBloc> call, Throwable t) {
 
                                 }
                             });
+
+
+
                         }
 
                         @Override

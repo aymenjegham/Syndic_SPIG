@@ -28,6 +28,7 @@ public interface EditProfileView extends PickImageView {
     void setNumresidence(String username);
     void setMobile(String username);
     void setToken(String token);
+    void setBloc(String bloc);
 
 
     void setProfilePhoto(String photoUrl);
@@ -36,6 +37,7 @@ public interface EditProfileView extends PickImageView {
     String getResidenceText();
     String getNumresidenceText();
     String getMobileText();
+    String getBlocText();
 
 
     void setNameError(String string);

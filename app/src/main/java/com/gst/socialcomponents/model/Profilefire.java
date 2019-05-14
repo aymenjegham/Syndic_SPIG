@@ -13,9 +13,10 @@ public class Profilefire {
     private String email;
     private boolean active;
     private boolean type;
+    private String bloc;
 
 
-    public Profilefire(String residence, String numresidence, String mobile, String photoUrl, long likesCount, String token, String id, String username, String email, boolean active, boolean type) {
+    public Profilefire(String residence, String numresidence, String mobile, String photoUrl, long likesCount, String token, String id, String username, String email, boolean active, boolean type,String bloc) {
         this.residence = residence;
         this.numresidence = numresidence;
         this.mobile = mobile;
@@ -27,6 +28,7 @@ public class Profilefire {
         this.active = active;
         this.type = type;
         this.token=token;
+        this.bloc=bloc;
     }
 
     public Profilefire() {
@@ -118,5 +120,13 @@ public class Profilefire {
 
     public void setType(boolean type) {
         this.type = type;
+    }
+
+    public String getBloc() {
+        return bloc;
+    }
+
+    public void setBloc(String bloc) {
+        this.bloc = bloc;
     }
 }

@@ -92,6 +92,8 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                         view.setNumresidence(profile.getNumresidence());
                         view.setMobile(profile.getMobile());
                         view.setToken(profile.getToken());
+                        view.setBloc(profile.getBloc());
+
 
                         if (profile.getPhotoUrl() != null) {
                             view.setProfilePhoto(profile.getPhotoUrl());
@@ -116,6 +118,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                 String residence = view.getResidenceText().trim();
                 String numresidence=view.getNumresidenceText().trim();
                 String mobile=view.getMobileText().trim();
+                String bloc=view.getBlocText().trim();
 
                 boolean cancel = false;
 
@@ -148,6 +151,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                     profile.setMobile(mobile);
                     profile.setToken( FirebaseInstanceId.getInstance().getToken());
                     profile.setActive(ismoderator);
+                    profile.setBloc(bloc);
 
 
                     mAPIService = ApiUtils.getAPIService();
@@ -203,7 +207,7 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                          Toast.makeText(context, "Profile sauvegardé avec succées", Toast.LENGTH_SHORT).show();
                      }else{
                          Toast.makeText(context, "Propleme connection", Toast.LENGTH_SHORT).show();
-                         Log.v("loggingresponse", "probleme connectivité");
+                         Log.v("testingcreateprofile",response.body());
 
                      }
                 }

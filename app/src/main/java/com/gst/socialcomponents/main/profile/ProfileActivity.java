@@ -76,6 +76,7 @@ import com.gst.socialcomponents.managers.FollowManager;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Profile;
@@ -132,7 +133,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     public Boolean typeuser;
     private APIService mAPIService;
-    String numappart,residence;
+    String numappart,residence,bloc;
 
 
     @Override
@@ -205,6 +206,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
                     residence=profile.getResidence();
                     numappart=profile.getNumresidence();
+                    bloc=profile.getBloc();
                     if (!profile.isActive()) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -534,8 +536,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
     @Override
     public void setid(String id) {
-        Log.v("gyugyugy",id);
-        String finalFirebaseUser = firebaseUser.getUid();
+         String finalFirebaseUser = firebaseUser.getUid();
 
         if(id.equals(finalFirebaseUser)){
             frais.setVisibility(View.VISIBLE);
@@ -545,30 +546,56 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                 @Override
                 public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                     Integer numchantier=Integer.valueOf(response.body().getCbmarq());
-                    mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
+
+
+                    mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                         @Override
-                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                            Integer numap=Integer.valueOf(response.body().getCbmarq());
-                            mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+                        public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+
+                            mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
                                 @Override
-                                public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
-                                    frais.setVisibility(View.VISIBLE);
-                                    Integer fraissyndic=response.body().getFraisupposed();
-                                    frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
+                                public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+
+
+                                    Integer numap=Integer.valueOf(response.body().getCbmarq());
+                                    mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+                                        @Override
+                                        public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                            frais.setVisibility(View.VISIBLE);
+                                            Integer fraissyndic=response.body().getFraisupposed();
+                                            frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<InfoSyndic> call, Throwable t) {
+
+                                        }
+                                    });
                                 }
 
                                 @Override
-                                public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                public void onFailure(Call<NumAppart> call, Throwable t) {
 
                                 }
                             });
+
+
                         }
 
                         @Override
-                        public void onFailure(Call<NumAppart> call, Throwable t) {
+                        public void onFailure(Call<NumBloc> call, Throwable t) {
+                            Log.v("chekingnumappart","failed"+t.getMessage());
 
                         }
                     });
+
+
+
+
+
+
+
+
                 }
 
                 @Override

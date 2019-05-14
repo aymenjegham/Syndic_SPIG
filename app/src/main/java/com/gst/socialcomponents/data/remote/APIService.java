@@ -4,10 +4,12 @@ import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.PostProfile;
 import com.gst.socialcomponents.model.AcceptInfo;
 import com.gst.socialcomponents.model.Appartements;
+import com.gst.socialcomponents.model.Blocs;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.DataReunion;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.NumPrincipal;
 import com.gst.socialcomponents.model.NumReunion;
@@ -28,8 +30,7 @@ import retrofit2.http.Query;
 
 public interface APIService {
 
-   //@POST("/servicesMAC/posts.php")
-   @POST("/posts.php")
+    @POST("/posts.php")
     @FormUrlEncoded
     Call<String> savePost(  @Field("photoUrl") String photoUrl,
                             @Field("active") Boolean active,
@@ -52,6 +53,10 @@ public interface APIService {
     Call<List<Chantiers>> getListOfChantiers();
 
 
+    @POST("/getAppartementsbloc.php")
+    @FormUrlEncoded
+    Call<List<Blocs>> getListOfAppartementsbloc(@Field("cbmarq") Integer cbmarq);
+
     @POST("/getAppartements.php")
     @FormUrlEncoded
     Call<List<Appartements>> getListOfAppartements(@Field("cbmarq") Integer cbmarq);
@@ -64,6 +69,11 @@ public interface APIService {
     @POST("/getNumChantier.php")
     @FormUrlEncoded
     Call<NumChantier> getNumChantier(@Field("a_intitule") String  a_intitule);
+
+    @POST("/getbloc.php")
+    @FormUrlEncoded
+    Call<NumBloc> getbloc(@Field("b_intitule") String  b_intitule,
+                          @Field("cbmarq") Integer  cbmarq);
 
     @POST("/getInfoSyndic.php")
     @FormUrlEncoded
@@ -90,6 +100,10 @@ public interface APIService {
     @POST("/getIdReunion.php")
     @FormUrlEncoded
     Call<List<NumReunion>> getIdReunion(@Field("profile-id") Integer  profileid);
+
+    @POST("/getIdReunionBlocs.php")
+    @FormUrlEncoded
+    Call<List<NumReunion>> getIdReunionBlocs(@Field("profile-id") Integer  profileid);
 
     @POST("/getReunion.php")
     @FormUrlEncoded

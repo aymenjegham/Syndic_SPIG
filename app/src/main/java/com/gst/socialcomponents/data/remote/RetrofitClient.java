@@ -18,8 +18,8 @@ public class RetrofitClient {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(1, TimeUnit.MINUTES)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(59, TimeUnit.SECONDS)
+                    .writeTimeout(59, TimeUnit.SECONDS)
                     .build();
         }
 

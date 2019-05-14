@@ -1,17 +1,21 @@
 package com.gst.socialcomponents.main.main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +50,8 @@ import com.google.firebase.storage.UploadTask;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.data.remote.APIService;
 import com.gst.socialcomponents.data.remote.ApiUtils;
+import com.gst.socialcomponents.data.remote.ResultObject;
+import com.gst.socialcomponents.data.remote.VideoInterface;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumChantier;
@@ -54,14 +60,18 @@ import com.gst.socialcomponents.model.Ticket;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SendPicticketActivity extends AppCompatActivity {
 
@@ -98,6 +108,10 @@ public class SendPicticketActivity extends AppCompatActivity {
     VideoView videoView;
 
     Uri selectedMediaUri;
+    private static final String SERVER_PATH = "http://syndicspig.gloulougroupe.com";
+    private String pathToStoredVideo;
+
+
 
 
 
@@ -336,55 +350,10 @@ public class SendPicticketActivity extends AppCompatActivity {
 
                                     if(selectedMediaUri !=null && bitmap ==null){
 
- /*
-                                        FirebaseStorage storage = FirebaseStorage.getInstance();
-                                        StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/images");
-                                        StorageReference imagesRef = storageRef.child(selectedMediaUri.getLastPathSegment());
-                                        UploadTask uploadTask = imagesRef.putFile(selectedMediaUri);
-                                        ProgressDialog pd = new ProgressDialog(SendPicticketActivity.this);
-                                        pd.setMessage("envoi");
-                                        pd.show();
-                                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(SendPicticketActivity.this, "Connection échoué", Toast.LENGTH_SHORT).show();
-                                                pd.dismiss();
-                                            }
-                                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                                        checkPermissions();
+                                         pathToStoredVideo = getRealPathFromURIPath(selectedMediaUri, SendPicticketActivity.this);
+                                        uploadVideoToServer(pathToStoredVideo);
 
-                                                String task2=taskSnapshot.getMetadata().getReference().getName();
-
-                                                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                    @Override
-                                                    public void onSuccess(Uri uri) {
-
-                                                        photoLink = uri.toString();
-                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement,1);
-                                                        reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
-                                                        pd.dismiss();
-                                                        bitmap = null;
-                                                        Toast.makeText(SendPicticketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                        if(checkbxpub.isChecked()){
-
-                                                            Post post = new Post();
-                                                            post.setTitle(titletext);
-                                                            post.setModerator("false");
-                                                            post.setResidence(residence);
-                                                            post.setDescription(description);
-                                                            post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                                            post.setImageTitle(task2);
-                                                            reference.child("posts").push().setValue(post);
-
-                                                        }
-                                                    }
-                                                });
-
-                                            }
-                                        });  */
                                     }
 
                                 }
@@ -410,6 +379,66 @@ public class SendPicticketActivity extends AppCompatActivity {
         });
 
 }
+
+
+    public boolean checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                 return true;
+            } else {
+
+                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else {
+             return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+
+        }
+    }
+    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    private void uploadVideoToServer(String pathToVideoFile){
+        File videoFile = new File(pathToVideoFile);
+        RequestBody videoBody = RequestBody.create(MediaType.parse("video/*"), videoFile);
+        MultipartBody.Part vFile = MultipartBody.Part.createFormData("video", videoFile.getName(), videoBody);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(SERVER_PATH)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        VideoInterface vInterface = retrofit.create(VideoInterface.class);
+        Call<ResultObject>  serverCom = vInterface.uploadVideoToServer(vFile);
+        serverCom.enqueue(new Callback<ResultObject>() {
+            @Override
+            public void onResponse(Call<ResultObject> call, Response<ResultObject> response) {
+                ResultObject result = response.body();
+              if(!TextUtils.isEmpty(result.getSuccess())){
+                  Toast.makeText(SendPicticketActivity.this, "Result " + result.getSuccess(), Toast.LENGTH_LONG).show();
+                    Log.v("checkingsendingvideo",  response.body().getSuccess().toString());
+               }
+            }
+            @Override
+            public void onFailure(Call<ResultObject> call, Throwable t) {
+                Log.v("checkingsendingvideo", "Error message " + t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

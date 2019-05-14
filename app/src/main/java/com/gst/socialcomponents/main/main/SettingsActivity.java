@@ -69,6 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
         mAPIService.getPrincipal(email).enqueue(new Callback<NumPrincipal>() {
             @Override
             public void onResponse(Call<NumPrincipal> call, Response<NumPrincipal> response) {
+
                  if(response.body().getCbmarq() == 1){
                     getdata();
                 }
