@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearlayoutpost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,16 +22,31 @@
         card_view:cardElevation="@dimen/post_card_elevation"
         card_view:cardUseCompatPadding="true">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+
+            <VideoView
+                android:id="@+id/postvideoview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/post_list_item_image_height"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline21"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/postImageView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/post_list_item_image_height"
-                android:layout_marginBottom="@dimen/intrinsic_padding"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline21"
+                app:layout_constraintEnd_toEndOf="@+id/postvideoview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.gst.socialcomponents.views.CircularImageView
                 android:id="@+id/authorImageView"
@@ -38,9 +54,13 @@
                 android:layout_height="@dimen/post_list_item_author_image_side"
                 android:layout_alignTop="@+id/postImageView"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/post_list_item_author_image_margin"
-                android:layout_marginRight="@dimen/intrinsic_padding"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 app:border="false"
+                app:layout_constraintBottom_toBottomOf="@+id/guideline21"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideline21"
                 app:shadow="true"
                 app:shadow_color="@color/circle_image_shadow"
                 app:shadow_radius="@dimen/circle_image_shadow_radius" />
@@ -51,13 +71,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/postImageView"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="@dimen/intrinsic_padding"
                 android:layout_toStartOf="@+id/authorImageView"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
-                android:textAppearance="@style/TextAppearance.Title" />
+                android:textAppearance="@style/TextAppearance.Title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideline21" />
 
             <TextView
                 android:id="@+id/detailsTextView"
@@ -71,7 +92,9 @@
                 android:maxLines="2"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
-                android:textAppearance="@style/TextAppearance.Second" />
+                android:textAppearance="@style/TextAppearance.Second"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
             <include
                 android:id="@+id/countersContainer"
@@ -79,11 +102,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detailsTextView"
-                android:layout_marginLeft="@dimen/intrinsic_padding"
-                android:layout_marginRight="@dimen/intrinsic_padding"
-                android:layout_toStartOf="@+id/authorImageView" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toStartOf="@+id/authorImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailsTextView" />
 
-        </RelativeLayout>
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="200dp" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 

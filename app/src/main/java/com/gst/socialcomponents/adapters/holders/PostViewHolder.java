@@ -20,6 +20,8 @@ package com.gst.socialcomponents.adapters.holders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +29,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,6 +74,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private ViewGroup likeViewGroup;
     private CardView cardview;
     private LinearLayout linearlayout;
+    private VideoView postvideoview ;
 
     private ProfileManager profileManager;
     protected PostManager postManager;
@@ -98,8 +103,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         likeViewGroup = view.findViewById(R.id.likesContainer);
         cardview=view.findViewById(R.id.card_view);
         linearlayout =view.findViewById(R.id.linearlayoutpost);
+        postvideoview=view.findViewById(R.id.postvideoview);
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
+        postImageView.setVisibility(View.VISIBLE);
 
         profileManager = ProfileManager.getInstance(context.getApplicationContext());
         postManager = PostManager.getInstance(context.getApplicationContext());
@@ -157,6 +164,37 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
+
+        }
+
+
+        if(post.isIsvideo()){
+             postImageView.setVisibility(View.GONE);
+
+            String url =post.getImageTitle();
+
+            postvideoview.setVisibility(View.VISIBLE);
+            postvideoview.setMediaController(new MediaController(context));
+            postvideoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
+            postvideoview.requestFocus();
+            postvideoview.start();
+
+
+            postvideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                public void onPrepared(MediaPlayer mp) {
+                   // progDailog.setVisibility(View.GONE);
+                }
+            });
+
+            postvideoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    postvideoview.start();
+                }
+            });
+
+
         }
 
 
@@ -166,8 +204,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             linearlayout.setBackgroundColor(0xffB22222);
          }else {
             linearlayout.setBackgroundColor(Color.WHITE);
-
         }
+
+
 
     }
 

@@ -303,6 +303,7 @@ public class PostInteractor {
                             post.setCreatedDate(createdDate);
                             post.setModerator((String) mapObj.get("moderator"));
                             post.setResidence((String) mapObj.get("residence"));
+                            post.setIsvideo((boolean) mapObj.get("isvideo"));
 
                             if (mapObj.containsKey("commentsCount")) {
                                 post.setCommentsCount((long) mapObj.get("commentsCount"));

@@ -106,11 +106,10 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         }else if (url != null && type==1){
 
 
-            Log.v("tcheckingvie",url);
 
             videoview.setVisibility(View.VISIBLE);
              videoview.setMediaController(new MediaController(cxt));
-            videoview.setVideoURI(Uri.parse(url));
+            videoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
             videoview.requestFocus();
             videoview.start();
 

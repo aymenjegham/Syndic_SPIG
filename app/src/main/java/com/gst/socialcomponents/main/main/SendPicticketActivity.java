@@ -318,6 +318,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                                             Post post = new Post();
                                                             post.setTitle(titletext);
                                                             post.setModerator("false");
+                                                            post.setIsvideo(false);
                                                             post.setResidence(residence);
                                                             post.setDescription(description);
                                                             post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -333,17 +334,7 @@ public class SendPicticketActivity extends AppCompatActivity {
                                         Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, "null", "empty",idResidence,idAppartement,2);
                                         reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                                         Toast.makeText(SendPicticketActivity.this, "Reclamation envoyée avec sucées", Toast.LENGTH_SHORT).show();
-                                        if(checkbxpub.isChecked()){
 
-                                            Post post = new Post();
-                                            post.setTitle(titletext);
-                                            post.setModerator("false");
-                                            post.setResidence(residence);
-                                            post.setDescription(description);
-                                            post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                            post.setImageTitle("web_hi_res_512.png");
-                                            reference.child("posts").push().setValue(post);
-                                        }
 
                                         finish();
                                     }
@@ -351,10 +342,10 @@ public class SendPicticketActivity extends AppCompatActivity {
 
                                     if(selectedMediaUri !=null && bitmap ==null){
 
-                                        checkPermissions();
 
                                          pathToStoredVideo = getRealPathFromURIPath(selectedMediaUri, SendPicticketActivity.this);
                                         uploadVideoToServer(pathToStoredVideo,titletext,description);
+
 
                                     }
 
@@ -426,6 +417,10 @@ public class SendPicticketActivity extends AppCompatActivity {
                 .build();
         VideoInterface vInterface = retrofit.create(VideoInterface.class);
         Call<ResultObject>  serverCom = vInterface.uploadVideoToServer(vFile);
+        checkPermissions();
+        ProgressDialog pd = new ProgressDialog(SendPicticketActivity.this);
+        pd.setMessage("envoi");
+        pd.show();
         serverCom.enqueue(new Callback<ResultObject>() {
             @Override
             public void onResponse(Call<ResultObject> call, Response<ResultObject> response) {
@@ -437,7 +432,20 @@ public class SendPicticketActivity extends AppCompatActivity {
 
                   reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
                   Toast.makeText(SendPicticketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
+                  if(checkbxpub.isChecked()){
+
+                      Post post = new Post();
+                      post.setTitle(titletext);
+                      post.setModerator("false");
+                      post.setIsvideo(true);
+                      post.setResidence(residence);
+                      post.setDescription(description);
+                      post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                      post.setImageTitle(link);
+                      reference.child("posts").push().setValue(post);
+                  }
                   finish();
+                  pd.dismiss();
 
                }
             }

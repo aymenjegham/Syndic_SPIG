@@ -26,9 +26,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Kristina on 10/28/16.
- */
 
 public class Post implements Serializable, LazyLoading {
 
@@ -46,6 +43,15 @@ public class Post implements Serializable, LazyLoading {
     private ItemType itemType;
      private String residence;
      private String moderator;
+     private boolean isvideo;
+
+    public boolean isIsvideo() {
+        return isvideo;
+    }
+
+    public void setIsvideo(boolean isvideo) {
+        this.isvideo = isvideo;
+    }
 
     public String getModerator() {
         return moderator;
@@ -175,6 +181,7 @@ public class Post implements Serializable, LazyLoading {
         result.put("createdDateText", FormatterUtil.getFirebaseDateFormat().format(new Date(createdDate)));
         result.put("moderator",moderator);
         result.put("residence",residence);
+        result.put("isvideo",isvideo);
 
 
         return result;

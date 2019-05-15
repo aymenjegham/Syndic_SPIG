@@ -55,6 +55,7 @@ public class CreatePostPresenter extends BaseCreatePostPresenter<CreatePostView>
             post.setTitle(title);
             post.setModerator(ismod);
             post.setResidence(reside);
+            post.setIsvideo(false);
              post.setDescription(description);
             post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
             postManager.createOrUpdatePostWithImage(view.getImageUri(), this, post);

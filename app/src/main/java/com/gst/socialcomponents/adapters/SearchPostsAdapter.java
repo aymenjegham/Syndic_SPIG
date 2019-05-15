@@ -93,6 +93,7 @@ public class SearchPostsAdapter extends BasePostsAdapter {
         postList.clear();
         postList.addAll(list);
         notifyDataSetChanged();
+
     }
 
     public void removeSelectedPost() {

@@ -43,10 +43,6 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by Kristina on 10/31/16.
- */
-
 public class PostsAdapter extends BasePostsAdapter {
     public static final String TAG = PostsAdapter.class.getSimpleName();
 
