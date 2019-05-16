@@ -42,6 +42,9 @@ public interface PostDetailsView extends BaseView {
 
     void loadPostDetailImage(String imagePath);
 
+    void loadvideo(String videolink);
+
+
     void loadAuthorPhoto(String photoUrl);
 
     void setAuthorName(String username);

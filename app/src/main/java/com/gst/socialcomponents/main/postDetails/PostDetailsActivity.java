@@ -22,6 +22,8 @@ import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +35,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,9 +47,11 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gst.socialcomponents.R;
@@ -113,6 +118,8 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     private boolean isEnterTransitionFinished = false;
     private Button sendButton;
 
+    private VideoView postvideoviewdetail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +154,10 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
         commentsProgressBar = findViewById(R.id.commentsProgressBar);
         warningCommentsTextView = findViewById(R.id.warningCommentsTextView);
         sendButton = findViewById(R.id.sendButton);
+        postvideoviewdetail=findViewById(R.id.postvidedetail);
+
+
+        postImageView.setVisibility(View.VISIBLE);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isAuthorAnimationRequired) {
             authorImageView.setScaleX(0);
@@ -362,11 +373,41 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     }
 
     @Override
+    public void loadvideo(String videolink) {
+
+        progressBar.setVisibility(View.VISIBLE);
+        postImageView.setVisibility(View.GONE);
+        postvideoviewdetail.setVisibility(View.VISIBLE);
+        postvideoviewdetail.setMediaController(new MediaController(this));
+        postvideoviewdetail.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+videolink));
+        postvideoviewdetail.requestFocus();
+        postvideoviewdetail.start();
+
+
+        postvideoviewdetail.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mp) {
+             }
+        });
+
+        postvideoviewdetail.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                postvideoviewdetail.start();
+            }
+        });
+
+
+    }
+
+    @Override
     public void loadPostDetailImage(String imageTitle) {
+        postvideoviewdetail.setVisibility(View.GONE);
         postManager.loadImageMediumSize(GlideApp.with(this), imageTitle, postImageView, () -> {
             scheduleStartPostponedTransition(postImageView);
             progressBar.setVisibility(View.GONE);
-        });
+
+         });
     }
 
     @Override

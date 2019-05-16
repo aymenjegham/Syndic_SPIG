@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +23,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -53,7 +57,8 @@ public class TicketDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     TabLayout tablayout;
     public ActionBar actionBar;
-
+    private VideoView videoview ;
+    Integer isvideo;
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -65,6 +70,7 @@ public class TicketDetailActivity extends AppCompatActivity {
        TouchImageView img = (TouchImageView) findViewById(R.id.imageViewdetail);
        commentEt=findViewById(R.id.commentEditText);
        submitBtn=findViewById(R.id.sendButton);
+       videoview=findViewById(R.id.videoView4);
 
 
 
@@ -89,6 +95,7 @@ public class TicketDetailActivity extends AppCompatActivity {
         String TicketKey;
 
 
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -100,6 +107,7 @@ public class TicketDetailActivity extends AppCompatActivity {
                 ImageUrl= extras.getString("ImageUrl");
                 UserKey= extras.getString("UserKey");
                 TicketKey= extras.getString("TicketKey");
+                isvideo=extras.getInt("isvid");
 
 
             }
@@ -111,6 +119,8 @@ public class TicketDetailActivity extends AppCompatActivity {
 
 
         }
+
+
 
 
         if(ImageUrl.equals("null")){
@@ -155,43 +165,75 @@ public class TicketDetailActivity extends AppCompatActivity {
             }
         });}
         else if(!ImageUrl.equals("null")){
-             ProgressDialog pd = new ProgressDialog(TicketDetailActivity.this);
-            pd.setMessage("chargement d'image");
+
+            ProgressDialog pd = new ProgressDialog(TicketDetailActivity.this);
+            pd.setMessage("chargement de media");
             pd.show();
 
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .error(R.drawable.ic_gallery)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .priority(Priority.HIGH);
+            if(isvideo == 1){
+                img.setVisibility(View.GONE);
+                videoview.setVisibility(View.VISIBLE);
 
-            Glide.with(img.getContext())
-                    .load(ImageUrl)
-                    .apply(options)
-                    .listener(new RequestListener<Drawable>() {
+                videoview.setVisibility(View.VISIBLE);
+                videoview.setMediaController(new MediaController(this));
+                videoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+ImageUrl));
+                videoview.requestFocus();
+                videoview.start();
 
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                             pd.dismiss();
-                            img.setImageResource(R.drawable.ic_gallery);
-                             return false;
-                        }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                             pd.dismiss();
+                videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
-                            return false;
-                        }
-                    })
-                    .into(img);
-            pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    img.setImageResource(R.drawable.ic_gallery);
+                    public void onPrepared(MediaPlayer mp) {
+                    pd.dismiss();
+                    }
+                });
 
-                }
-            });
+                videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        videoview.start();
+                    }
+                });
+
+            }
+            else if(isvideo == 0){
+                RequestOptions options = new RequestOptions()
+                        .centerCrop()
+                        .error(R.drawable.ic_gallery)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .priority(Priority.HIGH);
+
+                Glide.with(img.getContext())
+                        .load(ImageUrl)
+                        .apply(options)
+                        .listener(new RequestListener<Drawable>() {
+
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                pd.dismiss();
+                                img.setImageResource(R.drawable.ic_gallery);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                pd.dismiss();
+
+                                return false;
+                            }
+                        })
+                        .into(img);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        img.setImageResource(R.drawable.ic_gallery);
+
+                    }
+                });
+            }
+
+
+
 
         }
 

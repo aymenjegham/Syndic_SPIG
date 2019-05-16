@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -81,6 +82,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private LikeController likeController;
     private BaseActivity baseActivity;
+    private ProgressBar progressBar ;
 
     public PostViewHolder(View view, final OnClickListener onClickListener, BaseActivity activity) {
         this(view, onClickListener, activity, true);
@@ -104,6 +106,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         cardview=view.findViewById(R.id.card_view);
         linearlayout =view.findViewById(R.id.linearlayoutpost);
         postvideoview=view.findViewById(R.id.postvideoview);
+        progressBar=view.findViewById(R.id.progressBar3);
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
         postImageView.setVisibility(View.VISIBLE);
@@ -169,6 +172,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
 
         if(post.isIsvideo()){
+            progressBar.setVisibility(View.VISIBLE);
              postImageView.setVisibility(View.GONE);
 
             String url =post.getImageTitle();
@@ -183,7 +187,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             postvideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
-                   // progDailog.setVisibility(View.GONE);
+                   progressBar.setVisibility(View.GONE);
                 }
             });
 

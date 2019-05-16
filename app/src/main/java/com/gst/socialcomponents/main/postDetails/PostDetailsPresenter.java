@@ -110,6 +110,11 @@ class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
             view.setDescription(post.getDescription());
             view.loadPostDetailImage(post.getImageTitle());
 
+            if(post.isIsvideo()){
+                view.loadvideo(post.getImageTitle());
+            }
+
+
             loadAuthorProfile();
         });
     }

@@ -1,11 +1,16 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +41,8 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
     private TextView userresidenceTv;
     private  TextView commentlabel;
     private  TextView comment;
+    private VideoView videoview ;
+    private ProgressBar progressbar;
 
 
 
@@ -56,6 +63,8 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
         this.userresidenceTv=itemView.findViewById(R.id.residencenumtv);
         this.comment=itemView.findViewById(R.id.commenttv);
         this.commentlabel=itemView.findViewById(R.id.commenlabelmod);
+       this.videoview=itemView.findViewById(R.id.videoView3);
+       this.progressbar=itemView.findViewById(R.id.progressBar4);
 
 
 
@@ -77,6 +86,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
         Integer statestring=ticketRetrieve.getState();
         Long timelong=ticketRetrieve.getTimestamp();
         String commentaire=ticketRetrieve.getComment();
+        Integer isvideo =ticketRetrieve.getType();
 
         Query query = FirebaseDatabase.getInstance().getReference().child("profiles");
         query.addValueEventListener(
@@ -106,7 +116,39 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
 
         title.setText(titleString);
         description.setText(descriptionString);
+        photolink.setVisibility(View.VISIBLE);
         Glide.with(photolink.getContext()).load(url).into(photolink);
+
+
+
+
+        if(isvideo == 1){
+            Log.v("tectingvidreclam",titleString);
+            progressbar.setVisibility(View.VISIBLE);
+            videoview.setVisibility(View.VISIBLE);
+            videoview.setMediaController(new MediaController(cxt));
+            videoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
+            videoview.requestFocus();
+            videoview.start();
+
+
+            videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                public void onPrepared(MediaPlayer mp) {
+                    progressbar.setVisibility(View.GONE);
+                }
+            });
+
+            videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoview.start();
+                }
+            });
+
+        }
+
+
 
 
         if(statestring == 1){

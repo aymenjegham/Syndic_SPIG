@@ -52,7 +52,7 @@ public class TicketAdapterMod extends RecyclerView.Adapter<TicketHolderMod> {
     public void onBindViewHolder(@NonNull TicketHolderMod ticketHolderMod, int i) {
         final TicketRetrieve ticketRetrieve =tickets.get(i);
         final String userkey =ticketscreators.get(i);
-        ticketHolderMod.updateUI(ticketRetrieve,userkey,cxt.getApplicationContext());
+        ticketHolderMod.updateUI(ticketRetrieve,userkey,cxt);
 
         ticketHolderMod.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +60,13 @@ public class TicketAdapterMod extends RecyclerView.Adapter<TicketHolderMod> {
                 final TicketRetrieve ticketRetrieve =tickets.get(i);
                 final String userkey =ticketscreators.get(i);
                 final String ticketkey =ticketsid.get(i);
+                final Integer isvideo=ticketRetrieve.type;
 
                 Intent intent =new Intent(cxt.getApplicationContext(), TicketDetailActivity.class);
                 intent.putExtra("ImageUrl",ticketRetrieve.getPhotolink() );
                 intent.putExtra("UserKey",userkey );
                 intent.putExtra("TicketKey",ticketkey );
+                intent.putExtra("isvid",isvideo);
 
 
 
