@@ -123,10 +123,15 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
 
 
         if(isvideo == 1){
-            Log.v("tectingvidreclam",titleString);
-            progressbar.setVisibility(View.VISIBLE);
+             progressbar.setVisibility(View.VISIBLE);
             videoview.setVisibility(View.VISIBLE);
-            videoview.setMediaController(new MediaController(cxt));
+          //
+            videoview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    videoview.setMediaController(new MediaController(cxt));
+                }
+            });
             videoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
             videoview.requestFocus();
             videoview.start();

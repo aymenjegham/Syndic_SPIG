@@ -7,6 +7,7 @@ import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Blocs;
 import com.gst.socialcomponents.model.Chantiers;
 import com.gst.socialcomponents.model.DataReunion;
+import com.gst.socialcomponents.model.HistorySyndic;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumBloc;
@@ -78,6 +79,10 @@ public interface APIService {
     @POST("/getInfoSyndic.php")
     @FormUrlEncoded
     Call<InfoSyndic> getInfoSyndic(@Field("iAppartement") int  iAppartment);
+
+    @POST("/getHistoric.php")
+    @FormUrlEncoded
+    Call<List<HistorySyndic>> getHistoric(@Field("cbmarq") String  cbmarq);
 
     @POST("/getSoldeAppartement.php")
     @FormUrlEncoded

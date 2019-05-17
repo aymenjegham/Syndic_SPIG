@@ -178,10 +178,16 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             String url =post.getImageTitle();
 
             postvideoview.setVisibility(View.VISIBLE);
-            postvideoview.setMediaController(new MediaController(context));
             postvideoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
             postvideoview.requestFocus();
             postvideoview.start();
+
+            postvideoview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postvideoview.setMediaController(new MediaController(context));
+                }
+            });
 
 
             postvideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
