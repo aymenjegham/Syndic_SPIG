@@ -648,9 +648,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(0xffB22222);
          menuDr = navigationView.getMenu();
-        menuDr.getItem(5).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
-        menuDr.getItem(6).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
-        menuDr.getItem(6).setTitle("Publications signalés");
+        menuDr.getItem(2).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+        menuDr.getItem(3).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
+        menuDr.getItem(3).setTitle("Publications signalés");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
@@ -674,7 +674,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(getResources().getColor(R.color.send_button_color));
         menuDr = navigationView.getMenu();
-        menuDr.getItem(5).setTitle("Reglements");
+        menuDr.getItem(2).setTitle("Reglements");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);

@@ -213,7 +213,7 @@ public class CalendarActivity extends AppCompatActivity {
                                     }
                                     @Override
                                     public void onFailure(Call<List<NumReunion>> call, Throwable t) {
-                                        Toast.makeText(CalendarActivity.this, "Pas de reunions pour vous !", Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(CalendarActivity.this, "Pas de reunions pour vous !", Toast.LENGTH_LONG).show();
                                         Log.v("testingresult",t.getMessage()+"   3");
 
 
