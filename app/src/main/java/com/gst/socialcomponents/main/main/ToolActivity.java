@@ -72,6 +72,8 @@ public class ToolActivity extends AppCompatActivity {
     ArrayList<Factureitemdata> dataModels;
     private RecyclerView recyclerview ;
     private ArrayList<Integer> years;
+    private ArrayList<Integer> frais;
+
 
 
 
@@ -123,13 +125,41 @@ public class ToolActivity extends AppCompatActivity {
                                             mAPIService.getHistoric(numappartement).enqueue(new Callback<List<HistorySyndic>>() {
                                                 @Override
                                                 public void onResponse(Call<List<HistorySyndic>> call, Response<List<HistorySyndic>> response) {
-                                                    Log.v("gettingnumappart",response.body().get(0).getFrais()+"    "+response.body().get(0).getYear());
 
-                                                    years=new ArrayList<>();
-                                                    for(int i=0;i<response.body().size();i++){
-                                                        years.add(response.body().get(i).getYear());
-                                                    }
-                                                    populaterecyclerview(years,appart);
+                                                    FirebaseFunctions.getInstance().getHttpsCallable("getTime")
+                                                            .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                                                        @Override
+                                                        public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                                            Long timestamp = (long) httpsCallableResult.getData();
+                                                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+                                                            Date datenow = new Date(timestamp);
+                                                            cal.setTime(datenow);
+                                                            int year = cal.get(Calendar.YEAR);
+
+                                                            years=new ArrayList<>();
+                                                            frais=new ArrayList<>();
+                                                            years.add(year);
+                                                            frais.add(0);
+                                                            for(int i=0;i<response.body().size();i++){
+
+                                                                if(response.body().get(i).getYear() == year-1){
+                                                                    years.add(response.body().get(i).getYear());
+                                                                    frais.add(response.body().get(i).getFrais());
+                                                                }
+
+
+                                                            }
+
+                                                            populaterecyclerview(years,appart,frais,year);
+
+                                                        }
+                                                    });
+
+
+
+
+
+
                                                 }
 
                                                 @Override
@@ -174,10 +204,10 @@ public class ToolActivity extends AppCompatActivity {
 
     }
 
-    private void populaterecyclerview(ArrayList<Integer> years,String appart) {
+    private void populaterecyclerview(ArrayList<Integer> years,String appart,ArrayList<Integer> frais,int yearactual) {
 
         YearlyReglementAdapter adapter;
-        adapter = new YearlyReglementAdapter(years,appart,ToolActivity.this,residence);
+        adapter = new YearlyReglementAdapter(years,appart,ToolActivity.this,residence,yearactual,frais);
         recyclerview.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

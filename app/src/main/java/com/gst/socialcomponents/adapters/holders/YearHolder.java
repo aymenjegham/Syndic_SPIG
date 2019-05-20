@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +48,7 @@ public class YearHolder extends RecyclerView.ViewHolder {
             private TextView balance,reste,yeartv,retenu,retenu_annuel;
             ArrayList<Factureitemdata> dataModels;
             private CustomFacturesMonthsAdapter listAdapter ;
+            private ConstraintLayout rest,solde,redev,retenue;
 
 
 
@@ -61,6 +63,10 @@ public class YearHolder extends RecyclerView.ViewHolder {
         this.yeartv =itemView.findViewById(R.id.textView21);
         this.retenu =itemView.findViewById(R.id.retenu);
         retenu_annuel=itemView.findViewById(R.id.retenueannuel);
+        this.rest=itemView.findViewById(R.id.ConstraintLayoutrest);
+        this.solde=itemView.findViewById(R.id.constraintLayoutrest);
+        this.redev=itemView.findViewById(R.id.ConstraintLayoutsolde);
+        this.retenue=itemView.findViewById(R.id.constraintLayout2);
 
 
 
@@ -75,6 +81,133 @@ public class YearHolder extends RecyclerView.ViewHolder {
          getcbmarq(appart,cxt,residence);
 
         }
+    public void updateUI2(Integer year,String appart,Context cxt,String residence,Integer frai){
+
+        gethistoricpayement(appart,cxt,residence,frai,year);
+
+    }
+
+    private void gethistoricpayement(String appart, Context cxt, String residence, Integer frai,Integer year) {
+      ProgressDialog pd = new ProgressDialog(cxt);
+        pd.setMessage("chargement des données");
+        pd.show();
+        pd.setCancelable(false);
+
+        yeartv.setText(String.valueOf(year));
+        rest.setVisibility(View.GONE);
+        solde.setVisibility(View.GONE);
+        redev.setVisibility(View.GONE);
+        retenue.setVisibility(View.GONE);
+        mAPIService = ApiUtils.getAPIService();
+        mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
+            @Override
+            public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
+                Integer numchantier=Integer.valueOf(response.body().getCbmarq());
+                final String[] date = new String[1];
+                final int[] frais = new int[1];
+                final Date[] strtodate = new Date[1];
+
+
+                mAPIService.getNumOfAppartements(appart,numchantier).enqueue(new Callback<NumAppart>() {
+                    @Override
+                    public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                        pd.dismiss();
+                        if(response.isSuccessful()) {
+                            mAPIService.getInfoSyndic(Integer.valueOf(response.body().getCbmarq())).enqueue(new Callback<InfoSyndic>() {
+                                int numAppart =Integer.valueOf(response.body().getCbmarq());
+
+                                @Override
+                                public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                    date[0] =response.body().getDateRemiseCle();
+                                    frais[0] =response.body().getFraisupposed();
+                                    mAPIService.getSoldeappartement(numAppart).enqueue(new Callback<SoldeAppartement>() {
+                                        @Override
+                                        public void onResponse(Call<SoldeAppartement> call, Response<SoldeAppartement> response) {
+                                            Integer retenu_ann= response.body().getsRetenu();
+                                            balance.setText(String.valueOf(response.body().getSolde()));
+                                            dataModels= new ArrayList<>();
+                                            dataModels.add(new Factureitemdata("Janvier", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Fevrier", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Mars","","",0,0));
+                                            dataModels.add(new Factureitemdata("Avril", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("May", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Juin", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Juillet","","",0,0));
+                                            dataModels.add(new Factureitemdata("Aout", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Septembre", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Octobre", "", "",0,0));
+                                            dataModels.add(new Factureitemdata("Novembre","","",0,0));
+                                            dataModels.add(new Factureitemdata("Decembre", "", "",0,0));
+                                            listAdapter = new CustomFacturesMonthsAdapter(dataModels, cxt);
+                                            listview.setAdapter( listAdapter );
+
+                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                             try {
+                                                strtodate[0] = format.parse ( date[0] );
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Paris"));
+
+                                             cal.setTime(strtodate[0]);
+                                            int yearremi = cal.get(Calendar.YEAR);
+                                            int month =cal.get(Calendar.MONTH);
+                                            if(yearremi == year){
+                                                dataModels.get(month).setImgview2(R.drawable.remise_key);
+                                            }
+
+
+                                            Integer fraismensuelhistoriq=frai/12;
+                                            Integer soldehistori=frai+retenu_ann;
+                                            Integer monthspaid=soldehistori/fraismensuelhistoriq;
+                                            for(int i =0;i<monthspaid;i++){
+                                                dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                dataModels.get(i).setRemise_cle(String.valueOf(fraismensuelhistoriq)+" TND");
+                                            }
+
+                                            Log.v("gettingfrai",fraismensuelhistoriq+"    "+soldehistori);
+
+
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<SoldeAppartement> call, Throwable t) {
+                                            Toast.makeText(cxt, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                                            Log.v("errorcom",t.getMessage()+ "  1");
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                    Toast.makeText(cxt, "Connexion échouée", Toast.LENGTH_SHORT).show();
+                                    Log.v("errorcom","2"+t.getMessage());
+
+                                }
+                            });
+
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<NumAppart> call, Throwable t) {
+                        Toast.makeText(cxt, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                });
+            }
+
+            @Override
+            public void onFailure(Call<NumChantier> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
 
     public void getcbmarq(String appartId,Context cxt,String residence) {
         final String[] date = new String[1];
