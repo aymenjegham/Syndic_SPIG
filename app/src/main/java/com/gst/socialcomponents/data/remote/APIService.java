@@ -41,7 +41,8 @@ public interface APIService {
                             @Field("username") String username,
                             @Field("residence") String residence,
                             @Field("numresidence") Integer numresidence,
-                            @Field("type") boolean type);
+                            @Field("type") boolean type,
+                            @Field("principal") boolean principal);
 
 
 

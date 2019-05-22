@@ -26,6 +26,7 @@ import com.gst.socialcomponents.model.Facture;
 import com.gst.socialcomponents.model.Factureitemdata;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.FormatterUtil;
@@ -76,18 +77,18 @@ public class YearHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void updateUI(Integer year,String appart,Context cxt,String residence){
+    public void updateUI(Integer year,String appart,Context cxt,String residence,String bloc){
 
-         getcbmarq(appart,cxt,residence);
+         getcbmarq(appart,cxt,residence,bloc);
 
         }
-    public void updateUI2(Integer year,String appart,Context cxt,String residence,Integer frai){
+    public void updateUI2(Integer year,String appart,Context cxt,String residence,Integer frai,String bloc){
 
-        gethistoricpayement(appart,cxt,residence,frai,year);
+        gethistoricpayement(appart,cxt,residence,frai,year,bloc);
 
     }
 
-    private void gethistoricpayement(String appart, Context cxt, String residence, Integer frai,Integer year) {
+    private void gethistoricpayement(String appart, Context cxt, String residence, Integer frai,Integer year,String bloc) {
       ProgressDialog pd = new ProgressDialog(cxt);
         pd.setMessage("chargement des données");
         pd.show();
@@ -107,8 +108,11 @@ public class YearHolder extends RecyclerView.ViewHolder {
                 final int[] frais = new int[1];
                 final Date[] strtodate = new Date[1];
 
-
-                mAPIService.getNumOfAppartements(appart,numchantier).enqueue(new Callback<NumAppart>() {
+                mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
+                    @Override
+                    public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                        Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+                mAPIService.getNumOfAppartements(appart,numbloc).enqueue(new Callback<NumAppart>() {
                     @Override
                     public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
                         pd.dismiss();
@@ -165,7 +169,6 @@ public class YearHolder extends RecyclerView.ViewHolder {
                                                 dataModels.get(i).setRemise_cle(String.valueOf(fraismensuelhistoriq)+" TND");
                                             }
 
-                                            Log.v("gettingfrai",fraismensuelhistoriq+"    "+soldehistori);
 
 
 
@@ -182,8 +185,8 @@ public class YearHolder extends RecyclerView.ViewHolder {
 
                                 @Override
                                 public void onFailure(Call<InfoSyndic> call, Throwable t) {
-                                    Toast.makeText(cxt, "Connexion échouée", Toast.LENGTH_SHORT).show();
-                                    Log.v("errorcom","2"+t.getMessage());
+                                    Toast.makeText(cxt, "Données non trouvées", Toast.LENGTH_SHORT).show();
+                                    Log.v("errorcom","21"+t.getMessage());
 
                                 }
                             });
@@ -193,14 +196,24 @@ public class YearHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onFailure(Call<NumAppart> call, Throwable t) {
                         Toast.makeText(cxt, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                        Log.v("errorcom","3"+t.getMessage());
 
                     }
 
+                });
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<NumBloc> call, Throwable t) {
+
+                    }
                 });
             }
 
             @Override
             public void onFailure(Call<NumChantier> call, Throwable t) {
+                Log.v("errorcom","4"+t.getMessage());
 
             }
         });
@@ -209,7 +222,7 @@ public class YearHolder extends RecyclerView.ViewHolder {
 
 
 
-    public void getcbmarq(String appartId,Context cxt,String residence) {
+    public void getcbmarq(String appartId,Context cxt,String residence,String bloc) {
         final String[] date = new String[1];
         final int[] frais = new int[1];
         final Date[] strtodate = new Date[1];
@@ -231,7 +244,12 @@ public class YearHolder extends RecyclerView.ViewHolder {
                     public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                         Integer numchantier=Integer.valueOf(response.body().getCbmarq());
 
-                        mAPIService.getNumOfAppartements(appartId,numchantier).enqueue(new Callback<NumAppart>() {
+                        mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
+                            @Override
+                            public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                                Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+
+                        mAPIService.getNumOfAppartements(appartId,numbloc).enqueue(new Callback<NumAppart>() {
                             @Override
                             public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
                                 pd.dismiss();
@@ -298,7 +316,6 @@ public class YearHolder extends RecyclerView.ViewHolder {
                                                         reste.setText(String.valueOf(totalmustbepayed-(response.body().getSolde()+response.body().getsRetenu())));
                                                         retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
-                                                        Log.v("checkingfraisold",response.body().getSolde()+"   "+response.body().getsRetenu()+"   1"+"  "+year+"   "+yearlocal);
 
                                                         dataModels.get(month).setImgview2(R.drawable.remise_key);
                                                         if((month+monthspayable)<12){
@@ -327,10 +344,18 @@ public class YearHolder extends RecyclerView.ViewHolder {
                                                         retenu.setText(String.valueOf(monthspayable*monthlyfrais));
 
 
-                                                        for(int i =0;i<monthspayable;i++){
-                                                            dataModels.get(i).setImgview(R.drawable.ic_done);
-                                                            dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                        if(monthspayable<=12){
+                                                            for(int i =0;i<monthspayable;i++){
+                                                                dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                            }
+                                                        }else{
+                                                            for(int i =0;i<12;i++){
+                                                                dataModels.get(i).setImgview(R.drawable.ic_done);
+                                                                dataModels.get(i).setRemise_cle(String.valueOf(monthlyfrais)+" TND");
+                                                            }
                                                         }
+
 
                                                     }
                                                 }
@@ -346,8 +371,8 @@ public class YearHolder extends RecyclerView.ViewHolder {
 
                                         @Override
                                         public void onFailure(Call<InfoSyndic> call, Throwable t) {
-                                            Toast.makeText(cxt, "Connexion échouée", Toast.LENGTH_SHORT).show();
-                                            Log.v("errorcom","2"+t.getMessage());
+                                            Toast.makeText(cxt, "Données non trouvées", Toast.LENGTH_SHORT).show();
+                                            Log.v("errorcom","22"+t.getMessage());
 
                                         }
                                     });
@@ -357,14 +382,24 @@ public class YearHolder extends RecyclerView.ViewHolder {
                             @Override
                             public void onFailure(Call<NumAppart> call, Throwable t) {
                                 Toast.makeText(cxt, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                                Log.v("errorcom","3"+t.getMessage());
 
                             }
 
+                        });
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<NumBloc> call, Throwable t) {
+
+                            }
                         });
                     }
 
                     @Override
                     public void onFailure(Call<NumChantier> call, Throwable t) {
+                        Log.v("errorcom","4"+t.getMessage());
 
                     }
                 });

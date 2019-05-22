@@ -367,7 +367,7 @@ public class SendPicticketActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<NumChantier> call, Throwable t) {
-
+                Toast.makeText(SendPicticketActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
             }
         });
 

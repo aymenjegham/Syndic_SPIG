@@ -19,9 +19,13 @@ package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -177,15 +181,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
             String url =post.getImageTitle();
 
+            postvideoview.seekTo(100);
             postvideoview.setVisibility(View.VISIBLE);
             postvideoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
             postvideoview.requestFocus();
-            postvideoview.start();
 
             postvideoview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     postvideoview.setMediaController(new MediaController(context));
+
                 }
             });
 
@@ -193,16 +199,23 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             postvideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
-                   progressBar.setVisibility(View.GONE);
+
+                    progressBar.setVisibility(View.GONE);
+                    postvideoview.start();
+
                 }
             });
 
             postvideoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    Log.v("checkvidload","4");
+
                     postvideoview.start();
+
                 }
             });
+
 
 
         }

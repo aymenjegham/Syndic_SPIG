@@ -39,6 +39,7 @@ import com.gst.socialcomponents.model.Factureitemdata;
 import com.gst.socialcomponents.model.HistorySyndic;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.model.TicketRetrieve;
@@ -64,7 +65,7 @@ public class ToolActivity extends AppCompatActivity {
 
 
     public ActionBar actionBar;
-    String residence;
+    String residence,bloc;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference,reference2;
     private APIService mAPIService;
@@ -97,6 +98,7 @@ public class ToolActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
+        bloc =prefs.getString("sharedprefbloc",null);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -118,7 +120,12 @@ public class ToolActivity extends AppCompatActivity {
                              @Override
                              public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                                  Integer numchantier=Integer.valueOf(response.body().getCbmarq());
-                                 mAPIService.getNumOfAppartements(appart,numchantier).enqueue(new Callback<NumAppart>() {
+
+                                 mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
+                                     @Override
+                                     public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                                         Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+                                         mAPIService.getNumOfAppartements(appart,numbloc).enqueue(new Callback<NumAppart>() {
                                      @Override
                                      public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
                                          String numappartement =response.body().getCbmarq();
@@ -174,6 +181,15 @@ public class ToolActivity extends AppCompatActivity {
                                      @Override
                                      public void onFailure(Call<NumAppart> call, Throwable t) {
                                          Toast.makeText(ToolActivity.this, "Erreur connectivité", Toast.LENGTH_SHORT).show();
+                                         Log.v("gettingnumappart","1    "+t.getMessage());
+
+
+                                     }
+                                 });
+                                     }
+
+                                     @Override
+                                     public void onFailure(Call<NumBloc> call, Throwable t) {
 
                                      }
                                  });
@@ -182,6 +198,8 @@ public class ToolActivity extends AppCompatActivity {
                              @Override
                              public void onFailure(Call<NumChantier> call, Throwable t) {
                                  Toast.makeText(ToolActivity.this, "Erreur connectivité", Toast.LENGTH_SHORT).show();
+                                 Log.v("gettingnumappart","2    "+t.getMessage());
+
 
                              }
                          });
@@ -207,7 +225,7 @@ public class ToolActivity extends AppCompatActivity {
     private void populaterecyclerview(ArrayList<Integer> years,String appart,ArrayList<Integer> frais,int yearactual) {
 
         YearlyReglementAdapter adapter;
-        adapter = new YearlyReglementAdapter(years,appart,ToolActivity.this,residence,yearactual,frais);
+        adapter = new YearlyReglementAdapter(years,appart,ToolActivity.this,residence,bloc,yearactual,frais);
         recyclerview.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

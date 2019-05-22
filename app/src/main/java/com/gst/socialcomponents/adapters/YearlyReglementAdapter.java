@@ -31,14 +31,16 @@ public class YearlyReglementAdapter extends RecyclerView.Adapter<YearHolder> {
     Context cxt;
     String residence;
     private ArrayList<Integer> frais ;
+    private String bloc;
 
 
-    public YearlyReglementAdapter(ArrayList<Integer> years,String appartId,Context cxt,String residence,int yearactual,ArrayList<Integer> frais) {
+    public YearlyReglementAdapter(ArrayList<Integer> years,String appartId,Context cxt,String residence,String bloc,int yearactual,ArrayList<Integer> frais) {
         this.years=years;
         this.appartId=appartId;
         this.cxt=cxt;
         this.residence=residence;
         this.frais=frais;
+        this.bloc=bloc;
      }
 
     @Override
@@ -64,11 +66,11 @@ public class YearlyReglementAdapter extends RecyclerView.Adapter<YearHolder> {
                 int yearactual = cal.get(Calendar.YEAR);
 
                 if(yearactual == year){
-                    yearHolder.updateUI(yearactual,appart,cxt,residence);
+                    yearHolder.updateUI(yearactual,appart,cxt,residence,bloc);
 
                 }else if(yearactual != year){
                     final Integer frai=frais.get(i);
-                    yearHolder.updateUI2(year,appart,cxt,residence,frai);
+                    yearHolder.updateUI2(year,appart,cxt,residence,frai,bloc);
 
 
                 }

@@ -158,16 +158,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         if (firebaseUser != null) {
             currentUserId = firebaseUser.getUid();
         }
-
-
-
-
-
-
-
-
-
-
+        
         // Set up the login form.
         progressBar = findViewById(R.id.progressBar);
         imageView = findViewById(R.id.drawer_img);
@@ -557,7 +548,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                                 public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
 
 
-                                    Integer numap=Integer.valueOf(response.body().getCbmarq());
+                                     Integer numap=Integer.valueOf(response.body().getCbmarq());
                                     mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
                                         @Override
                                         public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
