@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.collection.LLRBNode;
@@ -59,9 +60,6 @@ import com.gst.socialcomponents.utils.ImageUtil;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by alexey on 27.12.16.
- */
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = PostViewHolder.class.getSimpleName();
@@ -80,6 +78,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private CardView cardview;
     private LinearLayout linearlayout;
     private VideoView postvideoview ;
+    private ImageView watcherimageview;
+    private  ImageView commentcountimageview;
 
     private ProfileManager profileManager;
     protected PostManager postManager;
@@ -102,6 +102,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         likesImageView = view.findViewById(R.id.likesImageView);
         commentsCountTextView = view.findViewById(R.id.commentsCountTextView);
         watcherCounterTextView = view.findViewById(R.id.watcherCounterTextView);
+        watcherimageview=view.findViewById(R.id.watcherImageView);
+        commentcountimageview=view.findViewById(R.id.commentsCountImageView);
         dateTextView = view.findViewById(R.id.dateTextView);
         titleTextView = view.findViewById(R.id.titleTextView);
         detailsTextView = view.findViewById(R.id.detailsTextView);
@@ -143,10 +145,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(Post post) {
-
-
-
-
 
         likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
 
@@ -209,13 +207,37 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             postvideoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    Log.v("checkvidload","4");
 
                     postvideoview.start();
 
                 }
             });
 
+
+
+        }
+
+        if(post.getAuthorId().equals("ADMIN")){
+            Log.v("checkingdepenses",post.getTitle()+"    "+post.getCreatedDate()+"   "+post.getDescription()+"   "+post.getAuthorId()+"    "+post.getId()+"   "+post.getImageTitle()+"    "+post.getItemType());
+
+            likeCounterTextView.setVisibility(View.GONE);
+            likesImageView.setVisibility(View.GONE);
+            commentsCountTextView.setVisibility(View.GONE);
+            watcherCounterTextView.setVisibility(View.GONE);
+            watcherimageview.setVisibility(View.GONE);
+            commentcountimageview.setVisibility(View.GONE);
+            String url="http://testeasysyndic.gloulougroupe.com/uploads/documents/";
+             Glide.with(postImageView.getContext()).load(url+post.getImageTitle()).into(postImageView);
+
+             if(!post.getId().equals("NULL")){
+                 titleTextView.setText(post.getTitle()+" ( "+post.getImagePath()+" : "+post.getId()+" ) ");
+             }
+             detailsTextView.setText(post.getDescription()+" TND");
+             String timestamp=Long.valueOf(post.getCreatedDate()).toString();
+             long dateformat=Long.valueOf(timestamp+"000");
+             CharSequence datecreated = FormatterUtil.getRelativeTimeSpanString(context, dateformat);//post.getCreatedDate()+);
+
+            dateTextView.setText(datecreated);
 
 
         }

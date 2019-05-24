@@ -45,6 +45,25 @@ public class Post implements Serializable, LazyLoading {
      private String moderator;
      private boolean isvideo;
 
+
+    public Post(String id, String title, String description, long createdDate, String imagePath, String imageTitle, String authorId, long commentsCount, long likesCount, long watchersCount, boolean hasComplain, ItemType itemType, String residence, String moderator, boolean isvideo) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.createdDate = createdDate;
+        this.imagePath = imagePath;
+        this.imageTitle = imageTitle;
+        this.authorId = authorId;
+        this.commentsCount = commentsCount;
+        this.likesCount = likesCount;
+        this.watchersCount = watchersCount;
+        this.hasComplain = hasComplain;
+        this.itemType = itemType;
+        this.residence = residence;
+        this.moderator = moderator;
+        this.isvideo = isvideo;
+    }
+
     public boolean isIsvideo() {
         return isvideo;
     }
@@ -71,11 +90,13 @@ public class Post implements Serializable, LazyLoading {
         setId(itemType.toString());
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
 
-
-
-
-
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public String getResidence() {
         return residence;

@@ -106,25 +106,32 @@ public class TicketHolder extends RecyclerView.ViewHolder {
         }else if (url != null && type==1){
 
 
-
             videoview.setVisibility(View.VISIBLE);
              videoview.setMediaController(new MediaController(cxt));
             videoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
-            videoview.requestFocus();
-            videoview.start();
+
+
+
+
+
 
 
             videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
+
                 public void onPrepared(MediaPlayer mp) {
+
                     progDailog.setVisibility(View.GONE);
+                    videoview.start();
                 }
             });
 
             videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+
                     videoview.start();
+
                 }
             });
 

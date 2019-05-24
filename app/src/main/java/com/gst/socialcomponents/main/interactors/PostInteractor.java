@@ -47,9 +47,11 @@ import com.gst.socialcomponents.managers.listeners.OnPostChangedListener;
 import com.gst.socialcomponents.managers.listeners.OnPostCreatedListener;
 import com.gst.socialcomponents.managers.listeners.OnPostListChangedListener;
 import com.gst.socialcomponents.managers.listeners.OnTaskCompleteListener;
+import com.gst.socialcomponents.model.DepenseListResult;
 import com.gst.socialcomponents.model.Like;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.PostListResult;
+import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.ImageUtil;
 import com.gst.socialcomponents.utils.LogUtil;
 
@@ -151,12 +153,21 @@ public class PostInteractor {
             postsQuery = databaseReference.limitToLast(Constants.Post.POST_AMOUNT_ON_PAGE).endAt(date).orderByChild("createdDate");
         }
 
+        ArrayList<DepenseListResult> depenses = new ArrayList() ;
+
         postsQuery.keepSynced(true);
         postsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
                 PostListResult result = parsePostList(objectMap);
+                depenses.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                   DepenseListResult depense = ds.getValue(DepenseListResult.class);
+                         depenses.add(depense);
+
+                }
+
 
 
 
@@ -268,10 +279,14 @@ public class PostInteractor {
                 if (obj instanceof Map) {
                     Map<String, Object> mapObj = (Map<String, Object>) obj;
 
-                    if (!isPostValid(mapObj)) {
+
+
+                   if (!isPostValid(mapObj)) {
                         LogUtil.logDebug(TAG, "Invalid post, id: " + key);
                         continue;
                     }
+
+
 
                     boolean hasComplain = mapObj.containsKey("hasComplain") && (boolean) mapObj.get("hasComplain");
                     long createdDate = (long) mapObj.get("createdDate");
@@ -293,6 +308,7 @@ public class PostInteractor {
 
 
                      if(mapObj.get("residence").equals(residence)) {
+
                          Post post;
                           post = new Post();
                             post.setId(key);
@@ -340,6 +356,14 @@ public class PostInteractor {
                 && post.containsKey("imageTitle")
                 && post.containsKey("authorId")
                 && post.containsKey("description");
+    }
+
+    private boolean isPostdepense(Map<String, Object> post) {
+        return post.containsKey("compteur")
+                && post.containsKey("iddepense")
+                && post.containsKey("montant")
+                && post.containsKey("residence")
+                && post.containsKey("title");
     }
 
     public void addComplainToPost(Post post) {

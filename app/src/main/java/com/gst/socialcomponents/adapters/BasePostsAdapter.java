@@ -50,6 +50,7 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
+
         return postList.get(position).getItemType().getTypeCode();
     }
 

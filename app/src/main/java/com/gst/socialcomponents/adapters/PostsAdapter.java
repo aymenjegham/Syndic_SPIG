@@ -27,6 +27,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.adapters.holders.LoadViewHolder;
 import com.gst.socialcomponents.adapters.holders.PostViewHolder;
@@ -35,11 +40,16 @@ import com.gst.socialcomponents.enums.ItemType;
 import com.gst.socialcomponents.main.main.MainActivity;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.managers.listeners.OnPostListChangedListener;
+import com.gst.socialcomponents.model.DepenseListResult;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.PostListResult;
+import com.gst.socialcomponents.model.TicketRetrieve;
 import com.gst.socialcomponents.utils.PreferencesUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -52,6 +62,8 @@ public class PostsAdapter extends BasePostsAdapter {
     private long lastLoadedItemCreatedDate;
     private SwipeRefreshLayout swipeContainer;
     private MainActivity mainActivity;
+    private DatabaseReference reference1;
+
 
 
     public PostsAdapter(final MainActivity activity, SwipeRefreshLayout swipeContainer) {
@@ -159,6 +171,7 @@ public class PostsAdapter extends BasePostsAdapter {
     }
 
     private void addList(List<Post> list) {
+
         this.postList.addAll(list);
         notifyDataSetChanged();
         isLoading = false;
@@ -186,28 +199,60 @@ public class PostsAdapter extends BasePostsAdapter {
                 isMoreDataAvailable = result.isMoreDataAvailable();
                 List<Post> list = result.getPosts();
 
-                if (nextItemCreatedDate == 0) {
-                    postList.clear();
+                ArrayList<DepenseListResult> depenses = new ArrayList() ;
+                reference1 = FirebaseDatabase.getInstance().getReference().child("posts");
+                reference1.keepSynced(true);
+                reference1.addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                 depenses.clear();
+                                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    DepenseListResult depense = ds.getValue(DepenseListResult.class);
 
-                    notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
-                }
+                                    //depenses.add(depense);
+                                   if(depense.getAuthorId().equals("ADMIN")){
+                                        Post post1= new Post(depense.getCompteur(),depense.getTitle(),depense.getMontant().toString(),depense.getDatefacture(),depense.getContrat(), depense.getImageTitle(),depense.getAuthorId(), 0, 2, 2, false,ItemType.valueOf("ITEM"),depense.getResidence(), "true",false);
+                                        list.add(post1);
+                                    }
 
-                hideProgress();
+                                }
 
-                if (!list.isEmpty()) {
 
-                    addList(list);
 
-                    if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
-                        PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
-                    }
-                } else {
-                    isLoading = false;
+                                if (nextItemCreatedDate == 0) {
+                                    postList.clear();
 
-                }
+                                    notifyDataSetChanged();
+                                    swipeContainer.setRefreshing(false);
+                                }
 
-                callback.onListLoadingFinished();
+                                hideProgress();
+
+                                if (!list.isEmpty()) {
+
+                                    addList(list);
+
+                                    if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
+                                        PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
+                                    }
+                                } else {
+                                    isLoading = false;
+
+                                }
+
+                                callback.onListLoadingFinished();
+                            }
+
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+
+
+
             }
 
             @Override

@@ -34,9 +34,7 @@ import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.model.Post;
 
-/**
- * Created by Alexey on 03.05.18.
- */
+
 
 class MainPresenter extends BasePresenter<MainView> {
 

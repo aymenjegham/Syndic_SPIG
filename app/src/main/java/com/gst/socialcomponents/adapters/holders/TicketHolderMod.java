@@ -141,6 +141,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
 
                 public void onPrepared(MediaPlayer mp) {
                     progressbar.setVisibility(View.GONE);
+                    videoview.start();
                 }
             });
 
