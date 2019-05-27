@@ -128,6 +128,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         postManager = PostManager.getInstance(this);
 
         isAuthorAnimationRequired = getIntent().getBooleanExtra(AUTHOR_ANIMATION_NEEDED_EXTRA_KEY, false);

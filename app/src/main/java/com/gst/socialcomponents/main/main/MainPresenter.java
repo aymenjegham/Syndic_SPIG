@@ -62,10 +62,15 @@ class MainPresenter extends BasePresenter<MainView> {
     void onPostClicked(final Post post, final View postView) {
 
         postManager.isPostExistSingleValue(post.getId(), exist -> ifViewAttached(view -> {
+
             if (exist) {
                 view.openPostDetailsActivity(post, postView);
             } else {
-                view.showFloatButtonRelatedSnackBar(R.string.error_post_was_removed);
+                if (post.getAuthorId().equals("ADMIN")){
+
+                }else{
+                    view.showFloatButtonRelatedSnackBar(R.string.error_post_was_removed);
+                }
             }
         }));
     }

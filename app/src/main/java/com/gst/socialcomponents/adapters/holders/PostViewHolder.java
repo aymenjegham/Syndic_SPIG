@@ -18,14 +18,11 @@
 package com.gst.socialcomponents.adapters.holders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,11 +38,11 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.collection.LLRBNode;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
 import com.gst.socialcomponents.controllers.LikeController;
 import com.gst.socialcomponents.main.base.BaseActivity;
+import com.gst.socialcomponents.main.main.PublicationPicture;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.managers.ProfileManager;
 import com.gst.socialcomponents.managers.listeners.OnObjectChangedListener;
@@ -88,6 +85,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private BaseActivity baseActivity;
     private ProgressBar progressBar ;
 
+
+
     public PostViewHolder(View view, final OnClickListener onClickListener, BaseActivity activity) {
         this(view, onClickListener, activity, true);
     }
@@ -113,6 +112,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         linearlayout =view.findViewById(R.id.linearlayoutpost);
         postvideoview=view.findViewById(R.id.postvideoview);
         progressBar=view.findViewById(R.id.progressBar3);
+
+
+
 
         authorImageView.setVisibility(isAuthorNeeded ? View.VISIBLE : View.GONE);
         postImageView.setVisibility(View.VISIBLE);
@@ -162,13 +164,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         postManager.loadImageMediumSize(GlideApp.with(baseActivity), post.getImageTitle(), postImageView);
 
-        if (post.getAuthorId() != null) {
+        if (post.getAuthorId() != null ) {
+
             profileManager.getProfileSingleValue(post.getAuthorId(), createProfileChangeListener(authorImageView));
+
         }
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null  ) {
             postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
+
+
 
         }
 
@@ -176,6 +182,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isIsvideo()){
             progressBar.setVisibility(View.VISIBLE);
              postImageView.setVisibility(View.GONE);
+
+
 
             String url =post.getImageTitle();
 
@@ -217,8 +225,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         }
 
-        if(post.getAuthorId().equals("ADMIN")){
-            Log.v("checkingdepenses",post.getTitle()+"    "+post.getCreatedDate()+"   "+post.getDescription()+"   "+post.getAuthorId()+"    "+post.getId()+"   "+post.getImageTitle()+"    "+post.getItemType());
+
+
+        if(post.getAuthorId().equals("ADMIN") ){
+
 
             likeCounterTextView.setVisibility(View.GONE);
             likesImageView.setVisibility(View.GONE);
@@ -232,12 +242,28 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
              if(!post.getId().equals("NULL")){
                  titleTextView.setText(post.getTitle()+" ( "+post.getImagePath()+" : "+post.getId()+" ) ");
              }
-             detailsTextView.setText(post.getDescription()+" TND");
-             String timestamp=Long.valueOf(post.getCreatedDate()).toString();
-             long dateformat=Long.valueOf(timestamp+"000");
-             CharSequence datecreated = FormatterUtil.getRelativeTimeSpanString(context, dateformat);//post.getCreatedDate()+);
+             String timestampfacture=Long.valueOf(post.getCreatedDate()).toString();
+            String timestampcreated=Long.valueOf(post.getCommentsCount()).toString();
+
+            long dateformatcreate=Long.valueOf(timestampcreated+"000");
+            long dateformafacturet=Long.valueOf(timestampfacture+"000");
+
+            CharSequence datecreated = FormatterUtil.getRelativeTimeSpanString(context, dateformatcreate);
+            CharSequence datefacture = FormatterUtil.getRelativeTimeSpanString(context, dateformafacturet);
 
             dateTextView.setText(datecreated);
+            detailsTextView.setText(post.getDescription()+" TND"+" ( "+datefacture+" )");
+            cardview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(context, PublicationPicture.class);
+                    intent.putExtra("url",url+post.getImageTitle());
+                    context.startActivity(intent);
+                }
+            });
+
+
+
 
 
         }

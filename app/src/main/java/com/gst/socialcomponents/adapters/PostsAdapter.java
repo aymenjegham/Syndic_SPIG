@@ -63,6 +63,8 @@ public class PostsAdapter extends BasePostsAdapter {
     private SwipeRefreshLayout swipeContainer;
     private MainActivity mainActivity;
     private DatabaseReference reference1;
+    String residence ;
+
 
 
 
@@ -72,6 +74,7 @@ public class PostsAdapter extends BasePostsAdapter {
         this.swipeContainer = swipeContainer;
         initRefreshLayout();
         setHasStableIds(true);
+
     }
 
     private void initRefreshLayout() {
@@ -119,6 +122,7 @@ public class PostsAdapter extends BasePostsAdapter {
             public void onItemClick(int position, View view) {
                 if (callback != null) {
                     selectedPostPosition = position;
+
                     callback.onItemClick(getItemByPosition(position), view);
                 }
             }
@@ -151,6 +155,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
 
                         postList.add(new Post(ItemType.LOAD));
+
                         notifyItemInserted(postList.size());
                         loadNext(lastLoadedItemCreatedDate - 1);
                     } else {
@@ -202,18 +207,27 @@ public class PostsAdapter extends BasePostsAdapter {
                 ArrayList<DepenseListResult> depenses = new ArrayList() ;
                 reference1 = FirebaseDatabase.getInstance().getReference().child("posts");
                 reference1.keepSynced(true);
-                reference1.addValueEventListener(
+                reference1.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                  depenses.clear();
                                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                                    DepenseListResult depense = ds.getValue(DepenseListResult.class);
+                                     DepenseListResult depense = ds.getValue(DepenseListResult.class);
+
 
                                     //depenses.add(depense);
-                                   if(depense.getAuthorId().equals("ADMIN")){
-                                        Post post1= new Post(depense.getCompteur(),depense.getTitle(),depense.getMontant().toString(),depense.getDatefacture(),depense.getContrat(), depense.getImageTitle(),depense.getAuthorId(), 0, 2, 2, false,ItemType.valueOf("ITEM"),depense.getResidence(), "true",false);
-                                        list.add(post1);
+                                    if(depense.getAuthorId().equals("ADMIN") ){
+                                        SharedPreferences prefs = activity.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
+                                        residence = prefs.getString("sharedprefresidence", null);
+
+                                       if(depense.getPublier()==1  && depense.getResidence().equals(residence)){
+                                            Post post1= new Post(depense.getCompteur(),depense.getTitle(),depense.getMontant().toString(),depense.getDatefacture(),depense.getContrat(), depense.getImageTitle(),depense.getAuthorId(), depense.getCreateddate(),1, 2, false,ItemType.valueOf("ITEM"),depense.getResidence(), "true",false);
+                                           list.add(post1);
+                                       }
+
+
+
                                     }
 
                                 }
@@ -222,6 +236,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
                                 if (nextItemCreatedDate == 0) {
                                     postList.clear();
+
 
                                     notifyDataSetChanged();
                                     swipeContainer.setRefreshing(false);
@@ -233,6 +248,7 @@ public class PostsAdapter extends BasePostsAdapter {
 
                                     addList(list);
 
+
                                     if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
                                         PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
                                     }
@@ -240,9 +256,9 @@ public class PostsAdapter extends BasePostsAdapter {
                                     isLoading = false;
 
                                 }
-
                                 callback.onListLoadingFinished();
                             }
+
 
 
                             @Override

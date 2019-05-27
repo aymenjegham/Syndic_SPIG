@@ -9,15 +9,17 @@ public class DepenseListResult {
 
     private String compteur;
     private long  datefacture;
+    private long  createddate;
     private Integer iddepense;
     private Integer montant;
+    private int publier;
     private String residence;
     private String title;
     private String authorId;
     private String imageTitle;
     private String contrat;
 
-    public DepenseListResult(String compteur, long datefacture, Integer iddepense, Integer montant, String residence, String title,String authorId,String imageTitle,String contrat) {
+    public DepenseListResult(String compteur, long datefacture, Integer iddepense, Integer montant, String residence, String title,String authorId,String imageTitle,String contrat,long createddate ,int publier) {
         this.compteur = compteur;
         this.datefacture = datefacture;
         this.iddepense = iddepense;
@@ -27,7 +29,26 @@ public class DepenseListResult {
         this.authorId=authorId;
         this.imageTitle=imageTitle;
         this.contrat=contrat;
-     }
+        this.createddate=createddate;
+        this.publier=publier;
+      }
+
+
+    public int getPublier() {
+        return publier;
+    }
+
+    public void setPublier(int publier) {
+        this.publier = publier;
+    }
+
+    public long getCreateddate() {
+        return createddate;
+    }
+
+    public void setCreateddate(long createddate) {
+        this.createddate = createddate;
+    }
 
     public String getContrat() {
         return contrat;

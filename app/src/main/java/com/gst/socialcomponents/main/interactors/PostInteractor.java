@@ -162,11 +162,7 @@ public class PostInteractor {
                 Map<String, Object> objectMap = (Map<String, Object>) dataSnapshot.getValue();
                 PostListResult result = parsePostList(objectMap);
                 depenses.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                   DepenseListResult depense = ds.getValue(DepenseListResult.class);
-                         depenses.add(depense);
 
-                }
 
 
 
@@ -305,9 +301,9 @@ public class PostInteractor {
                         SharedPreferences prefs = context.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
                         residence = prefs.getString("sharedprefresidence", null);
 
+                        Log.v("checkingresults", mapObj.toString());
 
-
-                     if(mapObj.get("residence").equals(residence)) {
+                      if(mapObj.get("residence").equals(residence)) {
 
                          Post post;
                           post = new Post();
@@ -321,7 +317,8 @@ public class PostInteractor {
                             post.setResidence((String) mapObj.get("residence"));
                             post.setIsvideo((boolean) mapObj.get("isvideo"));
 
-                            if (mapObj.containsKey("commentsCount")) {
+
+                          if (mapObj.containsKey("commentsCount")) {
                                 post.setCommentsCount((long) mapObj.get("commentsCount"));
                             }
                             if (mapObj.containsKey("likesCount")) {

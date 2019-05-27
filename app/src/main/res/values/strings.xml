@@ -208,10 +208,12 @@
     <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
     <string name="a_propos" translatable="false">A propos</string>
     <string name="notification" translatable="false">Notification</string>
-     <string name="administration" translatable="false">Administration</string>
+    <string name="administration" translatable="false">Administration</string>
     <string name="calendrier" translatable="false">Calendrier</string>
     <string name="galerie" translatable="false">Galerie</string>
     <string name="reclamations" translatable="false">Reclamations</string>
+
+    <string name="title_activity_publication_picture">PublicationPicture</string>
 
 
 </resources>

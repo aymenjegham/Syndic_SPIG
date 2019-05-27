@@ -86,6 +86,7 @@ public class PostsByUserAdapter extends BasePostsAdapter {
     }
 
     private void setList(List<Post> list) {
+
         postList.clear();
         postList.addAll(list);
         notifyDataSetChanged();
@@ -101,6 +102,7 @@ public class PostsByUserAdapter extends BasePostsAdapter {
         OnDataChangedListener<Post> onPostsDataChangedListener = new OnDataChangedListener<Post>() {
             @Override
             public void onListChanged(List<Post> list) {
+
                 setList(list);
                 callBack.onPostsListChanged(list.size());
             }

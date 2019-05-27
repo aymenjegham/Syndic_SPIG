@@ -36,6 +36,7 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
     protected int selectedPostPosition = RecyclerView.NO_POSITION;
 
     public BasePostsAdapter(BaseActivity activity) {
+
         this.activity = activity;
     }
 
@@ -52,6 +53,7 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
     public int getItemViewType(int position) {
 
         return postList.get(position).getItemType().getTypeCode();
+
     }
 
     protected Post getItemByPosition(int position) {
@@ -62,6 +64,8 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
         return new OnPostChangedListener() {
             @Override
             public void onObjectChanged(Post obj) {
+
+
                 postList.set(postPosition, obj);
 
                 notifyItemChanged(postPosition);
@@ -78,6 +82,7 @@ public abstract class BasePostsAdapter extends RecyclerView.Adapter<RecyclerView
         if (selectedPostPosition != RecyclerView.NO_POSITION) {
             Post selectedPost = getItemByPosition(selectedPostPosition);
             PostManager.getInstance(activity).getSinglePostValue(selectedPost.getId(), createOnPostChangeListener(selectedPostPosition));
+
         }
     }
 }
