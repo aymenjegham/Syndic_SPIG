@@ -22,12 +22,12 @@
         android:orderInCategory="0"
         android:title="@string/search_menu_item"
         app:showAsAction="collapseActionView" />
-    <item
+    <!--  <item
         android:id="@+id/ticketing"
         android:icon="@drawable/ic_ticket"
         android:orderInCategory="2"
         android:title="@string/reclamations"
-        app:showAsAction="collapseActionView" />
+        app:showAsAction="collapseActionView" /> -->
     <item
         android:id="@+id/notif"
         android:icon="@drawable/ic_notif"
@@ -35,40 +35,40 @@
         android:title="@string/notification"
         app:showAsAction="collapseActionView" />
 
-    <item
-        android:id="@+id/tools"
-        android:icon="@drawable/ic_money"
-        android:orderInCategory="4"
-        android:title="Reglements"
-        app:showAsAction="collapseActionView" />
+    <!--  <item
+          android:id="@+id/tools"
+          android:icon="@drawable/ic_money"
+          android:orderInCategory="4"
+          android:title="Reglements"
+          app:showAsAction="collapseActionView" />  -->
 
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/ic_info"
-        android:orderInCategory="9"
-        android:title="A propos"
-        app:showAsAction="collapseActionView" />
+      <item
+          android:id="@+id/about"
+          android:icon="@drawable/ic_info"
+          android:orderInCategory="9"
+          android:title="A propos"
+          app:showAsAction="collapseActionView" />
 
-    <item
-        android:id="@+id/config"
-        android:icon="@drawable/ic_settings"
-        android:orderInCategory="8"
-        android:title="Configuration"
-        app:showAsAction="collapseActionView" />
+  <!--    <item
+          android:id="@+id/config"
+          android:icon="@drawable/ic_settings"
+          android:orderInCategory="8"
+          android:title="Configuration"
+          app:showAsAction="collapseActionView" />  -->
 
-    <item
-        android:id="@+id/gallerie"
-        android:icon="@drawable/ic_galerie"
-        android:orderInCategory="7"
-        android:title="Galerie"
-        app:showAsAction="collapseActionView" />
+      <item
+          android:id="@+id/gallerie"
+          android:icon="@drawable/ic_galerie"
+          android:orderInCategory="7"
+          android:title="Galerie"
+          app:showAsAction="collapseActionView" />
 
-    <item
-        android:id="@+id/calendar"
-        android:icon="@drawable/ic_calendar"
-        android:orderInCategory="3"
-        android:title="Calendrier"
-        app:showAsAction="collapseActionView" />
+    <!--  <item
+          android:id="@+id/calendar"
+          android:icon="@drawable/ic_calendar"
+          android:orderInCategory="3"
+          android:title="Calendrier"
+          app:showAsAction="collapseActionView" /> -->
 
-</menu>
+  </menu>
 

@@ -194,7 +194,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
 
-
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         horizontalTextView    = (TextView)findViewById(R.id.horizontal_textview_id);
@@ -215,6 +214,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         });
 
 
+      //  horizontalOuterLayout.setVisibility(View.GONE);
+       // horizontalScrollview.setVisibility(View.GONE);
 
 
 
@@ -642,13 +643,14 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
        if(menu != null){
            menu.getItem(4).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
            menu.getItem(3).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali_white));
-           menu.getItem(3).setTitle("Publications signalés");
+           menu.getItem(3).setTitle("Notifications");
 
        }
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(0xffB22222);
          menuDr = navigationView.getMenu();
         menuDr.getItem(2).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+        menuDr.getItem(2).setTitle("Activer");
         menuDr.getItem(3).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
         menuDr.getItem(3).setTitle("Publications signalés");
 

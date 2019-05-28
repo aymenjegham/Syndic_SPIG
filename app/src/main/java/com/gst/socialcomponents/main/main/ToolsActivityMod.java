@@ -74,7 +74,7 @@ public class ToolsActivityMod extends AppCompatActivity implements ActivationFra
         ViewPagerAdapter viewPagerAdapter =new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(new ActivationFragment(),"Activation");
-        viewPagerAdapter.addFragment(new InvoicingFragment(),"Reglement");
+       // viewPagerAdapter.addFragment(new InvoicingFragment(),"Reglement");
        // viewPagerAdapter.addFragment(new ReunionFragment(),"Inviter");
 
 

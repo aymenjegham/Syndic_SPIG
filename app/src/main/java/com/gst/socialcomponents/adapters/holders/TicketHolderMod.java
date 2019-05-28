@@ -89,7 +89,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
         Integer isvideo =ticketRetrieve.getType();
 
         Query query = FirebaseDatabase.getInstance().getReference().child("profiles");
-        query.addValueEventListener(
+        query.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,7 +97,7 @@ public class TicketHolderMod extends RecyclerView.ViewHolder {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                            if(snapshot.getKey().equals(userkey)){
                                Profilefire profile = snapshot.getValue(Profilefire.class);
-                               Glide.with(cxt).load(profile.getPhotoUrl()).into(photoImageView);
+                               Glide.with(photoImageView).load(profile.getPhotoUrl()).into(photoImageView);
                                userTv.setText(profile.getUsername());
                                userresidenceTv.setText(profile.getNumresidence());
 

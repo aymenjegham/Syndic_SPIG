@@ -110,7 +110,7 @@ public class CalendarActivity extends AppCompatActivity {
                 mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                     @Override public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
                         Integer cbmarqbloc = Integer.valueOf(response.body().getCbmarq());
-
+                            Log.v("gettingbloc",cbmarqbloc.toString());
 
                         mAPIService.getIdReunionBlocs(cbmarqbloc).enqueue(new Callback<List<NumReunion>>() {
                             @Override

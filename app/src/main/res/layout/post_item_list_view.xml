@@ -67,17 +67,19 @@
 
             <TextView
                 android:id="@+id/titleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/postImageView"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/authorImageView"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
                 android:textAppearance="@style/TextAppearance.Title"
+                app:layout_constraintEnd_toStartOf="@+id/authorImageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline21" />
 

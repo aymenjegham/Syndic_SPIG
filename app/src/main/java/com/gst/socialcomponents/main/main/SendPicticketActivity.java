@@ -54,6 +54,7 @@ import com.gst.socialcomponents.data.remote.ResultObject;
 import com.gst.socialcomponents.data.remote.VideoInterface;
 import com.gst.socialcomponents.managers.PostManager;
 import com.gst.socialcomponents.model.NumAppart;
+import com.gst.socialcomponents.model.NumBloc;
 import com.gst.socialcomponents.model.NumChantier;
 import com.gst.socialcomponents.model.Post;
 import com.gst.socialcomponents.model.Ticket;
@@ -96,7 +97,7 @@ public class SendPicticketActivity extends AppCompatActivity {
     byte[] data;
     byte[] convertVideoToBytes;
     String url;
-    String residence;
+    String residence,bloc;
     ImageView ivtick;
     private APIService mAPIService;
     private Integer idResidence;
@@ -144,6 +145,8 @@ public class SendPicticketActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("Myprefsfile", MODE_PRIVATE);
         residence = prefs.getString("sharedprefresidence", null);
+        bloc =prefs.getString("sharedprefbloc",null);
+
 
         mAPIService = ApiUtils.getAPIService();
         mAPIService.getNumChantier(residence).enqueue(new Callback<NumChantier>() {
@@ -241,8 +244,6 @@ public class SendPicticketActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
     public void getcbmarq(String appartId, Integer idResidence){
 
@@ -252,122 +253,138 @@ public class SendPicticketActivity extends AppCompatActivity {
             public void onResponse(Call<NumChantier> call, Response<NumChantier> response) {
                 Integer numchantier=Integer.valueOf(response.body().getCbmarq());
 
-                mAPIService.getNumOfAppartements(appartId,numchantier).enqueue(new Callback<NumAppart>() {
+
+                mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                     @Override
-                    public void onResponse (Call < NumAppart > call, Response < NumAppart > response){
+                    public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
+                        Integer numbloc =Integer.valueOf(response.body().getCbmarq());
 
-                        idAppartement=Integer.valueOf(response.body().getCbmarq());
-
-                        addbtn.setOnClickListener(new View.OnClickListener() {
+                        mAPIService.getNumOfAppartements(appartId,numbloc).enqueue(new Callback<NumAppart>() {
                             @Override
-                            public void onClick(View v) {
-                                boolean cancel = false;
+                            public void onResponse (Call < NumAppart > call, Response < NumAppart > response){
 
-                                EditText titleet = findViewById(R.id.title);
-                                String titletext = titleet.getText().toString();
-                                EditText descet = findViewById(R.id.description);
-                                String description = descet.getText().toString();
+                                idAppartement=Integer.valueOf(response.body().getCbmarq());
 
-                                if ((TextUtils.isEmpty(titletext))) {
-                                    titleet.setError(getApplicationContext().getString(R.string.error_field_required));
-                                    cancel = true;
-                                } else if ((TextUtils.isEmpty(description))) {
-                                    descet.setError(getApplicationContext().getString(R.string.error_field_required));
-                                    cancel = true;
-                                }
-                                if (!cancel) {
-                                    if (bitmap != null) {
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                        data = baos.toByteArray();
-                                        url = bitmap.toString();
+                                addbtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        boolean cancel = false;
 
-                                        FirebaseStorage storage = FirebaseStorage.getInstance();
-                                        StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/images");
-                                        StorageReference imagesRef = storageRef.child(url);
-                                        UploadTask uploadTask = imagesRef.putBytes(data);
-                                        ProgressDialog pd = new ProgressDialog(SendPicticketActivity.this);
-                                        pd.setMessage("envoi");
-                                        pd.show();
-                                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception exception) {
-                                                Toast.makeText(SendPicticketActivity.this, "Connection a échoué", Toast.LENGTH_SHORT).show();
-                                                pd.dismiss();
-                                            }
-                                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                                                String task2=taskSnapshot.getMetadata().getReference().getName();
+                                        EditText titleet = findViewById(R.id.title);
+                                        String titletext = titleet.getText().toString();
+                                        EditText descet = findViewById(R.id.description);
+                                        String description = descet.getText().toString();
 
-                                                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        if ((TextUtils.isEmpty(titletext))) {
+                                            titleet.setError(getApplicationContext().getString(R.string.error_field_required));
+                                            cancel = true;
+                                        } else if ((TextUtils.isEmpty(description))) {
+                                            descet.setError(getApplicationContext().getString(R.string.error_field_required));
+                                            cancel = true;
+                                        }
+                                        if (!cancel) {
+                                            if (bitmap != null) {
+                                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                                data = baos.toByteArray();
+                                                url = bitmap.toString();
+
+                                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                                StorageReference storageRef = storage.getReferenceFromUrl("gs://syndic-spig.appspot.com/images");
+                                                StorageReference imagesRef = storageRef.child(url);
+                                                UploadTask uploadTask = imagesRef.putBytes(data);
+                                                ProgressDialog pd = new ProgressDialog(SendPicticketActivity.this);
+                                                pd.setMessage("envoi");
+                                                pd.show();
+                                                uploadTask.addOnFailureListener(new OnFailureListener() {
                                                     @Override
-                                                    public void onSuccess(Uri uri) {
-
-                                                        photoLink = uri.toString();
-                                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement,0);
-                                                        reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
+                                                    public void onFailure(@NonNull Exception exception) {
+                                                        Toast.makeText(SendPicticketActivity.this, "Connection a échoué", Toast.LENGTH_SHORT).show();
                                                         pd.dismiss();
-                                                        bitmap = null;
-                                                        Toast.makeText(SendPicticketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                        if(checkbxpub.isChecked()){
+                                                    }
+                                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                        Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
 
-                                                            Post post = new Post();
-                                                            post.setTitle(titletext);
-                                                            post.setModerator("false");
-                                                            post.setIsvideo(false);
-                                                            post.setResidence(residence);
-                                                            post.setDescription(description);
-                                                            post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                                            post.setImageTitle(task2);
-                                                            reference.child("posts").push().setValue(post);
+                                                        String task2=taskSnapshot.getMetadata().getReference().getName();
 
-                                                        }
+                                                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                            @Override
+                                                            public void onSuccess(Uri uri) {
+
+                                                                photoLink = uri.toString();
+                                                                Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, photoLink, "empty",idResidence,idAppartement,0);
+                                                                reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
+                                                                pd.dismiss();
+                                                                bitmap = null;
+                                                                Toast.makeText(SendPicticketActivity.this, "Reclmation envoyée avec sucées", Toast.LENGTH_SHORT).show();
+                                                                finish();
+                                                                if(checkbxpub.isChecked()){
+
+                                                                    Post post = new Post();
+                                                                    post.setTitle(titletext);
+                                                                    post.setModerator("false");
+                                                                    post.setIsvideo(false);
+                                                                    post.setResidence(residence);
+                                                                    post.setDescription(description);
+                                                                    post.setAuthorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                                    post.setImageTitle(task2);
+                                                                    reference.child("posts").push().setValue(post);
+
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 });
+                                            } else if(bitmap ==null && selectedMediaUri ==null) {
+                                                Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, "null", "empty",idResidence,idAppartement,2);
+                                                reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
+                                                Toast.makeText(SendPicticketActivity.this, "Reclamation envoyée avec sucées", Toast.LENGTH_SHORT).show();
+
+                                                finish();
                                             }
-                                        });
-                                    } else if(bitmap ==null && selectedMediaUri ==null) {
-                                        Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, "null", "empty",idResidence,idAppartement,2);
-                                        reference.child("Tickets").child(residence).child(firebaseUser.getUid()).push().setValue(ticket);
-                                        Toast.makeText(SendPicticketActivity.this, "Reclamation envoyée avec sucées", Toast.LENGTH_SHORT).show();
+
+                                            if(selectedMediaUri !=null && bitmap ==null){
 
 
-                                        finish();
-                                    }
+                                                pathToStoredVideo = getRealPathFromURIPath(selectedMediaUri, SendPicticketActivity.this);
+                                                uploadVideoToServer(pathToStoredVideo,titletext,description);
 
+                                            }
 
-                                    if(selectedMediaUri !=null && bitmap ==null){
-
-
-                                         pathToStoredVideo = getRealPathFromURIPath(selectedMediaUri, SendPicticketActivity.this);
-                                        uploadVideoToServer(pathToStoredVideo,titletext,description);
-
+                                        }
 
                                     }
+                                });
 
-                                }
+                            }
+                            @Override
+                            public void onFailure (Call < NumAppart > call, Throwable t){
+                                Toast.makeText(SendPicticketActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                                Log.v("checkingsendingvideo",  "falure 1");
+
 
                             }
                         });
-
                     }
+
                     @Override
-                    public void onFailure (Call < NumAppart > call, Throwable t){
-                        Toast.makeText(SendPicticketActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
-
-
+                    public void onFailure(Call<NumBloc> call, Throwable t) {
 
                     }
                 });
+
+
+
             }
 
             @Override
             public void onFailure(Call<NumChantier> call, Throwable t) {
                 Toast.makeText(SendPicticketActivity.this, "Connexion au serveur échouée", Toast.LENGTH_SHORT).show();
+                Log.v("checkingsendingvideo",  "falure 2");
+
             }
         });
 
@@ -426,7 +443,6 @@ public class SendPicticketActivity extends AppCompatActivity {
             public void onResponse(Call<ResultObject> call, Response<ResultObject> response) {
                 ResultObject result = response.body();
               if(!TextUtils.isEmpty(result.getSuccess())){
-                     Log.v("checkingsendingvideo",  response.body().getSuccess());
                      link=response.body().getSuccess();
                   Ticket ticket = new Ticket(titletext, description, ServerValue.TIMESTAMP, 0, link, "empty",idResidence,idAppartement,1);
 

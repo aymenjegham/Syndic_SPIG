@@ -24,6 +24,8 @@ public class FollowPostViewHolder extends PostViewHolder {
     }
 
     public void bindData(FollowingPost followingPost) {
+
+
         postManager.getSinglePostValue(followingPost.getPostId(), new OnPostChangedListener() {
             @Override
             public void onObjectChanged(Post obj) {

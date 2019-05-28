@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,7 +98,9 @@ public class LoginemailActivity extends AppCompatActivity {
                                 finish();
                             }
                             else {
-                                Toast.makeText(getApplicationContext(), "Échec de la connexion! Veuillez réessayer plus tard ! "+task.getException(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Échec de connecter! Vérifier votre email et mot de passe! ", Toast.LENGTH_LONG).show();
+                                pd.dismiss();
+                                Log.v("checkingresultauth",task.getException().toString());
                              }
                         }
                     });

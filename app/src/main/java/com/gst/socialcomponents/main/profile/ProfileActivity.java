@@ -529,6 +529,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     public void setid(String id) {
          String finalFirebaseUser = firebaseUser.getUid();
 
+
         if(id.equals(finalFirebaseUser)){
             frais.setVisibility(View.VISIBLE);
 
@@ -542,8 +543,8 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                     mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                         @Override
                         public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
-
-                            mAPIService.getNumOfAppartements(numappart,numchantier).enqueue(new Callback<NumAppart>() {
+                            Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+                            mAPIService.getNumOfAppartements(numappart,numbloc).enqueue(new Callback<NumAppart>() {
                                 @Override
                                 public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
 
@@ -554,11 +555,13 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                                         public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
                                             frais.setVisibility(View.VISIBLE);
                                             Integer fraissyndic=response.body().getFraisupposed();
+
                                             frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
                                         }
 
                                         @Override
                                         public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                            Log.v("checkingfraispro","failure");
 
                                         }
                                     });
@@ -566,6 +569,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
 
                                 @Override
                                 public void onFailure(Call<NumAppart> call, Throwable t) {
+                                    Log.v("checkingfraispro","failure2");
 
                                 }
                             });

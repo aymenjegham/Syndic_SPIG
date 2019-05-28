@@ -204,12 +204,6 @@ public class ToolActivity extends AppCompatActivity {
                              }
                          });
 
-
-
-
-
-
-
                         }
 
                     @Override
@@ -217,8 +211,6 @@ public class ToolActivity extends AppCompatActivity {
 
                     }
                 });
-
-
 
     }
 

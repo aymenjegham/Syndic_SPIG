@@ -64,13 +64,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
                 android:textAppearance="@style/TextAppearance.Second"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
                 app:layout_constraintEnd_toEndOf="@+id/title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -85,6 +83,7 @@
                 android:transitionName="@string/post_author_image_transition_name"
                 android:visibility="visible"
                 app:border="false"
+                app:layout_constraintBottom_toTopOf="@+id/countersContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/photo"
                 app:shadow="false"
@@ -105,7 +104,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/commenlabelmod"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/photoImageViewticket"
+                app:layout_constraintTop_toBottomOf="@+id/description"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
