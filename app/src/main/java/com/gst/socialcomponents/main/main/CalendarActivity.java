@@ -133,6 +133,7 @@ public class CalendarActivity extends AppCompatActivity {
                                                     setupRecyclerview(reunions,intuser);
                                                     try {
                                                         setupCalendar(reunions);
+
                                                     } catch (ParseException e) {
                                                         e.printStackTrace();
                                                     }
@@ -191,6 +192,7 @@ public class CalendarActivity extends AppCompatActivity {
                                                             setupRecyclerview(reunions,intuser);
                                                             try {
                                                                 setupCalendar(reunions);
+
                                                             } catch (ParseException e) {
                                                                 e.printStackTrace();
                                                             }

@@ -23,18 +23,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -65,10 +61,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,12 +74,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
-import com.gst.socialcomponents.Application;
 import com.gst.socialcomponents.Constants;
 import com.gst.socialcomponents.R;
-import com.gst.socialcomponents.adapters.CustomFacturesMonthsAdapter;
 import com.gst.socialcomponents.adapters.PostsAdapter;
-import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.remote.APIService;
 import com.gst.socialcomponents.data.remote.ApiUtils;
 import com.gst.socialcomponents.main.base.BaseActivity;
@@ -95,7 +86,7 @@ import com.gst.socialcomponents.main.post.createPost.CreatePostActivity;
 import com.gst.socialcomponents.main.postDetails.PostDetailsActivity;
 import com.gst.socialcomponents.main.profile.ProfileActivity;
 import com.gst.socialcomponents.main.search.SearchActivity;
-import com.gst.socialcomponents.model.Factureitemdata;
+import com.gst.socialcomponents.model.AdsInfo;
 import com.gst.socialcomponents.model.InfoSyndic;
 import com.gst.socialcomponents.model.NumAppart;
 import com.gst.socialcomponents.model.NumBloc;
@@ -106,27 +97,22 @@ import com.gst.socialcomponents.model.SoldeAppartement;
 import com.gst.socialcomponents.utils.AnimationUtils;
 import com.gst.socialcomponents.utils.LogUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.text.Format;
+import java.security.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Headers;
 
 public class MainActivity extends BaseActivity<MainView, MainPresenter> implements MainView {
 
@@ -140,6 +126,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private SwipeRefreshLayout swipeContainer;
     Constants constants;
     final Date[] strtodate = new Date[1];
+    final Date[] strtodate2 = new Date[1];
+    final Date[] strtodate3 = new Date[1];
+
+
     Date datenow;
 
 
@@ -184,6 +174,13 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     private String[]      nameArray = {"ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7", "ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7"};
     private String[] imageNameArray = {"ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7", "ad","ad2", "ad3", "ad4", "ad5", "ad6","ad7"};
 
+    private  ArrayList<Drawable> drawable2=new ArrayList<>();
+    private  ArrayList<String> urlStrings=new ArrayList<>();
+
+
+
+
+
 
 
     @Override
@@ -191,7 +188,9 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         presenter.onProfileMenuActionClicked();
+        mAPIService = ApiUtils.getAPIService();
 
+        Log.v("checkicklifeycle","created");
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -201,7 +200,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         horizontalScrollview  = (HorizontalScrollView) findViewById(R.id.horiztonal_scrollview_id);
         horizontalOuterLayout =	(LinearLayout)findViewById(R.id.horiztonal_outer_layout_id);
         horizontalScrollview.setHorizontalScrollBarEnabled(false);
-        addImagesToView();
+       // addImagesToView();
+
+
+        getadd();
 
         ViewTreeObserver vto 	=	horizontalOuterLayout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -214,8 +216,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         });
 
 
-      //  horizontalOuterLayout.setVisibility(View.GONE);
-       // horizontalScrollview.setVisibility(View.GONE);
+
 
 
 
@@ -353,7 +354,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        mAPIService = ApiUtils.getAPIService();
 
 
 
@@ -456,11 +456,121 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
     }
 
-    public void addImagesToView(){
-        for (int i=0;i<imageNameArray.length;i++){
+    private void getadd() {
+
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("chargement");
+        pd.show();
+        pd.setCancelable(true);
+        mAPIService.getAds().enqueue(new Callback<List<AdsInfo>>() {
+            @Override
+            public void onResponse(Call<List<AdsInfo>> call, Response<List<AdsInfo>> response) {
+
+                FirebaseFunctions.getInstance().getHttpsCallable("getTime")
+                        .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        Long timestamp = (long) httpsCallableResult.getData();
+
+                        for(int i=0;i<response.body().size();i++){
+
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                            try {
+                                if(response.body().get(i).getBp_datedebut() != null  && response.body().get(i).getBp_datefin() != null  ){
+                                    strtodate2[0] = format.parse (response.body().get(i).getBp_datedebut());
+                                    strtodate3[0] = format.parse (response.body().get(i).getBp_datefin());
+                                }
+                                else{
+                                    return;
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            long unixTimebegin = (long)strtodate2[0].getTime()/1000;
+                            long unixTimeend = (long)strtodate3[0].getTime()/1000;
+
+
+                            long timenow =removeLastNDigits(timestamp,3);
+
+                            if(unixTimebegin<timenow  && timenow<unixTimeend){
+                                urlStrings.add(response.body().get(i).getBp_image());
+                            }
+                        }
+                        new RetrieveFeedTask().execute(urlStrings);
+
+
+
+                    }
+                });
+
+                pd.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<List<AdsInfo>> call, Throwable t) {
+                horizontalOuterLayout.setVisibility(View.GONE);
+                horizontalScrollview.setVisibility(View.GONE);
+                pd.dismiss();
+
+            }
+        });
+
+    }
+
+
+    long removeLastNDigits(long x, long n) {
+        return (long) (x / Math.pow(10, n));
+    }
+
+
+    class RetrieveFeedTask extends AsyncTask<ArrayList<String>, Void, ArrayList<Drawable>> {
+
+        private Exception exception;
+        private  ArrayList<Drawable> drawable=new ArrayList<>();
+
+
+
+        protected ArrayList<Drawable> doInBackground(ArrayList<String>... arrayLists) {
+            try {
+
+                for(int i=0;i<arrayLists[0].size();i++) {
+
+                    InputStream iStream = (InputStream) new URL(arrayLists[0].get(i)).getContent();
+                    drawable.add(Drawable.createFromStream(iStream, "src name"));
+
+
+
+                }
+                 return drawable;
+            } catch (Exception e) {
+
+                return drawable;
+            }
+        }
+
+
+
+        protected void onPostExecute(ArrayList<Drawable> drawable) {
+
+
+             if(!drawable.isEmpty()){
+                 addImagesToView(drawable);
+             }else{
+                 horizontalOuterLayout.setVisibility(View.GONE);
+                 horizontalScrollview.setVisibility(View.GONE);
+             }
+        }
+    }
+
+    public void addImagesToView(ArrayList<Drawable> drawable){
+        for (int i=0;i<drawable.size();i++){
             final Button imageButton =	new Button(this);
-            int imageResourceId =getResources().getIdentifier(imageNameArray[i], "drawable",getPackageName());
-            Drawable image  =this.getResources().getDrawable(imageResourceId);
+          //  int imageResourceId =getResources().getIdentifier(imageNameArray[i], "drawable",getPackageName());
+            //Drawable image  =this.getResources().getDrawable(imageResourceId);
+            Drawable image =drawable.get(i);
+
             imageButton.setBackgroundDrawable(image);
             imageButton.setTag(i);
             imageButton.setTextSize(50);
@@ -504,9 +614,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     public void getScrollMaxAmount(){
         int actualWidth = (horizontalOuterLayout.getMeasuredWidth()-512);
         scrollMax   = actualWidth;
+
     }
 
     public void startAutoScrolling(){
+
         if (scrollTimer == null) {
             scrollTimer	=	new Timer();
             final Runnable Timer_Tick 	= 	new Runnable() {
@@ -518,6 +630,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             if(scrollerSchedule != null){
                 scrollerSchedule.cancel();
                 scrollerSchedule = null;
+
             }
             scrollerSchedule = new TimerTask(){
                 @Override
@@ -532,6 +645,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
 
 
     public void stopAutoScrolling(){
+
         if (scrollTimer != null) {
             scrollTimer.cancel();
             scrollTimer	=	null;
@@ -539,12 +653,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     }
 
     public void moveScrollView(){
+
         scrollPos= 	(int) (horizontalScrollview.getScrollX() + 1.0);
         if(scrollPos >= scrollMax){
             scrollPos=	0;
         }
         horizontalScrollview.scrollTo(scrollPos, 0);
-
     }
 
     public Animation scaleFaceUpAnimation(){
@@ -560,8 +674,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             }
             @Override
             public void onAnimationRepeat(Animation arg0) {}
+
+
             @Override
             public void onAnimationEnd(Animation arg0) {
+
                 if(faceTimer != null){
                     faceTimer.cancel();
                     faceTimer = null;
@@ -608,6 +725,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             public void onAnimationEnd(Animation arg0) {
                 horizontalTextView.setText("");
                 isFaceDown = true;
+
             }
         };
         scaleFace.setAnimationListener(scaleFaceAnimationListener);
@@ -1137,6 +1255,8 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.v("checkicklifeycle","destroyed");
+
     }
 
 

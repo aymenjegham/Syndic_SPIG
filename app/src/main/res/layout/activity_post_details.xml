@@ -51,22 +51,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="@dimen/progress_bar_size"
-                    android:layout_height="@dimen/progress_bar_size"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="@+id/postvidedetail"
-                    app:layout_constraintEnd_toEndOf="@+id/postvidedetail"
-                    app:layout_constraintStart_toStartOf="@+id/postImageView"
-                    app:layout_constraintTop_toTopOf="parent" />
-
             </android.support.constraint.ConstraintLayout>
 
             <TextView
@@ -163,7 +147,10 @@
                     android:id="@+id/commentsProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="347dp"
                     android:visibility="visible" />
 
                 <TextView

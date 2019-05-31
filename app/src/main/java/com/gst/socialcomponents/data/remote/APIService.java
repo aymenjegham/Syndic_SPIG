@@ -3,6 +3,7 @@ package com.gst.socialcomponents.data.remote;
 import com.gst.socialcomponents.data.GetFacture;
 import com.gst.socialcomponents.data.PostProfile;
 import com.gst.socialcomponents.model.AcceptInfo;
+import com.gst.socialcomponents.model.AdsInfo;
 import com.gst.socialcomponents.model.Appartements;
 import com.gst.socialcomponents.model.Blocs;
 import com.gst.socialcomponents.model.Chantiers;
@@ -136,5 +137,8 @@ public interface APIService {
     @POST("/getPrincipal.php")
     @FormUrlEncoded
     Call<NumPrincipal> getPrincipal(@Field("email") String  email);
+
+    @POST("/getAds.php")
+    Call<List<AdsInfo>> getAds();
 
 }

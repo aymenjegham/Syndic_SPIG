@@ -93,8 +93,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     private TextView authorTextView;
     private TextView dateTextView;
     private ImageView authorImageView;
-    private ProgressBar progressBar;
-    private ImageView postImageView;
+     private ImageView postImageView;
     private TextView titleTextView;
     private TextView descriptionEditText;
     private ProgressBar commentsProgressBar;
@@ -139,8 +138,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
         titleTextView = findViewById(R.id.titleTextView);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         postImageView = findViewById(R.id.postImageView);
-        progressBar = findViewById(R.id.progressBar);
-        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
+         commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
         scrollView = findViewById(R.id.scrollView);
         commentsLabel = findViewById(R.id.commentsLabel);
         commentEditText = findViewById(R.id.commentEditText);
@@ -376,7 +374,7 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
     @Override
     public void loadvideo(String videolink) {
 
-        progressBar.setVisibility(View.VISIBLE);
+
         postImageView.setVisibility(View.GONE);
         postvideoviewdetail.setVisibility(View.VISIBLE);
         postvideoviewdetail.setMediaController(new MediaController(this));
@@ -406,7 +404,6 @@ public class PostDetailsActivity extends BaseActivity<PostDetailsView, PostDetai
         postvideoviewdetail.setVisibility(View.GONE);
         postManager.loadImageMediumSize(GlideApp.with(this), imageTitle, postImageView, () -> {
             scheduleStartPostponedTransition(postImageView);
-            progressBar.setVisibility(View.GONE);
 
          });
     }

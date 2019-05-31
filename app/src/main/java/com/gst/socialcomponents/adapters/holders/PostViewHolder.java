@@ -208,6 +208,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
                     progressBar.setVisibility(View.GONE);
                     postvideoview.start();
+                    mp.setVolume(0f,0f);
 
                 }
             });
@@ -217,6 +218,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 public void onCompletion(MediaPlayer mp) {
 
                     postvideoview.start();
+                    mp.setVolume(0f,0f);
+
 
                 }
             });
@@ -273,7 +276,16 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.getModerator().equals("true")){
         // linearlayout.setBackgroundResource(R.drawable.stripes2);
             linearlayout.setBackgroundColor(0xffB22222);
-         }else {
+
+            if (!post.isIsvideo()){
+                postvideoview.setVisibility(View.GONE);
+                postImageView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+
+
+            }
+
+        }else {
             linearlayout.setBackgroundColor(Color.WHITE);
         }
 

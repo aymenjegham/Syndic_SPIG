@@ -19,6 +19,7 @@ package com.gst.socialcomponents.main.profile;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -136,6 +137,9 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
     String numappart,residence,bloc;
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +149,7 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         mAPIService = ApiUtils.getAPIService();
+
 
 
         if (actionBar != null) {
