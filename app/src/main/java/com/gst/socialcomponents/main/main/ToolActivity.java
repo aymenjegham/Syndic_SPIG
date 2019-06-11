@@ -133,6 +133,8 @@ public class ToolActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onResponse(Call<List<HistorySyndic>> call, Response<List<HistorySyndic>> response) {
 
+                                                    Log.v("gettingnumappart",response.body().get(0).getFrais()+"     "+response.body().get(1).getFrais()+"    "+response.body().size());
+
                                                     FirebaseFunctions.getInstance().getHttpsCallable("getTime")
                                                             .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
                                                         @Override
@@ -215,6 +217,8 @@ public class ToolActivity extends AppCompatActivity {
     }
 
     private void populaterecyclerview(ArrayList<Integer> years,String appart,ArrayList<Integer> frais,int yearactual) {
+        Log.v("gettingnumappart",yearactual+"   "+years+"      "+appart+"     "+frais);
+
 
         YearlyReglementAdapter adapter;
         adapter = new YearlyReglementAdapter(years,appart,ToolActivity.this,residence,bloc,yearactual,frais);
