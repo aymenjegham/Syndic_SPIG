@@ -316,6 +316,11 @@ public class PostInteractor {
                             post.setModerator((String) mapObj.get("moderator"));
                             post.setResidence((String) mapObj.get("residence"));
                             post.setIsvideo((boolean) mapObj.get("isvideo"));
+                            post.setPublier((long) mapObj.get("publier"));
+                          post.setCompteur((String) mapObj.get("compteur"));
+                          post.setContrat((String) mapObj.get("contrat"));
+                          post.setDatefacture((long) mapObj.get("datefacture"));
+                          post.setMontant((long) mapObj.get("montant"));
 
 
                           if (mapObj.containsKey("commentsCount")) {
@@ -355,13 +360,6 @@ public class PostInteractor {
                 && post.containsKey("description");
     }
 
-    private boolean isPostdepense(Map<String, Object> post) {
-        return post.containsKey("compteur")
-                && post.containsKey("iddepense")
-                && post.containsKey("montant")
-                && post.containsKey("residence")
-                && post.containsKey("title");
-    }
 
     public void addComplainToPost(Post post) {
         databaseHelper.getDatabaseReference().child(DatabaseHelper.POSTS_DB_KEY).child(post.getId()).child("hasComplain").setValue(true);

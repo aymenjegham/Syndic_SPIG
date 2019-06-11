@@ -171,6 +171,7 @@ public class PostsAdapter extends BasePostsAdapter {
         if (getItemViewType(position) != ItemType.LOAD.getTypeCode()) {
 
 
+
             ((PostViewHolder) holder).bindData(postList.get(position));
         }
     }
@@ -204,26 +205,33 @@ public class PostsAdapter extends BasePostsAdapter {
                 isMoreDataAvailable = result.isMoreDataAvailable();
                 List<Post> list = result.getPosts();
 
-                ArrayList<DepenseListResult> depenses = new ArrayList() ;
+         /*       ArrayList<DepenseListResult> depenses = new ArrayList() ;
                 reference1 = FirebaseDatabase.getInstance().getReference().child("posts");
                 reference1.keepSynced(true);
                 reference1.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                 depenses.clear();
+
+
+                                depenses.clear();
                                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                                      DepenseListResult depense = ds.getValue(DepenseListResult.class);
 
 
+
                                     //depenses.add(depense);
-                                    if(depense.getAuthorId().equals("ADMIN") ){
+                                    if(depense.getAuthorId().equals("ADMIN") &&isMoreDataAvailable == true ){
+
                                         SharedPreferences prefs = activity.getSharedPreferences("Myprefsfile", MODE_PRIVATE);
                                         residence = prefs.getString("sharedprefresidence", null);
 
                                        if(depense.getPublier()==1  && depense.getResidence().equals(residence)){
-                                            Post post1= new Post(depense.getCompteur(),depense.getTitle(),depense.getMontant().toString(),depense.getDatefacture(),depense.getContrat(), depense.getImageTitle(),depense.getAuthorId(), depense.getCreateddate(),1, 2, false,ItemType.valueOf("ITEM"),depense.getResidence(), "true",false);
-                                           list.add(post1);
+
+                                           Post post1= new Post(depense.getCompteur(),depense.getTitle(),depense.getMontant().toString(),depense.getDatefacture(),depense.getContrat(), depense.getImageTitle(),depense.getAuthorId(), depense.getCreateddate(),1, 2, false,ItemType.valueOf("ITEM"),depense.getResidence(), "true",false);
+                                            list.add(post1);
+
+
                                        }
 
 
@@ -234,29 +242,9 @@ public class PostsAdapter extends BasePostsAdapter {
 
 
 
-                                if (nextItemCreatedDate == 0) {
-                                    postList.clear();
 
 
-                                    notifyDataSetChanged();
-                                    swipeContainer.setRefreshing(false);
-                                }
 
-                                hideProgress();
-
-                                if (!list.isEmpty()) {
-
-                                    addList(list);
-
-
-                                    if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
-                                        PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
-                                    }
-                                } else {
-                                    isLoading = false;
-
-                                }
-                                callback.onListLoadingFinished();
                             }
 
 
@@ -264,9 +252,33 @@ public class PostsAdapter extends BasePostsAdapter {
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                             }
-                        });
+                        });    */
+
+                if (nextItemCreatedDate == 0) {
+                    postList.clear();
 
 
+                    notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
+                }
+
+                hideProgress();
+
+                if (!list.isEmpty()) {
+
+
+                    addList(list);
+
+
+
+                    if (!PreferencesUtil.isPostWasLoadedAtLeastOnce(mainActivity)) {
+                        PreferencesUtil.setPostWasLoadedAtLeastOnce(mainActivity, true);
+                    }
+                } else {
+                    isLoading = false;
+
+                }
+                callback.onListLoadingFinished();
 
 
             }

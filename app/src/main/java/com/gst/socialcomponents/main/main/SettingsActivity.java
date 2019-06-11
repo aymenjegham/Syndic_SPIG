@@ -98,11 +98,18 @@ public class SettingsActivity extends AppCompatActivity {
                         profiles.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
                             Profilefire profile = ds.getValue(Profilefire.class);
-                            if(profile.getNumresidence().equals(numresidence)){
-                                if(!profile.getId().equals(firebaseUser.getUid())){
-                                    profiles.add(profile);
+
+                            if(ds.getKey().equals("ADMIN")){
+
+                            }else {
+                                if(profile.getNumresidence().equals(numresidence)){
+                                    if(!profile.getId().equals(firebaseUser.getUid())){
+                                        profiles.add(profile);
+                                    }
                                 }
                             }
+
+
                         }
                         retrivedata(profiles);
                     }

@@ -110,7 +110,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_toStartOf="@+id/authorImageView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/detailsTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/datepaytv" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline21"
@@ -128,6 +128,52 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/montanttextv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Montant :"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailsTextView" />
+
+            <TextView
+                android:id="@+id/datepaytv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Date de payement :"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/montanttextv" />
+
+            <TextView
+                android:id="@+id/montant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                android:textColor="@color/google_button_color_pressed"
+                android:visibility="gone"
+                app:layout_constraintBaseline_toBaselineOf="@+id/montanttextv"
+                app:layout_constraintStart_toEndOf="@+id/montanttextv" />
+
+            <TextView
+                android:id="@+id/datepay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                android:textColor="@color/google_button_color_pressed"
+                android:visibility="gone"
+                app:layout_constraintBaseline_toBaselineOf="@+id/datepaytv"
+                app:layout_constraintStart_toEndOf="@+id/datepaytv" />
 
         </android.support.constraint.ConstraintLayout>
 

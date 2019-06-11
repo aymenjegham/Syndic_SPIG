@@ -125,11 +125,21 @@ class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
                 @Override
                 public void onObjectChanged(Profile profile) {
                     ifViewAttached(view -> {
-                        if (profile.getPhotoUrl() != null) {
-                            view.loadAuthorPhoto(profile.getPhotoUrl());
+
+
+                        if(!post.getAuthorId().equals("ADMIN")){
+                            if (profile.getPhotoUrl() != null) {
+                                view.loadAuthorPhoto(profile.getPhotoUrl());
+                            }
+
+                            view.setAuthorName(profile.getUsername());
+                        }else{
+
+                         //   view.loadAuthorPhoto("");
+                            view.setAuthorName("l'administration");
+
                         }
 
-                        view.setAuthorName(profile.getUsername());
                     });
                 }
             });
@@ -137,9 +147,18 @@ class PostDetailsPresenter extends BasePresenter<PostDetailsView> {
     }
 
     public void onAuthorClick(View authorView) {
-        if (post != null) {
-            ifViewAttached(view -> view.openProfileActivity(post.getAuthorId(), authorView));
+
+
+        if(post.getAuthorId().equals("ADMIN")){
+            Log.v("postauthorid",post.getAuthorId());
+
+        }else{
+            if (post != null) {
+                ifViewAttached(view -> view.openProfileActivity(post.getAuthorId(), authorView));
+            }
         }
+
+
     }
 
 

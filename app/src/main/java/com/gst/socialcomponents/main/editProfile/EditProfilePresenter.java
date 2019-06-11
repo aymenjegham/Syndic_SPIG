@@ -176,58 +176,75 @@ public class EditProfilePresenter<V extends EditProfileView> extends PickImagePr
                                 @Override
                                 public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
 
-                                    Integer numbloc =Integer.valueOf(response.body().getCbmarq());
 
-                                    mAPIService.getNumOfAppartements(numresidence,numbloc).enqueue(new Callback<NumAppart>() {
-                                        @Override
-                                        public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
-                                            reference = FirebaseDatabase.getInstance().getReference().child("profiles");
-                                            reference.keepSynced(true);
-                                            reference.addListenerForSingleValueEvent(
-                                                    new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                                            for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    if(response.body().getCbmarq() != null){
 
-                                                                Profilefire profilefire = ds.getValue(Profilefire.class);
-                                                                if((profilefire.getId().equals(profile.getId()))){
-                                                                    reference.child(profile.getId()).child("username").setValue(name);
-                                                                    reference.child(profile.getId()).child("residence").setValue(residence);
-                                                                    reference.child(profile.getId()).child("numresidence").setValue(numresidence);
-                                                                    reference.child(profile.getId()).child("mobile").setValue(mobile);
-                                                                    reference.child(profile.getId()).child("token").setValue(FirebaseInstanceId.getInstance().getToken());
-                                                                    reference.child(profile.getId()).child("active").setValue(ismoderator);
-                                                                    reference.child(profile.getId()).child("bloc").setValue(bloc);
+                                        Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+
+                                        mAPIService.getNumOfAppartements(numresidence,numbloc).enqueue(new Callback<NumAppart>() {
+                                            @Override
+                                            public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+                                                reference = FirebaseDatabase.getInstance().getReference().child("profiles");
+                                                reference.keepSynced(true);
+                                                reference.addListenerForSingleValueEvent(
+                                                        new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+
+                                                                    if(!ds.getKey().equals("ADMIN")){
+
+                                                                        Profilefire profilefire = ds.getValue(Profilefire.class);
+                                                                        if((profilefire.getId().equals(profile.getId()))){
+                                                                            reference.child(profile.getId()).child("username").setValue(name);
+                                                                            reference.child(profile.getId()).child("residence").setValue(residence);
+                                                                            reference.child(profile.getId()).child("numresidence").setValue(numresidence);
+                                                                            reference.child(profile.getId()).child("mobile").setValue(mobile);
+                                                                            reference.child(profile.getId()).child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+                                                                            reference.child(profile.getId()).child("active").setValue(ismoderator);
+                                                                            reference.child(profile.getId()).child("bloc").setValue(bloc);
+
+                                                                        }
+                                                                    }
+
 
                                                                 }
-
                                                             }
-                                                        }
 
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
-                                                            Toast.makeText(getApplicationContext(), "Error connexion", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+                                                                Toast.makeText(getApplicationContext(), "Error connexion", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
 
 
 
 
-                                            cbresidence=response.body().getCbmarq();
-                                            sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),mobile,name,residence,Integer.valueOf(cbresidence),ismoderator);
 
-                                        }
+                                                cbresidence=response.body().getCbmarq();
+                                                sendPost(profile.getPhotoUrl(),profile.isActive(), profile.getEmail(),profile.getId(),mobile,name,residence,Integer.valueOf(cbresidence),ismoderator);
 
-                                        @Override
-                                        public void onFailure(Call<NumAppart> call, Throwable t) {
+                                            }
 
-                                            Log.v("checkingprobnull","failed");
-                                            Toast.makeText(context, "Appartement non existante ou mauvaise connexion", Toast.LENGTH_SHORT).show();
-                                            return;
+                                            @Override
+                                            public void onFailure(Call<NumAppart> call, Throwable t) {
 
-                                        }
-                                    });
+                                                Log.v("checkingprobnull","failed");
+                                                Toast.makeText(context, "Appartement non existante ou mauvaise connexion", Toast.LENGTH_SHORT).show();
+                                                return;
+
+                                            }
+                                        });
+
+                                    } else{
+                                         Toast.makeText(context, "Appartement non existante ou mauvaise connexion", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+
+
                                 }
 
                                 @Override

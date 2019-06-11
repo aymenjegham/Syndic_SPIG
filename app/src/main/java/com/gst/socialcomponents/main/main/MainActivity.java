@@ -190,7 +190,6 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         presenter.onProfileMenuActionClicked();
         mAPIService = ApiUtils.getAPIService();
 
-        Log.v("checkicklifeycle","created");
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -226,11 +225,11 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                switch (menuItem.getItemId()) {
-                    case R.id.profile:
+               /*     case R.id.profile:
                         presenter.onProfileMenuActionClicked();
                         menuItem.setChecked(true);
                         drawerLayout.closeDrawers();
-                        return true;
+                        return true;  */
 
                    case R.id.config:
                        Intent config = new Intent(getApplicationContext(), SettingsActivity.class);
@@ -304,12 +303,12 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
                         }
                         return true;
 
-                    case R.id.gallerie:
+            /*        case R.id.gallerie:
                         Intent gallery = new Intent(getApplicationContext(), GalleryActivity.class);
                         startActivity(gallery);
                         menuItem.setChecked(true);
                         drawerLayout.closeDrawers();
-                        return true;
+                        return true;  */
 
                     case R.id.about:
                         Intent apropos = new Intent(getApplicationContext(), About.class);
@@ -767,10 +766,10 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(0xffB22222);
          menuDr = navigationView.getMenu();
-        menuDr.getItem(2).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
-        menuDr.getItem(2).setTitle("Activer");
-        menuDr.getItem(3).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
-        menuDr.getItem(3).setTitle("Publications signalés");
+        menuDr.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_key));
+        menuDr.getItem(1).setTitle("Activer");
+        menuDr.getItem(2).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_signali));
+        menuDr.getItem(2).setTitle("Publications signalés");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
@@ -794,7 +793,7 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         View header = navigationView.getHeaderView(0);
         header.setBackgroundColor(getResources().getColor(R.color.send_button_color));
         menuDr = navigationView.getMenu();
-        menuDr.getItem(2).setTitle("Reglements");
+        menuDr.getItem(1).setTitle("Reglements");
 
 
         drawerImage = (ImageView) header.findViewById(R.id.drawer_img);
@@ -807,6 +806,15 @@ public class MainActivity extends BaseActivity<MainView, MainPresenter> implemen
         drawerresidence.setText(profile.getResidence());
         drawernumresidence.setText(profile.getNumresidence());
         Glide.with(getApplicationContext()).load(profile.getPhotoUrl()).into(drawerImage);
+
+
+        drawerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onProfileMenuActionClicked();
+                drawerLayout.closeDrawers();
+            }
+        });
 
     }
 

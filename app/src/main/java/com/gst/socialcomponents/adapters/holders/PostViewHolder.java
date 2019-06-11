@@ -77,6 +77,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private VideoView postvideoview ;
     private ImageView watcherimageview;
     private  ImageView commentcountimageview;
+    private TextView montanttv,montant,datepaytv,datepay;
 
     private ProfileManager profileManager;
     protected PostManager postManager;
@@ -112,6 +113,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         linearlayout =view.findViewById(R.id.linearlayoutpost);
         postvideoview=view.findViewById(R.id.postvideoview);
         progressBar=view.findViewById(R.id.progressBar3);
+        montant=view.findViewById(R.id.montant);
+        montanttv=view.findViewById(R.id.montanttextv);
+        datepay=view.findViewById(R.id.datepay);
+        datepaytv=view.findViewById(R.id.datepaytv);
 
 
 
@@ -148,7 +153,18 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Post post) {
 
-        likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
+
+
+
+
+
+        if(!post.getAuthorId().equals("ADMIN")){
+
+            likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
+            montant.setVisibility(View.GONE);
+            montanttv.setVisibility(View.GONE);
+            datepay.setVisibility(View.GONE);
+            datepaytv.setVisibility(View.GONE);
 
 
         String title = removeNewLinesDividers(post.getTitle());
@@ -162,35 +178,39 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedDate());
         dateTextView.setText(date);
 
+
         postManager.loadImageMediumSize(GlideApp.with(baseActivity), post.getImageTitle(), postImageView);
 
-        if (post.getAuthorId() != null ) {
+        if (post.getAuthorId() != null) {
 
             profileManager.getProfileSingleValue(post.getAuthorId(), createProfileChangeListener(authorImageView));
 
         }
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null  ) {
+        if (firebaseUser != null) {
             postManager.hasCurrentUserLikeSingleValue(post.getId(), firebaseUser.getUid(), createOnLikeObjectExistListener());
-
 
 
         }
 
 
-        if(post.isIsvideo()){
+        if (post.isIsvideo()) {
+
+
+
             progressBar.setVisibility(View.VISIBLE);
-             postImageView.setVisibility(View.GONE);
+            postImageView.setVisibility(View.GONE);
 
 
-
-            String url =post.getImageTitle();
+            String url = post.getImageTitle();
 
             postvideoview.seekTo(100);
             postvideoview.setVisibility(View.VISIBLE);
-            postvideoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/"+url));
+            postvideoview.setVideoURI(Uri.parse("http://syndicspig.gloulougroupe.com/VideoUpload/Upload/" + url));
             postvideoview.requestFocus();
+
+
 
             postvideoview.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -208,7 +228,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
                     progressBar.setVisibility(View.GONE);
                     postvideoview.start();
-                    mp.setVolume(0f,0f);
+                    mp.setVolume(0f, 0f);
 
                 }
             });
@@ -218,76 +238,100 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 public void onCompletion(MediaPlayer mp) {
 
                     postvideoview.start();
-                    mp.setVolume(0f,0f);
+                    mp.setVolume(0f, 0f);
 
 
                 }
             });
 
 
-
         }
 
+            if(post.getModerator().equals("true")){
+                // linearlayout.setBackgroundResource(R.drawable.stripes2);
+                linearlayout.setBackgroundColor(0xffB22222);
+
+                if (!post.isIsvideo()){
+                    postvideoview.setVisibility(View.GONE);
+                    postImageView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
 
 
-        if(post.getAuthorId().equals("ADMIN") ){
-
-
-            likeCounterTextView.setVisibility(View.GONE);
-            likesImageView.setVisibility(View.GONE);
-            commentsCountTextView.setVisibility(View.GONE);
-            watcherCounterTextView.setVisibility(View.GONE);
-            watcherimageview.setVisibility(View.GONE);
-            commentcountimageview.setVisibility(View.GONE);
-            String url="http://testeasysyndic.gloulougroupe.com/uploads/documents/";
-             Glide.with(postImageView.getContext()).load(url+post.getImageTitle()).into(postImageView);
-
-             if(!post.getId().equals("NULL")){
-                 titleTextView.setText(post.getTitle()+" ( "+post.getImagePath()+" : "+post.getId()+" ) ");
-             }
-             String timestampfacture=Long.valueOf(post.getCreatedDate()).toString();
-            String timestampcreated=Long.valueOf(post.getCommentsCount()).toString();
-
-            long dateformatcreate=Long.valueOf(timestampcreated+"000");
-            long dateformafacturet=Long.valueOf(timestampfacture+"000");
-
-            CharSequence datecreated = FormatterUtil.getRelativeTimeSpanString(context, dateformatcreate);
-            CharSequence datefacture = FormatterUtil.getRelativeTimeSpanString(context, dateformafacturet);
-
-            dateTextView.setText(datecreated);
-            detailsTextView.setText(post.getDescription()+" TND"+" ( "+datefacture+" )");
-            cardview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent =new Intent(context, PublicationPicture.class);
-                    intent.putExtra("url",url+post.getImageTitle());
-                    context.startActivity(intent);
                 }
-            });
 
-
-
-
-
-        }
-
-
-
-        if(post.getModerator().equals("true")){
-        // linearlayout.setBackgroundResource(R.drawable.stripes2);
-            linearlayout.setBackgroundColor(0xffB22222);
-
-            if (!post.isIsvideo()){
-                postvideoview.setVisibility(View.GONE);
-                postImageView.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-
-
+            }else {
+                linearlayout.setBackgroundColor(Color.WHITE);
             }
 
-        }else {
-            linearlayout.setBackgroundColor(Color.WHITE);
+
+    }
+    else  if(post.getAuthorId().equals("ADMIN") ){
+            authorImageView.setVisibility(View.GONE);
+        if(post.getPublier() == 1) {
+
+            likeController = new LikeController(context, post, likeCounterTextView, likesImageView, true);
+
+            authorImageView.setVisibility(View.GONE);
+            String title = removeNewLinesDividers(post.getTitle());
+            titleTextView.setText(title);
+            String description = removeNewLinesDividers(post.getDescription());
+            detailsTextView.setText(description);
+            likeCounterTextView.setText(String.valueOf(post.getLikesCount()));
+            commentsCountTextView.setText(String.valueOf(post.getCommentsCount()));
+            watcherCounterTextView.setText(String.valueOf(post.getWatchersCount()));
+
+
+
+
+
+             String url="http://testeasysyndic.gloulougroupe.com/uploads/documents/";
+             Glide.with(postImageView.getContext()).load(url+post.getImageTitle()).into(postImageView);
+
+
+
+            CharSequence date = FormatterUtil.getRelativeTimeSpanStringShort(context, post.getCreatedDate());
+            dateTextView.setText(date);
+
+
+            datepay.setVisibility(View.VISIBLE);
+            datepaytv.setVisibility(View.VISIBLE);
+            CharSequence date2= FormatterUtil.getRelativeTimeSpanStringShort(context, post.getDatefacture());
+            datepay.setText(date2);
+
+            montant.setVisibility(View.VISIBLE);
+            montanttv.setVisibility(View.VISIBLE);
+            montant.setText(String.valueOf(post.getMontant())+" TND");
+
+
+
+
+
+
+
+
+
+            if (post.getModerator().equals("true")) {
+                // linearlayout.setBackgroundResource(R.drawable.stripes2);
+                linearlayout.setBackgroundColor(0xff33C4FF);
+
+                if (!post.isIsvideo()) {
+                    postvideoview.setVisibility(View.GONE);
+                    postImageView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+
+
+                }
+
+            } else {
+                linearlayout.setBackgroundColor(Color.WHITE);
+
+            }
+          }
         }
+
+
+
+
 
 
 

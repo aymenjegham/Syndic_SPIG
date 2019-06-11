@@ -44,9 +44,17 @@ public class Post implements Serializable, LazyLoading {
      private String residence;
      private String moderator;
      private boolean isvideo;
+     private long publier;
+     private  String compteur;
+     private String contrat;
+    private long datefacture;
+    private long montant;
 
 
-    public Post(String id, String title, String description, long createdDate, String imagePath, String imageTitle, String authorId, long commentsCount, long likesCount, long watchersCount, boolean hasComplain, ItemType itemType, String residence, String moderator, boolean isvideo) {
+
+    public Post(String id, String title, String description, long createdDate, String imagePath, String imageTitle, String authorId, long commentsCount,
+                long likesCount, long watchersCount, boolean hasComplain, ItemType itemType, String residence, String moderator, boolean isvideo,long publier,String compteur,String contrat,long datefacture,
+                long montant) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -62,6 +70,11 @@ public class Post implements Serializable, LazyLoading {
         this.residence = residence;
         this.moderator = moderator;
         this.isvideo = isvideo;
+        this.publier=publier;
+        this.compteur=compteur;
+        this.contrat=contrat;
+        this.datefacture=datefacture;
+        this.montant=montant;
     }
 
     public boolean isIsvideo() {
@@ -203,6 +216,12 @@ public class Post implements Serializable, LazyLoading {
         result.put("moderator",moderator);
         result.put("residence",residence);
         result.put("isvideo",isvideo);
+        result.put("publier", publier);
+        result.put("compteur",compteur);
+        result.put("contrat",contrat);
+        result.put("datefacture", datefacture);
+        result.put("montant",montant);
+
 
 
         return result;
@@ -216,5 +235,47 @@ public class Post implements Serializable, LazyLoading {
     @Override
     public void setItemType(ItemType itemType) {
 
+    }
+
+
+    public long getPublier() {
+        return publier;
+    }
+
+    public void setPublier(long publier) {
+        this.publier = publier;
+    }
+
+
+    public String getCompteur() {
+        return compteur;
+    }
+
+    public void setCompteur(String compteur) {
+        this.compteur = compteur;
+    }
+
+    public String getContrat() {
+        return contrat;
+    }
+
+    public void setContrat(String contrat) {
+        this.contrat = contrat;
+    }
+
+    public long getDatefacture() {
+        return datefacture;
+    }
+
+    public void setDatefacture(long datefacture) {
+        this.datefacture = datefacture;
+    }
+
+    public long getMontant() {
+        return montant;
+    }
+
+    public void setMontant(long montant) {
+        this.montant = montant;
     }
 }

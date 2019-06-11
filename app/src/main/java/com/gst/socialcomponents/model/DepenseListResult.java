@@ -9,7 +9,7 @@ public class DepenseListResult {
 
     private String compteur;
     private long  datefacture;
-    private long  createddate;
+    private long  createdDate;
     private Integer iddepense;
     private Integer montant;
     private int publier;
@@ -19,7 +19,7 @@ public class DepenseListResult {
     private String imageTitle;
     private String contrat;
 
-    public DepenseListResult(String compteur, long datefacture, Integer iddepense, Integer montant, String residence, String title,String authorId,String imageTitle,String contrat,long createddate ,int publier) {
+    public DepenseListResult(String compteur, long datefacture, Integer iddepense, Integer montant, String residence, String title,String authorId,String imageTitle,String contrat,long createdDate ,int publier) {
         this.compteur = compteur;
         this.datefacture = datefacture;
         this.iddepense = iddepense;
@@ -29,7 +29,7 @@ public class DepenseListResult {
         this.authorId=authorId;
         this.imageTitle=imageTitle;
         this.contrat=contrat;
-        this.createddate=createddate;
+        this.createdDate=createdDate;
         this.publier=publier;
       }
 
@@ -43,11 +43,11 @@ public class DepenseListResult {
     }
 
     public long getCreateddate() {
-        return createddate;
+        return createdDate;
     }
 
     public void setCreateddate(long createddate) {
-        this.createddate = createddate;
+        this.createdDate = createddate;
     }
 
     public String getContrat() {

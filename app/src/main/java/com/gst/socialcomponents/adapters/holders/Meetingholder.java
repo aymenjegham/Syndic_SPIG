@@ -97,6 +97,7 @@ public class Meetingholder extends RecyclerView.ViewHolder {
             public void onResponse(Call<AcceptInfo> call, Response<AcceptInfo> response) {
                 Log.v("checkingtosend",response.body().getProfile_id().toString());
                 accept.setEnabled(false);
+                accept.setBackgroundColor(0xffB22222);
                  accept.setAlpha(.5f);
 
             }

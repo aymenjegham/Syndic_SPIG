@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,13 +101,18 @@ public class ActivationFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         profiles.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                            Profilefire profile = ds.getValue(Profilefire.class);
-                            if(profile.getResidence().equals(residence)){
-                                if(!profile.getId().equals(firebaseUser.getUid())){
-                                    profiles.add(profile);
+                            if(ds.getKey().equals("ADMIN")){
 
+                            }else{
+                                Profilefire profile = ds.getValue(Profilefire.class);
+                                if(profile.getResidence().equals(residence)){
+                                    if(!profile.getId().equals(firebaseUser.getUid())){
+                                        profiles.add(profile);
+
+                                    }
                                 }
                             }
+
                         }
                         retrivedata(profiles);
                     }
@@ -161,9 +167,15 @@ public class ActivationFragment extends Fragment {
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
                             Profilefire profilefire = ds.getValue(Profilefire.class);
-                            if((profilefire.getId().equals(userid))){
-                                reference2.child(userid).child("active").setValue(state);
+
+                            if(ds.getKey().equals("ADMIN")){
+
+                            }else{
+                                if((profilefire.getId().equals(userid))){
+                                    reference2.child(userid).child("active").setValue(state);
+                                }
                             }
+
 
                         }
                     }

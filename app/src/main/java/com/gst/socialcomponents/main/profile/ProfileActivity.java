@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -548,36 +549,44 @@ public class ProfileActivity extends BaseActivity<ProfileView, ProfilePresenter>
                     mAPIService.getbloc(bloc,numchantier).enqueue(new Callback<NumBloc>() {
                         @Override
                         public void onResponse(Call<NumBloc> call, Response<NumBloc> response) {
-                            Integer numbloc =Integer.valueOf(response.body().getCbmarq());
-                            mAPIService.getNumOfAppartements(numappart,numbloc).enqueue(new Callback<NumAppart>() {
-                                @Override
-                                public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
+
+                            if(response.body().getCbmarq() != null){
+                                Log.v("getttingresponse",bloc+"    "+numchantier+"   "+response.body().getCbmarq());
+                                Integer numbloc =Integer.valueOf(response.body().getCbmarq());
+                                mAPIService.getNumOfAppartements(numappart,numbloc).enqueue(new Callback<NumAppart>() {
+                                    @Override
+                                    public void onResponse(Call<NumAppart> call, Response<NumAppart> response) {
 
 
-                                     Integer numap=Integer.valueOf(response.body().getCbmarq());
-                                    mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
-                                        @Override
-                                        public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
-                                            frais.setVisibility(View.VISIBLE);
-                                            Integer fraissyndic=response.body().getFraisupposed();
+                                        Integer numap=Integer.valueOf(response.body().getCbmarq());
+                                        mAPIService.getInfoSyndic(numap).enqueue(new Callback<InfoSyndic>() {
+                                            @Override
+                                            public void onResponse(Call<InfoSyndic> call, Response<InfoSyndic> response) {
+                                                frais.setVisibility(View.VISIBLE);
+                                                Integer fraissyndic=response.body().getFraisupposed();
 
-                                            frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
-                                        }
+                                                frais.setText("Frais Syndic:\n"+fraissyndic+" dt/An");
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<InfoSyndic> call, Throwable t) {
-                                            Log.v("checkingfraispro","failure");
+                                            @Override
+                                            public void onFailure(Call<InfoSyndic> call, Throwable t) {
+                                                Log.v("checkingfraispro","failure");
 
-                                        }
-                                    });
-                                }
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onFailure(Call<NumAppart> call, Throwable t) {
-                                    Log.v("checkingfraispro","failure2");
+                                    @Override
+                                    public void onFailure(Call<NumAppart> call, Throwable t) {
+                                        Log.v("checkingfraispro","failure2");
 
-                                }
-                            });
+                                    }
+                                });
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Appartement non existante ou mauvaise connexion", Toast.LENGTH_SHORT).show();
+
+                            }
+
 
 
                         }
